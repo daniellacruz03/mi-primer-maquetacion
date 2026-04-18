@@ -251,7 +251,7 @@ h1 {
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    z-index: 3000;
+    z-index: 4500; /* Ahora por encima del carrito (4000) */
     overflow-y: auto;
     display: none;
     align-items: flex-start;
@@ -270,6 +270,69 @@ h1 {
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
     animation: zoomIn 0.3s ease-out;
+}
+
+/* --- Animación de Reloj --- */
+.clock-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px;
+    filter: drop-shadow(0 0 10px rgba(230, 0, 0, 0.5));
+}
+
+.clock-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.clock-face {
+    fill: rgba(255, 255, 255, 0.05);
+    stroke: var(--primary-color);
+    stroke-width: 4;
+    animation: clockPulse 2s infinite ease-in-out;
+}
+
+.clock-hand {
+    stroke: white;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transform-origin: 50px 50px;
+}
+
+.hour { animation: rotateClock 8s linear infinite; }
+.minute { animation: rotateClock 2s linear infinite; }
+
+/* --- Texto Preparando con puntos --- */
+.preparing-text {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.preparing-text span {
+    animation: dotBlink 1.4s infinite both;
+}
+
+.preparing-text span:nth-child(2) { animation-delay: 0.2s; }
+.preparing-text span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBlink {
+    0% { opacity: 0.2; }
+    20% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+@keyframes clockPulse {
+    0%, 100% { stroke-opacity: 1; filter: drop-shadow(0 0 2px var(--primary-color)); }
+    50% { stroke-opacity: 0.5; filter: drop-shadow(0 0 15px var(--primary-color)); }
+}
+
+@keyframes rotateClock {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .upsell-content {
@@ -376,6 +439,47 @@ h1 {
 
 .qty-label { font-family: var(--font-heading); font-size: 1.2rem; }
 
+.warning-box {
+    background: rgba(255, 152, 0, 0.08);
+    border: 1px solid rgba(255, 152, 0, 0.2);
+    padding: 12px 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 15px;
+    text-align: left;
+    animation: zoomIn 0.3s ease;
+}
+
+.warning-icon { width: 18px; height: 18px; fill: #ff9800; flex-shrink: 0; margin-top: 2px; }
+.warning-text { color: #ffbb33; font-size: 0.85rem; line-height: 1.4; font-weight: 400; }
+
+.btn-variation-helper {
+    background: transparent;
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.btn-variation-helper:hover {
+    color: white;
+}
+
+@keyframes highlightGlow {
+    0%, 100% { box-shadow: 0 10px 20px rgba(230, 0, 0, 0.3); transform: scale(1); }
+    50% { box-shadow: 0 0 30px rgba(230, 0, 0, 0.7); transform: scale(1.02); }
+}
+
+.btn-highlight { animation: highlightGlow 0.8s ease-in-out 3; }
+
+
 .counter-control {
     display: flex;
     align-items: center;
@@ -409,9 +513,9 @@ h1 {
     border: 1px solid rgba(255,255,255,0.05);
 }
 
-.extra-info-text { display: flex; align-items: center; gap: 10px; }
-.extra-name { font-weight: 600; }
-.extra-cost { color: var(--primary-color); font-size: 0.85rem; }
+ .extra-info-text { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+ .extra-name { font-weight: 600; flex: 1; line-height: 1.2; }
+ .extra-cost { color: var(--primary-color); font-size: 0.85rem; margin-right: 12px; white-space: nowrap; }
 
 .extra-counter {
     display: flex;

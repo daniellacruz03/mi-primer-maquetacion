@@ -397,11 +397,11 @@
                 </button>
                 <form id="form-delivery" class="checkout-form">
                     <h3 class="checkout-title">Datos de Entrega</h3>
-                    <input type="text" id="name" name="name" placeholder="Tu Nombre" required autocomplete="name" enterkeyhint="next">
-                    <input type="text" id="sector" name="sector" placeholder="Sector / Urbanización" required autocomplete="address-level3" enterkeyhint="next">
-                    <textarea id="address" name="address" placeholder="Dirección (Calle, Edif/Casa, Apto)" required autocomplete="street-address" enterkeyhint="next"></textarea>
-                    <input type="text" id="reference" name="reference" placeholder="Punto de referencia (Ej: Frente a...)" autocomplete="off" enterkeyhint="done">
-                    <input type="text" id="maps" name="maps" placeholder="Enlace de Google Maps (Opcional)" enterkeyhint="done">
+                    <input type="text" id="full-name" name="full-name" placeholder="Tu Nombre" required autocomplete="name" enterkeyhint="next">
+                    <input type="text" id="avenida-calle" name="avenida-calle" placeholder="Avenida / Calle" required autocomplete="address-line1" enterkeyhint="next">
+                    <input type="text" id="edificio-casa" name="edificio-casa" placeholder="Edificio / Casa / Apto" required autocomplete="address-line2" enterkeyhint="next">
+                    <input type="text" id="reference" name="reference" placeholder="Punto de referencia (Ej: Frente a...)" autocomplete="address-line3" enterkeyhint="next">
+                    <input type="text" id="maps" name="maps" placeholder="Enlace de Google Maps (Opcional)" autocomplete="url" enterkeyhint="done">
 
                     <button type="submit" id="btn-whatsapp-final" class="btn-checkout-final">
                         <svg viewBox="0 0 448 512" class="whatsapp-icon">
@@ -425,11 +425,20 @@
                 <p class="modal-description">Una explosión de sabor con los mejores ingredientes seleccionados para ti.</p>
                 
                 <div class="modal-main-qty">
-                    <span class="qty-label">Cantidad:</span>
-                    <div class="counter-control">
-                        <button class="main-qty-btn" id="main-minus">-</button>
-                        <span id="main-qty-val">1</span>
-                        <button class="main-qty-btn" id="main-plus">+</button>
+                    <div style="width: 100%;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="qty-label">Cantidad:</span>
+                            <div class="counter-control">
+                                <button class="main-qty-btn" id="main-minus">-</button>
+                                <span id="main-qty-val">1</span>
+                                <button class="main-qty-btn" id="main-plus">+</button>
+                            </div>
+                        </div>
+                        <div id="warning-box" class="warning-box hidden">
+                            <svg class="warning-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                            <p id="warning-text" class="warning-text"></p>
+                        </div>
+                        <button type="button" id="btn-variation-helper" class="btn-variation-helper hidden">¿Quieres otra con diferentes extras?</button>
                     </div>
                 </div>
 
@@ -479,6 +488,16 @@
                         <div class="extra-card" data-extra-price="3.50">
                             <div class="extra-info-text">
                                 <span class="extra-name">Extra Chuleta</span> <span class="extra-cost">+$3.50</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Extra Huevito</span> <span class="extra-cost">+$1.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -611,6 +630,43 @@
         </div>
     </div>
 
+    <!-- Modal de Recordatorio Post-Envío -->
+    <div id="modal-reminder" class="modal">
+        <div class="modal-content upsell-content">
+            <div class="modal-details">
+                <div class="clock-container">
+                    <svg class="clock-svg" viewBox="0 0 100 100">
+                        <circle class="clock-face" cx="50" cy="50" r="45" />
+                        <line class="clock-hand hour" x1="50" y1="50" x2="50" y2="30" />
+                        <line class="clock-hand minute" x1="50" y1="50" x2="50" y2="20" />
+                        <circle fill="var(--primary-color)" cx="50" cy="50" r="3" />
+                    </svg>
+                </div>
+                <p class="preparing-text">Preparando<span>.</span><span>.</span><span>.</span></p>
+                <h2 class="modal-title">¡Pedido en proceso!</h2>
+                <p class="modal-description">¡Tu pedido está en camino! Recuerda completar el proceso en WhatsApp para que podamos procesarlo correctamente.</p>
+                <div class="upsell-buttons">
+                    <button id="btn-new-order" class="btn-add-order">Hacer otro pedido</button>
+                    <button id="btn-reminder-ok" class="btn-back-to-cart btn-large-cancel" style="margin-top: 10px; width: 100%;">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Continuar Armando -->
+    <div id="modal-build-next" class="modal">
+        <div class="modal-content upsell-content">
+            <div class="modal-details">
+                <h2 class="modal-title">¡Añadida con éxito!</h2>
+                <p class="modal-description">¿Deseas personalizar otra de esta misma hamburguesa o prefieres ver tu pedido?</p>
+                <div class="upsell-buttons">
+                    <button id="btn-continue-building" class="btn-add-order">Personalizar otra</button>
+                    <button id="btn-view-cart-now" class="btn-back-to-cart btn-large-cancel" style="margin-top: 10px; width: 100%;">Ver mi pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const logoCarga = document.querySelector('.contenedor-logo');
@@ -626,7 +682,10 @@
             let basePrice = 0;
             let currentMainQty = 1;
             let esHamburguesa = false;
+            let pedidoConfirmado = false;
             let upsellMostrado = false;
+            let isArmandoPedido = false;
+            let lastItemClicked = null;
             let carrito = [];
             let drinkSugerida = null;
 
@@ -648,10 +707,24 @@
             const btnUpsellMore = document.getElementById('btn-upsell-more');
             const btnUpsellCancel = document.getElementById('btn-upsell-cancel');
 
+            const modalReminder = document.getElementById('modal-reminder');
+            const btnReminderOk = document.getElementById('btn-reminder-ok');
+            const btnNewOrder = document.getElementById('btn-new-order');
+            const warningBox = document.getElementById('warning-box');
+            const warningText = document.getElementById('warning-text');
+            const btnVariationHelper = document.getElementById('btn-variation-helper');
+            const btnAddOrderMain = modal.querySelector('.btn-add-order');
+            
+            const modalBuildNext = document.getElementById('modal-build-next');
+            const btnContinueBuilding = document.getElementById('btn-continue-building');
+            const btnViewCartNow = document.getElementById('btn-view-cart-now');
+
             // --- Funciones Globales ---
             const cerrarFunc = () => {
                 modal.style.display = 'none';
                 modalUpsell.style.display = 'none';
+                modalReminder.style.display = 'none';
+                modalBuildNext.style.display = 'none';
                 document.body.style.overflow = 'auto';
             };
 
@@ -687,15 +760,15 @@
                             <p class="cart-item-extras">${item.extras.length > 0 ? item.extras.map(e => {
                                 const cleanName = e.nombre.replace(/^Extra\s+/i, '');
                                 if (e.isToggle && e.val === 'NO') return `SIN ${cleanName}`;
-                                return `+${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
-                            }).join(', ') : 'Sin extras'}</p>
+                                return `+ Extra ${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
+                            }).join(', ') : ''}</p>
                         </div>
                         <div class="cart-item-right">
                             <div class="cart-price-column">
                                 <span class="cart-item-price">$${item.subtotal.toFixed(2)}</span>
                                 <span class="cart-item-ref">REF</span>
                             </div>
-                            <button class="remove-item" data-index="${index}" aria-label="Eliminar producto">&times;</button>
+                            <button class="remove-item" data-id="${item.id}" aria-label="Eliminar producto">&times;</button>
                         </div>
                     `;
                     cartItemsContainer.appendChild(div);
@@ -703,8 +776,8 @@
 
                 document.querySelectorAll('.remove-item').forEach(btn => {
                     btn.onclick = () => {
-                        const index = btn.getAttribute('data-index');
-                        carrito.splice(index, 1);
+                        const idToRemove = btn.getAttribute('data-id');
+                        carrito = carrito.filter(item => item.id !== idToRemove);
                         actualizarInterfazCarrito();
                     };
                 });
@@ -731,12 +804,15 @@
             // Lógica para abrir la modal al hacer clic en un item
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', () => {
+                    lastItemClicked = item;
                     const name = item.querySelector('.item-name').innerText;
                     const desc = item.querySelector('.item-desc') ? item.querySelector('.item-desc').innerText : "";
                     const priceStr = item.querySelector('.item-price').innerText;
                     basePrice = parseFloat(priceStr.replace('$', '').replace(',', '.'));
 
-                    esHamburguesa = !!item.closest('#hamburguesas');
+                    const esKids = !!item.closest('#kids');
+                    esHamburguesa = !!item.closest('#hamburguesas') || esKids;
+                    isArmandoPedido = false;
                     
                     // Ocultar la sección de personalización si no es una hamburguesa
                     if (extrasContainer) {
@@ -754,18 +830,24 @@
                         const nameText = card.querySelector('.extra-name').innerText;
                         const nameLower = nameText.toLowerCase();
                         
-                        // Restablecer visibilidad
-                        card.style.display = 'flex';
-
-                        if (card.dataset.isToggle === "true") {
+                        // Lógica de visibilidad selectiva
+                        let visible = true;
+                        if (esKids) {
+                            // Para Kids House, solo mostramos el Extra Huevito
+                            visible = (nameText === 'Extra Huevito');
+                        } else {
+                            // Para hamburguesas normales, filtramos pepinillos si no los trae la receta
                             if (nameLower === 'pepinillos') {
                                 const tienePepinillos = desc.toLowerCase().includes('pepinillo');
-                                if (tienePepinillos) {
-                                    valSpan.innerText = 'SÍ';
-                                } else {
-                                    card.style.display = 'none';
-                                    valSpan.innerText = 'NO';
-                                }
+                                if (!tienePepinillos) visible = false;
+                            }
+                        }
+
+                        card.style.display = visible ? 'flex' : 'none';
+
+                        if (card.dataset.isToggle === "true") {
+                            if (nameLower === 'pepinillos' && !visible) {
+                                valSpan.innerText = 'NO';
                             } else {
                                 valSpan.innerText = nameLower.includes('extra') ? 'NO' : 'SÍ';
                             }
@@ -818,7 +900,8 @@
             });
 
             // Añadir al pedido (Carrito)
-            document.querySelector('.btn-add-order').addEventListener('click', () => {
+            const agregarAlPedido = () => {
+                const wasArmando = isArmandoPedido;
                 const extrasSeleccionados = [];
                 document.querySelectorAll('.extra-card').forEach(card => {
                     const valText = card.querySelector('.extra-qty-val').innerText;
@@ -845,6 +928,7 @@
                 });
 
                 const itemPedido = {
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
                     nombre: modalTitle.innerText,
                     cantidad: currentMainQty,
                     precioUnitario: basePrice,
@@ -854,9 +938,29 @@
 
                 carrito.push(itemPedido);
                 actualizarInterfazCarrito();
+
+                // Limpiar la modal para el próximo uso
+                currentMainQty = 1;
+                mainQtyVal.innerText = currentMainQty;
+                document.querySelectorAll('.extra-card').forEach(card => {
+                    const valSpan = card.querySelector('.extra-qty-val');
+                    if (card.dataset.isToggle === "true") {
+                        const nameLower = card.querySelector('.extra-name').innerText.toLowerCase();
+                        valSpan.innerText = nameLower.includes('extra') ? 'NO' : 'SÍ';
+                    } else {
+                        valSpan.innerText = '0';
+                    }
+                });
+                warningBox.classList.add('hidden');
+                btnVariationHelper.classList.add('hidden');
+                isArmandoPedido = false;
+                btnAddOrderMain.classList.remove('btn-highlight');
+
                 cerrarFunc();
 
-                if (esHamburguesa && !upsellMostrado) {
+                if (wasArmando) {
+                    modalBuildNext.style.display = 'flex';
+                } else if (esHamburguesa && !upsellMostrado) {
                     // Obtener todas las bebidas del menú para sugerir una al azar
                     const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
                     const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
@@ -872,6 +976,29 @@
                 } else {
                     abrirCarritoConFeedback();
                 }
+            };
+
+            btnAddOrderMain.addEventListener('click', agregarAlPedido);
+            
+            btnVariationHelper.addEventListener('click', () => {
+                isArmandoPedido = true;
+                warningText.innerText = "¡Entendido! Arma tu hamburguesa: sigue cambiando lo que quieras y luego añádela al pedido.";
+                btnVariationHelper.classList.add('hidden');
+                btnAddOrderMain.classList.add('btn-highlight');
+                
+                currentMainQty = 1;
+                mainQtyVal.innerText = currentMainQty;
+                updateTotal();
+            });
+
+            btnContinueBuilding.addEventListener('click', () => {
+                cerrarFunc();
+                if (lastItemClicked) lastItemClicked.click();
+            });
+
+            btnViewCartNow.addEventListener('click', () => {
+                cerrarFunc();
+                abrirCarritoConFeedback();
             });
 
             btnUpsellCancel.addEventListener('click', () => {
@@ -889,6 +1016,7 @@
                 if (!drinkSugerida) return;
                 
                 const itemBebida = {
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
                     nombre: drinkSugerida.nombre,
                     cantidad: 1,
                     precioUnitario: drinkSugerida.precio,
@@ -915,14 +1043,14 @@
             // Enviar pedido por WhatsApp
             document.getElementById('form-delivery').addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nombre = document.getElementById('name').value.trim();
-                const sector = document.getElementById('sector').value.trim();
-                const direccion = document.getElementById('address').value.trim();
+                const nombre = document.getElementById('full-name').value.trim();
+                const avenida = document.getElementById('avenida-calle').value.trim();
+                const edificio = document.getElementById('edificio-casa').value.trim();
                 const referencia = document.getElementById('reference').value.trim();
                 const mapsLink = document.getElementById('maps').value.trim();
 
-                if (!nombre || !sector || !direccion) {
-                    return alert("Por favor, ingresa tu nombre, sector y dirección para poder procesar tu pedido.");
+                if (!nombre || !avenida || !edificio) {
+                    return alert("Por favor, ingresa tu nombre, avenida/calle y edificio para poder procesar tu pedido.");
                 }
 
                 let mensaje = `Hola, soy ${nombre}. Mi pedido es:\n\n`;
@@ -933,8 +1061,8 @@
                     if (item.extras && item.extras.length > 0) {
                         const extrasStr = item.extras.map(e => {
                             const cleanName = e.nombre.replace(/^Extra\s+/i, '');
-                            if (e.isToggle && e.val === 'NO') return `+ NO ${cleanName}`;
-                            return `+ ${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
+                            if (e.isToggle && e.val === 'NO') return `SIN ${cleanName}`;
+                            return `+ Extra ${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
                         }).join(', ');
                         itemTexto += ` (${extrasStr})`;
                     }
@@ -942,7 +1070,7 @@
                     totalPedido += item.subtotal;
                 });
 
-                const direccionCompleta = `${direccion}, ${sector}${referencia ? ` (Ref: ${referencia})` : ''}`;
+                const direccionCompleta = `${avenida}, ${edificio}${referencia ? ` (Ref: ${referencia})` : ''}`;
                 mensaje += `\nTotal del pedido: $${totalPedido.toFixed(2)} REF\n`;
                 mensaje += `Mi dirección es: ${direccionCompleta}`;
 
@@ -953,7 +1081,45 @@
                 const numeroWhatsApp = "584127510090";
                 const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
                 
+                // Activar lógica de seguridad
+                pedidoConfirmado = true;
+                // Empujamos un estado al historial para capturar el botón "Atrás"
+                history.pushState({ orderSent: true }, "");
+                
                 window.open(url, '_blank');
+                cartSidebar.classList.add('cart-closed'); // Cerramos el carrito para evitar bloqueos
+                modalReminder.style.display = 'flex';
+            });
+
+            // Capturar intento de retroceder
+            window.addEventListener('popstate', (e) => {
+                if (pedidoConfirmado) {
+                    modalReminder.style.display = 'flex';
+                    // Re-insertamos el estado para que el usuario deba confirmar antes de salir realmente
+                    history.pushState({ orderSent: true }, "");
+                }
+            });
+
+            // Capturar cierre de pestaña
+            window.addEventListener('beforeunload', (e) => {
+                if (pedidoConfirmado) {
+                    e.preventDefault();
+                    e.returnValue = ''; // Muestra el diálogo estándar del navegador
+                }
+            });
+
+            btnReminderOk.addEventListener('click', () => {
+                pedidoConfirmado = false; 
+                currentMainQty = 1;
+                mainQtyVal.innerText = 1;
+                window.location.reload();
+            });
+
+            btnNewOrder.addEventListener('click', () => {
+                pedidoConfirmado = false;
+                currentMainQty = 1;
+                mainQtyVal.innerText = 1;
+                window.location.reload();
             });
 
             function updateTotal() {
@@ -965,6 +1131,21 @@
                 });
                 const finalTotal = (basePrice + extraTotal) * currentMainQty;
                 modalPrice.innerText = `$${finalTotal.toFixed(2)}`;
+                btnAddOrderMain.classList.remove('btn-highlight');
+
+                // Lógica de avisos de cantidad
+                if (currentMainQty > 1) {
+                    isArmandoPedido = false;
+                    warningText.innerText = `Estas ${currentMainQty} hamburguesas compartirán los mismos ingredientes adicionales.`;
+                    warningBox.classList.remove('hidden');
+                    btnVariationHelper.classList.remove('hidden');
+                } else if (isArmandoPedido) {
+                    warningBox.classList.remove('hidden');
+                    btnVariationHelper.classList.add('hidden');
+                } else {
+                    warningBox.classList.add('hidden');
+                    btnVariationHelper.classList.add('hidden');
+                }
             }
             
             // Cerrar si hace clic fuera del contenido
