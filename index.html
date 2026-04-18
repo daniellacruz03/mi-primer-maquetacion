@@ -456,6 +456,16 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
+                        <div class="extra-card" data-extra-price="1.20">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Extra Carne</span> <span class="extra-cost">+$1.20</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
                         <div class="extra-card" data-extra-price="3.00">
                             <div class="extra-info-text">
                                 <span class="extra-name">Extra Pollo Crispy</span> <span class="extra-cost">+$3.00</span>
@@ -478,7 +488,7 @@
                         </div>
                         <div class="extra-card" data-extra-price="1.20">
                             <div class="extra-info-text">
-                                <span class="extra-name">Cheese</span> <span class="extra-cost">+$1.20</span>
+                                <span class="extra-name">Extra Cheese</span> <span class="extra-cost">+$1.20</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -488,7 +498,7 @@
                         </div>
                         <div class="extra-card" data-extra-price="2.00">
                             <div class="extra-info-text">
-                                <span class="extra-name">Tocineta</span> <span class="extra-cost">+$2.00</span>
+                                <span class="extra-name">Extra Tocineta</span> <span class="extra-cost">+$2.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -498,7 +508,7 @@
                         </div>
                         <div class="extra-card" data-extra-price="1.00">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra BBQ</span> <span class="extra-cost">+$1.00</span>
+                                <span class="extra-name">Servicio de salsa BBQ</span> <span class="extra-cost">+$1.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -674,7 +684,11 @@
                     div.innerHTML = `
                         <div class="cart-item-info">
                             <h4>${item.cantidad}x ${item.nombre}</h4>
-                            <p class="cart-item-extras">${item.extras.length > 0 ? item.extras.map(e => `+${e.qty} ${e.nombre}`).join(', ') : 'Sin extras'}</p>
+                            <p class="cart-item-extras">${item.extras.length > 0 ? item.extras.map(e => {
+                                const cleanName = e.nombre.replace(/^Extra\s+/i, '');
+                                if (e.isToggle && e.val === 'NO') return `SIN ${cleanName}`;
+                                return `+${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
+                            }).join(', ') : 'Sin extras'}</p>
                         </div>
                         <div class="cart-item-right">
                             <div class="cart-price-column">
@@ -808,11 +822,23 @@
                 const extrasSeleccionados = [];
                 document.querySelectorAll('.extra-card').forEach(card => {
                     const valText = card.querySelector('.extra-qty-val').innerText;
+                    const nombre = card.querySelector('.extra-name').innerText;
+                    const isToggle = card.dataset.isToggle === "true";
                     const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : parseInt(valText));
-                    if (qty > 0) {
+
+                    let incluir = false;
+                    if (!isToggle && qty > 0) incluir = true;
+                    if (isToggle) {
+                        if ((nombre === 'Salsa de la Casa' || nombre === 'Pepinillos') && valText === 'NO') incluir = true;
+                        if (nombre.toLowerCase().includes('extra') && valText === 'SÍ') incluir = true;
+                    }
+
+                    if (incluir) {
                         extrasSeleccionados.push({
-                            nombre: card.querySelector('.extra-name').innerText,
+                            nombre: nombre,
                             qty: qty,
+                            val: valText,
+                            isToggle: isToggle,
                             precio: parseFloat(card.dataset.extraPrice) * qty
                         });
                     }
@@ -905,7 +931,11 @@
                 carrito.forEach(item => {
                     let itemTexto = `${item.cantidad} ${item.nombre}`;
                     if (item.extras && item.extras.length > 0) {
-                        const extrasStr = item.extras.map(e => e.qty > 1 ? `${e.qty} ${e.nombre}` : e.nombre).join(', ');
+                        const extrasStr = item.extras.map(e => {
+                            const cleanName = e.nombre.replace(/^Extra\s+/i, '');
+                            if (e.isToggle && e.val === 'NO') return `+ NO ${cleanName}`;
+                            return `+ ${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
+                        }).join(', ');
                         itemTexto += ` (${extrasStr})`;
                     }
                     mensaje += `${itemTexto}\n`;
@@ -948,16 +978,16 @@
             }
         });
     </script>
-    <!-- 
-      _           _        _______  _______           _______          
-     ( \         ( \      (  ___  )(  ____ )|\     /|(  ____ \|\     /|
-     | (         | (      | (   ) || (    )|| )   ( || (    \/| )   ( |
-     | |         | |      | (___) || (____)|| |   | || (_____ | (___) |
-     | |         | |      |  ___  ||     __)| |   | |(_____  )|  ___  |
-     | |         | |      | (   ) || (\ (   | |   | |      ) || (   ) |
-     | (____/\   | (____/\| )   ( || ) \ \__| (___) |/\____) || )   ( |
-     (_______/   (_______/|/     \||/   \__/(_______)\_______)|/     \|
-                                                                       
+    <!--
+      _        _______  _______  _______           _______          
+     ( \      (  ___  )(  ____ \(  ____ )|\     /|(  ____ \|\     /|
+     | (      | (   ) || (    \/| (    )|| )   ( || (    \/| )   ( |
+     | |      | (___) || |      | (____)|| |   | || (_____ | (___) |
+     | |      |  ___  || |      |     __)| |   | |(_____  )|  ___  |
+     | |      | (   ) || |      | (\ (   | |   | |      ) || (   ) |
+     | (____/\| )   ( || (____/\| ) \ \__| (___) |/\____) || )   ( |
+     (_______/|/     \|(_______/|/   \__/(_______)\_______)|/     \|
+
                                   B Y   L A C R U S H
     -->
 </body>
