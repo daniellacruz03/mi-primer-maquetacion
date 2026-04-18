@@ -244,6 +244,36 @@
                     <span class="item-ref">REF</span>
                 </div>
             </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <span class="item-name">Cajita Papas (115g)</span>
+                    <p class="item-desc">Porción individual de papas fritas crujientes.</p>
+                </div>
+                <div class="item-price-wrapper">
+                    <span class="item-price">$3</span>
+                    <span class="item-ref">REF</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <span class="item-name">Servicio de Papas (Sin Toppings)</span>
+                    <p class="item-desc">Ración generosa de papas fritas clásicas.</p>
+                </div>
+                <div class="item-price-wrapper">
+                    <span class="item-price">$4,5</span>
+                    <span class="item-ref">REF</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="item-info">
+                    <span class="item-name">Servicio de Nuggets</span>
+                    <p class="item-desc">Nuggets de pollo súper crujientes.</p>
+                </div>
+                <div class="item-price-wrapper">
+                    <span class="item-price">$8</span>
+                    <span class="item-ref">REF</span>
+                </div>
+            </div>
         </section>
 
         <section id="bebidas">
@@ -352,7 +382,7 @@
             </div>
 
             <div id="checkout-view" class="hidden">
-                <button id="btn-back-to-cart">← Volver al pedido</button>
+                <button id="btn-back-to-cart"><span class="back-arrow">←</span> Volver al pedido</button>
                 <div class="checkout-form">
                     <h3 class="checkout-title">Datos de Entrega</h3>
                     <input type="text" id="f-name" placeholder="Tu Nombre" required autocomplete="name" enterkeyhint="next">
@@ -394,9 +424,9 @@
                 <div class="modal-extras-container">
                     <h3 class="extras-title">Personaliza tu orden</h3>
                     <div class="extras-grid">
-                        <div class="extra-card" data-extra-price="3.00">
+                        <div class="extra-card" data-extra-price="1.20">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Carne</span> <span class="extra-cost">+$3.00</span>
+                                <span class="extra-name">Extra Pepinillos</span> <span class="extra-cost">+$1.20</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -416,7 +446,37 @@
                         </div>
                         <div class="extra-card" data-extra-price="3.00">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Chuleta</span> <span class="extra-cost">+$3.00</span>
+                                <span class="extra-name">Extra Pollo Crispy</span> <span class="extra-cost">+$3.00</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="3.50">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Extra Chuleta</span> <span class="extra-cost">+$3.50</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.20">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Cheese</span> <span class="extra-cost">+$1.20</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="2.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Tocineta</span> <span class="extra-cost">+$2.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -426,17 +486,7 @@
                         </div>
                         <div class="extra-card" data-extra-price="1.00">
                             <div class="extra-info-text">
-                                <span class="extra-name">Cheese</span> <span class="extra-cost">+$1.00</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">0</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
-                        <div class="extra-card" data-extra-price="1.50">
-                            <div class="extra-info-text">
-                                <span class="extra-name">Tocineta</span> <span class="extra-cost">+$1.50</span>
+                                <span class="extra-name">Extra BBQ</span> <span class="extra-cost">+$1.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -446,7 +496,17 @@
                         </div>
                         <div class="extra-card" data-extra-price="1.00">
                             <div class="extra-info-text">
-                                <span class="extra-name">Pepinillos</span> <span class="extra-cost">+$1.00</span>
+                                <span class="extra-name">Servicio de Mayonesa</span> <span class="extra-cost">+$1.00</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Servicio de Queso Fundido</span> <span class="extra-cost">+$1.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -456,27 +516,27 @@
                         </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
-                                <span class="extra-name">Sin Pepinillos</span>
+                                <span class="extra-name">Pepinillos</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">NO</span>
+                                <span class="extra-qty-val">SÍ</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
-                                <span class="extra-name">Sin Salsa de la Casa</span>
+                                <span class="extra-name">Salsa de la Casa</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">NO</span>
+                                <span class="extra-qty-val">SÍ</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Salsa de Tomate</span>
+                                <span class="extra-name">Extra Ketchup</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -546,6 +606,7 @@
             let esHamburguesa = false;
             let upsellMostrado = false;
             let carrito = [];
+            let drinkSugerida = null;
 
             // Funciones del Carrito
             const cartBtn = document.getElementById('cart-floating-btn');
@@ -664,7 +725,27 @@
                     mainQtyVal.innerText = currentMainQty;
                     document.querySelectorAll('.extra-card').forEach(card => {
                         const valSpan = card.querySelector('.extra-qty-val');
-                        valSpan.innerText = card.dataset.isToggle === "true" ? 'NO' : '0';
+                        const nameText = card.querySelector('.extra-name').innerText;
+                        const nameLower = nameText.toLowerCase();
+                        
+                        // Restablecer visibilidad
+                        card.style.display = 'flex';
+
+                        if (card.dataset.isToggle === "true") {
+                            if (nameLower === 'pepinillos') {
+                                const tienePepinillos = desc.toLowerCase().includes('pepinillo');
+                                if (tienePepinillos) {
+                                    valSpan.innerText = 'SÍ';
+                                } else {
+                                    card.style.display = 'none';
+                                    valSpan.innerText = 'NO';
+                                }
+                            } else {
+                                valSpan.innerText = nameLower.includes('extra') ? 'NO' : 'SÍ';
+                            }
+                        } else {
+                            valSpan.innerText = '0';
+                        }
                     });
 
                     modalImg.src = "hamburguesa.png"; 
@@ -738,6 +819,16 @@
                 cerrarFunc();
 
                 if (esHamburguesa && !upsellMostrado) {
+                    // Obtener todas las bebidas del menú para sugerir una al azar
+                    const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
+                    const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
+                    
+                    drinkSugerida = {
+                        nombre: randomElement.querySelector('.item-name').innerText,
+                        precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.'))
+                    };
+
+                    modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
                     modalUpsell.style.display = 'flex';
                     upsellMostrado = true;
                 } else {
@@ -757,12 +848,14 @@
             });
 
             btnUpsellAdd.addEventListener('click', () => {
+                if (!drinkSugerida) return;
+                
                 const itemBebida = {
-                    nombre: "Coca-Cola Bombita 355 ML",
+                    nombre: drinkSugerida.nombre,
                     cantidad: 1,
-                    precioUnitario: 1.00,
+                    precioUnitario: drinkSugerida.precio,
                     extras: [],
-                    subtotal: 1.00
+                    subtotal: drinkSugerida.precio
                 };
                 carrito.push(itemBebida);
                 actualizarInterfazCarrito();
