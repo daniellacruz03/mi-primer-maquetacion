@@ -942,17 +942,23 @@
                 if (e.target === modal || e.target === modalUpsell) cerrarFunc();
             });
 
-            // Limpiar el formulario de pedido al cargar la página
             const formDelivery = document.getElementById('form-delivery');
             if (formDelivery) {
                 formDelivery.reset();
             }
-
-            // Si estuvieras usando localStorage o sessionStorage para guardar el carrito o el pedido,
-            // aquí podrías limpiar claves específicas al recargar la página. Por ejemplo:
-            // localStorage.removeItem('cartItems'); // Si guardas el carrito
-            // sessionStorage.removeItem('currentOrderData'); // Si guardas datos del pedido en sesión
         });
     </script>
+    <!-- 
+      _           _        _______  _______           _______          
+     ( \         ( \      (  ___  )(  ____ )|\     /|(  ____ \|\     /|
+     | (         | (      | (   ) || (    )|| )   ( || (    \/| )   ( |
+     | |         | |      | (___) || (____)|| |   | || (_____ | (___) |
+     | |         | |      |  ___  ||     __)| |   | |(_____  )|  ___  |
+     | |         | |      | (   ) || (\ (   | |   | |      ) || (   ) |
+     | (____/\   | (____/\| )   ( || ) \ \__| (___) |/\____) || )   ( |
+     (_______/   (_______/|/     \||/   \__/(_______)\_______)|/     \|
+                                                                       
+                                  B Y   L A C R U S H
+    -->
 </body>
 </html>
