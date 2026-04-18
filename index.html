@@ -20,11 +20,11 @@
     </div>
 
     <div class="background-decor">
-        <img src="papas flotantes.png" alt="" class="corner-item papa-top-left" aria-hidden="true">
-        <img src="hamburguesa.png" alt="" class="corner-item papa-top-right" aria-hidden="true">
-        <img src="burger-flotante.png" alt="" class="corner-item burger-bottom-left" aria-hidden="true">
-        <img src="nuggets.png" alt="" class="corner-item nuggets-bottom-left" aria-hidden="true">
-        <img src="plato-completo.png" alt="" class="corner-item plato-bottom-right" aria-hidden="true">
+        <img src="papas flotantes.png" alt="" class="corner-item papa-top-left" aria-hidden="true" loading="lazy">
+        <img src="hamburguesa.png" alt="" class="corner-item papa-top-right" aria-hidden="true" loading="lazy">
+        <img src="burger-flotante.png" alt="" class="corner-item burger-bottom-left" aria-hidden="true" loading="lazy">
+        <img src="nuggets.png" alt="" class="corner-item nuggets-bottom-left" aria-hidden="true" loading="lazy">
+        <img src="plato-completo.png" alt="" class="corner-item plato-bottom-right" aria-hidden="true" loading="lazy">
     </div>
 
     <main id="main-menu" class="menu-container">
@@ -293,6 +293,13 @@
                 </div>
             </div>
             <div class="menu-item">
+                <div class="item-info"><span class="item-name">Coca-Cola Bombita Zero 355 ML</span></div>
+                <div class="item-price-wrapper">
+                    <span class="item-price">$1</span>
+                    <span class="item-ref">REF</span>
+                </div>
+            </div>
+            <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola Lata 350 ML</span></div>
                 <div class="item-price-wrapper">
                     <span class="item-price">$1,5</span>
@@ -382,21 +389,26 @@
             </div>
 
             <div id="checkout-view" class="hidden">
-                <button id="btn-back-to-cart"><span class="back-arrow">←</span> Volver al pedido</button>
-                <div class="checkout-form">
+                <button id="btn-back-to-cart">
+                    <svg viewBox="0 0 24 24" class="back-icon">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    Volver al pedido
+                </button>
+                <form id="form-delivery" class="checkout-form">
                     <h3 class="checkout-title">Datos de Entrega</h3>
-                    <input type="text" id="f-name" placeholder="Tu Nombre" required autocomplete="name" enterkeyhint="next">
-                    <input type="text" id="f-sector" placeholder="Sector / Urbanización" required enterkeyhint="next">
-                    <textarea id="f-address" placeholder="Dirección (Calle, Edif/Casa, Apto)" required enterkeyhint="next"></textarea>
-                    <input type="text" id="f-ref" placeholder="Punto de referencia (Ej: Frente a...)" enterkeyhint="done">
-                    <input type="text" id="f-maps" placeholder="Enlace de Google Maps (Opcional)" enterkeyhint="done">
+                    <input type="text" id="name" name="name" placeholder="Tu Nombre" required autocomplete="name" enterkeyhint="next">
+                    <input type="text" id="sector" name="sector" placeholder="Sector / Urbanización" required autocomplete="address-level3" enterkeyhint="next">
+                    <textarea id="address" name="address" placeholder="Dirección (Calle, Edif/Casa, Apto)" required autocomplete="street-address" enterkeyhint="next"></textarea>
+                    <input type="text" id="reference" name="reference" placeholder="Punto de referencia (Ej: Frente a...)" autocomplete="off" enterkeyhint="done">
+                    <input type="text" id="maps" name="maps" placeholder="Enlace de Google Maps (Opcional)" enterkeyhint="done">
 
-                    <button id="btn-whatsapp-final" class="btn-checkout-final">
+                    <button type="submit" id="btn-whatsapp-final" class="btn-checkout-final">
                         <svg viewBox="0 0 448 512" class="whatsapp-icon">
                             <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.7 17.7 69.4 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.2-3.2-5.6-.3-8.6 2.4-11.3 2.5-2.5 5.5-6.5 8.3-9.7 2.8-3.3 3.7-5.6 5.5-9.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.7 23.5 9.2 31.6 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.5 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
                         </svg>Confirmar pedido
                     </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -875,12 +887,13 @@
             });
 
             // Enviar pedido por WhatsApp
-            document.getElementById('btn-whatsapp-final').addEventListener('click', () => {
-                const nombre = document.getElementById('f-name').value.trim();
-                const sector = document.getElementById('f-sector').value.trim();
-                const direccion = document.getElementById('f-address').value.trim();
-                const referencia = document.getElementById('f-ref').value.trim();
-                const mapsLink = document.getElementById('f-maps').value.trim();
+            document.getElementById('form-delivery').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nombre = document.getElementById('name').value.trim();
+                const sector = document.getElementById('sector').value.trim();
+                const direccion = document.getElementById('address').value.trim();
+                const referencia = document.getElementById('reference').value.trim();
+                const mapsLink = document.getElementById('maps').value.trim();
 
                 if (!nombre || !sector || !direccion) {
                     return alert("Por favor, ingresa tu nombre, sector y dirección para poder procesar tu pedido.");
@@ -928,6 +941,17 @@
             window.addEventListener('click', (e) => {
                 if (e.target === modal || e.target === modalUpsell) cerrarFunc();
             });
+
+            // Limpiar el formulario de pedido al cargar la página
+            const formDelivery = document.getElementById('form-delivery');
+            if (formDelivery) {
+                formDelivery.reset();
+            }
+
+            // Si estuvieras usando localStorage o sessionStorage para guardar el carrito o el pedido,
+            // aquí podrías limpiar claves específicas al recargar la página. Por ejemplo:
+            // localStorage.removeItem('cartItems'); // Si guardas el carrito
+            // sessionStorage.removeItem('currentOrderData'); // Si guardas datos del pedido en sesión
         });
     </script>
 </body>
