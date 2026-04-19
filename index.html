@@ -377,7 +377,6 @@
         <div id="cart-content-wrapper">
             <div id="cart-items-view">
                 <div id="cart-items-container">
-                    <!-- Los productos se inyectarán aquí -->
                 </div>
                 <div class="cart-footer">
                     <div class="cart-total-info">
@@ -413,7 +412,6 @@
         </div>
     </div>
 
-    <!-- Ventana Modal de Producto -->
     <div id="modal-hamburguesa" class="modal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -614,7 +612,6 @@
         </div>
     </div>
 
-    <!-- Modal de Publicidad (Bebida) -->
     <div id="modal-upsell" class="modal">
         <div class="modal-content upsell-content">
             <div class="modal-details">
@@ -630,7 +627,6 @@
         </div>
     </div>
 
-    <!-- Modal de Recordatorio Post-Envío -->
     <div id="modal-reminder" class="modal">
         <div class="modal-content upsell-content">
             <div class="modal-details">
@@ -653,7 +649,6 @@
         </div>
     </div>
 
-    <!-- Modal Continuar Armando -->
     <div id="modal-build-next" class="modal">
         <div class="modal-content upsell-content">
             <div class="modal-details">
@@ -689,7 +684,6 @@
             let carrito = [];
             let drinkSugerida = null;
 
-            // Funciones del Carrito
             const cartBtn = document.getElementById('cart-floating-btn');
             const cartSidebar = document.getElementById('cart-sidebar');
             const closeCart = document.getElementById('close-cart');
@@ -697,11 +691,9 @@
             const cartItemsContainer = document.getElementById('cart-items-container');
             const cartGrandTotal = document.getElementById('cart-grand-total');
 
-            // Vistas del Carrito
             const cartItemsView = document.getElementById('cart-items-view');
             const checkoutView = document.getElementById('checkout-view');
 
-            // Elementos Modal Upsell
             const modalUpsell = document.getElementById('modal-upsell');
             const btnUpsellAdd = document.getElementById('btn-upsell-add');
             const btnUpsellMore = document.getElementById('btn-upsell-more');
@@ -719,7 +711,6 @@
             const btnContinueBuilding = document.getElementById('btn-continue-building');
             const btnViewCartNow = document.getElementById('btn-view-cart-now');
 
-            // --- Funciones Globales ---
             const cerrarFunc = () => {
                 modal.style.display = 'none';
                 modalUpsell.style.display = 'none';
@@ -801,7 +792,6 @@
 
             closeModal.addEventListener('click', cerrarFunc);
 
-            // Lógica para abrir la modal al hacer clic en un item
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', () => {
                     lastItemClicked = item;
@@ -814,7 +804,6 @@
                     esHamburguesa = !!item.closest('#hamburguesas') || esKids;
                     isArmandoPedido = false;
                     
-                    // Ocultar la sección de personalización si no es una hamburguesa
                     if (extrasContainer) {
                         extrasContainer.style.display = esHamburguesa ? 'block' : 'none';
                     }
@@ -830,16 +819,16 @@
                         const nameText = card.querySelector('.extra-name').innerText;
                         const nameLower = nameText.toLowerCase();
                         
-                        // Lógica de visibilidad selectiva
+                        const tienePepinillos = desc.toLowerCase().includes('pepinillo');
+
                         let visible = true;
                         if (esKids) {
-                            // Para Kids House, solo mostramos el Extra Huevito
                             visible = (nameText === 'Extra Huevito');
                         } else {
-                            // Para hamburguesas normales, filtramos pepinillos si no los trae la receta
-                            if (nameLower === 'pepinillos') {
-                                const tienePepinillos = desc.toLowerCase().includes('pepinillo');
-                                if (!tienePepinillos) visible = false;
+                            if (nameLower === 'pepinillos') { 
+                                visible = tienePepinillos;
+                            } else if (nameLower === 'extra pepinillos') {
+                                visible = !tienePepinillos;
                             }
                         }
 
@@ -856,6 +845,9 @@
                         }
                     });
 
+                    updateTotal(); 
+                    warningBox.classList.add('hidden');
+                    btnVariationHelper.classList.add('hidden');
                     modalImg.src = "hamburguesa.png"; 
 
                     modal.style.display = 'flex';
@@ -863,21 +855,18 @@
                 });
             });
 
-            // Lógica de botones +/- de extras
             document.querySelectorAll('.extra-qty-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const card = btn.closest('.extra-card');
                     const valSpan = btn.parentElement.querySelector('.extra-qty-val');
                     const isToggle = card.dataset.isToggle === "true";
                     
-                    let currentVal = valSpan.innerText === 'SÍ' ? 1 : (valSpan.innerText === 'NO' ? 0 : parseInt(valSpan.innerText));
+                    const text = valSpan.innerText;
+                    let currentVal = (text === 'SÍ') ? 1 : (text === 'NO' ? 0 : parseInt(text));
                     
                     if (btn.classList.contains('plus')) {
-                        if (isToggle) {
-                            currentVal = 1;
-                        } else {
-                            currentVal++;
-                        }
+                        if (isToggle) currentVal = 1;
+                        else currentVal++;
                     } else if (btn.classList.contains('minus') && currentVal > 0) {
                         currentVal--;
                     }
@@ -887,7 +876,6 @@
                 });
             });
 
-            // Lógica cantidad principal
             document.getElementById('main-plus').addEventListener('click', () => {
                 currentMainQty++;
                 mainQtyVal.innerText = currentMainQty;
@@ -899,7 +887,6 @@
                 updateTotal();
             });
 
-            // Añadir al pedido (Carrito)
             const agregarAlPedido = () => {
                 const wasArmando = isArmandoPedido;
                 const extrasSeleccionados = [];
@@ -939,7 +926,6 @@
                 carrito.push(itemPedido);
                 actualizarInterfazCarrito();
 
-                // Limpiar la modal para el próximo uso
                 currentMainQty = 1;
                 mainQtyVal.innerText = currentMainQty;
                 document.querySelectorAll('.extra-card').forEach(card => {
@@ -961,7 +947,6 @@
                 if (wasArmando) {
                     modalBuildNext.style.display = 'flex';
                 } else if (esHamburguesa && !upsellMostrado) {
-                    // Obtener todas las bebidas del menú para sugerir una al azar
                     const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
                     const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
                     
@@ -1040,7 +1025,6 @@
                 cartItemsView.classList.remove('hidden');
             });
 
-            // Enviar pedido por WhatsApp
             document.getElementById('form-delivery').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const nombre = document.getElementById('full-name').value.trim();
@@ -1081,30 +1065,24 @@
                 const numeroWhatsApp = "584127510090";
                 const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
                 
-                // Activar lógica de seguridad
                 pedidoConfirmado = true;
-                // Empujamos un estado al historial para capturar el botón "Atrás"
                 history.pushState({ orderSent: true }, "");
                 
                 window.open(url, '_blank');
-                cartSidebar.classList.add('cart-closed'); // Cerramos el carrito para evitar bloqueos
+                cartSidebar.classList.add('cart-closed');
                 modalReminder.style.display = 'flex';
             });
 
-            // Capturar intento de retroceder
             window.addEventListener('popstate', (e) => {
                 if (pedidoConfirmado) {
                     modalReminder.style.display = 'flex';
-                    // Re-insertamos el estado para que el usuario deba confirmar antes de salir realmente
                     history.pushState({ orderSent: true }, "");
                 }
             });
 
-            // Capturar cierre de pestaña
             window.addEventListener('beforeunload', (e) => {
                 if (pedidoConfirmado) {
                     e.preventDefault();
-                    e.returnValue = ''; // Muestra el diálogo estándar del navegador
                 }
             });
 
@@ -1133,7 +1111,6 @@
                 modalPrice.innerText = `$${finalTotal.toFixed(2)}`;
                 btnAddOrderMain.classList.remove('btn-highlight');
 
-                // Lógica de avisos de cantidad
                 if (currentMainQty > 1) {
                     isArmandoPedido = false;
                     warningText.innerText = `Estas ${currentMainQty} hamburguesas compartirán los mismos ingredientes adicionales.`;
@@ -1148,7 +1125,6 @@
                 }
             }
             
-            // Cerrar si hace clic fuera del contenido
             window.addEventListener('click', (e) => {
                 if (e.target === modal || e.target === modalUpsell) cerrarFunc();
             });

@@ -11,12 +11,12 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { 
+html {
     margin: 0; 
     padding: 0; 
     height: 100%;
     scroll-behavior: smooth; 
-    background-color: #080808; /* Evita que se vea blanco al rebotar el scroll */
+    background-color: #080808;
     image-rendering: -webkit-optimize-contrast;
 }
 
@@ -30,7 +30,10 @@ body {
     display: flex; flex-direction: column; align-items: center;
     overflow-x: hidden;
     color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 
@@ -42,7 +45,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 5000; /* Asegura que la carga esté por encima de todo */
+    z-index: 5000;
 }
 
 .logo-animado {
@@ -96,7 +99,7 @@ body {
     max-width: 600px;
     width: 95%;
     margin: 0 auto;
-    padding-top: 100px;
+    padding-top: calc(80px + env(safe-area-inset-top));
     padding-bottom: 60px;
     z-index: 10;
     transition: opacity 1s ease, visibility 1s;
@@ -120,7 +123,7 @@ body {
     height: auto;
     border-radius: 50%;
     border: none;
-    box-shadow: none !important; /* Aseguramos que el logo sea mate */
+    box-shadow: none !important;
 }
 
 h1 { 
@@ -152,12 +155,15 @@ h1 {
     transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
     z-index: 5;
+    touch-action: manipulation;
 }
 
-.menu-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px rgba(230, 0, 0, 0.3);
+@media (hover: hover) {
+    .menu-item:hover {
+        transform: translateY(-8px) scale(1.02);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 30px rgba(230, 0, 0, 0.3);
+    }
 }
 
 .menu-item:active {
@@ -218,7 +224,6 @@ h1 {
     .menu-item { flex-direction: column; text-align: center; gap: 10px; padding: 15px 12px; margin-bottom: 15px; }
     .item-price-wrapper { align-items: center; }
     
-    /* Ajuste de elementos decorativos para móvil */
     .papa-top-left { width: 150px; left: -30px; }
     .papa-top-right { width: 120px; right: -20px; }
     .burger-bottom-left { width: 150px; left: -40px; }
@@ -230,7 +235,6 @@ h1 {
     
     .badge-new, .badge-best { font-size: 0.6rem; padding: 1px 6px; }
 
-    /* Modal Compacta para Móvil */
     .modal { padding: 10px 5px; }
     .modal-content { border-radius: 20px; }
     .modal-image-container { height: 160px; padding: 15px; }
@@ -243,7 +247,6 @@ h1 {
     .btn-add-order { padding: 15px; font-size: 1.2rem; }
 }
 
-/* --- Estilos de la Ventana Modal --- */
 .modal {
     position: fixed;
     top: 0; left: 0;
@@ -251,8 +254,9 @@ h1 {
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    z-index: 4500; /* Ahora por encima del carrito (4000) */
+    z-index: 4500;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     display: none;
     align-items: flex-start;
     justify-content: center;
@@ -272,7 +276,6 @@ h1 {
     animation: zoomIn 0.3s ease-out;
 }
 
-/* --- Animación de Reloj --- */
 .clock-container {
     width: 80px;
     height: 80px;
@@ -302,7 +305,6 @@ h1 {
 .hour { animation: rotateClock 8s linear infinite; }
 .minute { animation: rotateClock 2s linear infinite; }
 
-/* --- Texto Preparando con puntos --- */
 .preparing-text {
     color: var(--text-muted);
     font-size: 0.8rem;
@@ -352,6 +354,7 @@ h1 {
     border-radius: 12px;
     cursor: pointer;
     transition: 0.3s;
+    touch-action: manipulation;
 }
 
 #btn-upsell-cancel {
@@ -361,11 +364,14 @@ h1 {
     transition: 0.3s;
 }
 
-#btn-upsell-add:hover, 
-#btn-upsell-more:hover, 
-#btn-upsell-cancel:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(230, 0, 0, 0.5);
+@media (hover: hover) {
+    #btn-upsell-add:hover, 
+    #btn-upsell-more:hover, 
+    #btn-upsell-cancel:hover,
+    .btn-add-order:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(230, 0, 0, 0.5);
+    }
 }
 
 .upsell-img {
@@ -398,7 +404,9 @@ h1 {
     transition: 0.3s;
 }
 
-.close-modal:hover { filter: brightness(1.2); transform: rotate(90deg); }
+@media (hover: hover) {
+    .close-modal:hover { filter: brightness(1.2); transform: rotate(90deg); }
+}
 
 .modal-image-container {
     width: 100%;
@@ -468,8 +476,10 @@ h1 {
     transition: 0.3s;
 }
 
-.btn-variation-helper:hover {
-    color: white;
+@media (hover: hover) {
+    .btn-variation-helper:hover {
+        color: white;
+    }
 }
 
 @keyframes highlightGlow {
@@ -539,9 +549,7 @@ h1 {
 
 .modal-price { display: block; font-family: var(--font-heading); font-size: 2.8rem; color: var(--primary-color); margin-bottom: 25px; font-weight: bold; }
 .btn-add-order { width: 100%; background: var(--primary-color); color: white; border: none; padding: 20px; border-radius: 15px; font-family: var(--font-heading); font-size: 1.4rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(230, 0, 0, 0.3); }
-.btn-add-order:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(230, 0, 0, 0.5); }
 
-/* --- Carrito Flotante --- */
 #cart-floating-btn.cart-btn-hidden {
     opacity: 0;
     transform: scale(0);
@@ -563,9 +571,10 @@ h1 {
 
 #cart-floating-btn {
     position: fixed;
-    top: 20px; right: 20px;
+    top: calc(20px + env(safe-area-inset-top));
+    right: 20px;
     width: 60px; height: 60px;
-    background: #ffffff; /* Fondo blanco para contraste */
+    background: #ffffff;
     border: 2px solid var(--primary-color);
     border-radius: 50%;
     display: flex;
@@ -599,7 +608,6 @@ h1 {
     filter: brightness(0) saturate(100%) invert(11%) sepia(94%) saturate(7441%) hue-rotate(358deg) brightness(96%) contrast(113%);
 }
 
-/* --- Barra Lateral Carrito --- */
 #cart-sidebar {
     position: fixed;
     top: 0; right: 0;
@@ -608,6 +616,7 @@ h1 {
     background: #0f0f0f;
     z-index: 4000;
     box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+    -webkit-overflow-scrolling: touch;
     transition: transform 0.4s ease;
     overscroll-behavior: contain;
     display: flex;
@@ -656,15 +665,18 @@ h1 {
     transition: 0.3s; 
 }
 
- #close-cart:hover {
-    filter: brightness(1.2);
-    transform: rotate(90deg);
+@media (hover: hover) {
+    #close-cart:hover {
+       filter: brightness(1.2);
+       transform: rotate(90deg);
+   }
 }
 
 #cart-items-container {
     flex: 1;
     overflow-y: auto;
     padding: 20px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .cart-item-row {
@@ -721,9 +733,11 @@ h1 {
     line-height: 1;
 }
 
-.remove-item:hover {
-    filter: brightness(1.2);
-    transform: scale(1.1);
+@media (hover: hover) {
+    .remove-item:hover {
+        filter: brightness(1.2);
+        transform: scale(1.1);
+    }
 }
 
 .cart-footer {
@@ -766,7 +780,7 @@ h1 {
 }
 
 .btn-checkout-final {
-    background: #25D366; /* Color oficial WhatsApp */
+    background: #25D366;
     font-size: 1.3rem;
     margin-top: 15px;
     box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
@@ -778,7 +792,9 @@ h1 {
     fill: currentColor;
 }
 
-.btn-checkout-final:hover { background: #128C7E; transform: translateY(-2px); }
+@media (hover: hover) {
+    .btn-checkout-final:hover { background: #128C7E; transform: translateY(-2px); }
+}
 
 #checkout-view { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
 
@@ -814,9 +830,11 @@ h1 {
     background: rgba(255, 255, 255, 0.05) !important;
 }
 
-#btn-back-to-cart:hover {
-    filter: brightness(1.2);
-    transform: translateY(-2px);
+@media (hover: hover) {
+    #btn-back-to-cart:hover {
+        filter: brightness(1.2);
+        transform: translateY(-2px);
+    }
 }
 
 .checkout-form { display: flex; flex-direction: column; gap: 12px; }
@@ -829,7 +847,9 @@ h1 {
     border-radius: 8px;
     color: white;
     font-family: var(--font-body);
-    font-size: 16px; /* Evita zoom automático en iOS */
+    font-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 .checkout-form label { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; }
