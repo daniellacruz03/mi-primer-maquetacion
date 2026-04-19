@@ -6,6 +6,21 @@
     <title>Burger House | Menú</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/jpeg" href="logobh.jpeg">
+    <style>
+        /* Estilos para el Modal de Tienda Cerrada */
+        .closed-store-content {
+            background-color: #121212 !important; /* Fondo ultra oscuro */
+            color: #ffffff !important;
+            border: 1px solid #333;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        .closed-store-content .modal-title {
+            color: #f7941d !important; /* Color naranja de la marca */
+        }
+        .closed-store-content .modal-description {
+            color: #cccccc !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -662,8 +677,60 @@
         </div>
     </div>
 
+    <!-- Modal de Tienda Cerrada -->
+    <div id="modal-closed" class="modal" style="display: none; z-index: 10000;">
+        <div class="modal-content upsell-content closed-store-content">
+            <div class="modal-details">
+                <img src="logobh.jpeg" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #f7941d;">
+                <h2 class="modal-title">¡Hola! Estamos cerrados</h2>
+                <p class="modal-description">Nuestro horario de atención es:<br><br>
+                <b>Lunes a Viernes:</b> 5:00 PM - 10:30 PM<br>
+                <b>Sábados y Domingos:</b> 1:00 PM - 10:30 PM</p>
+                <p class="modal-description" style="margin-top: 15px; font-weight: bold; color: #f7941d;">Estamos cerrados por ahora, pero puedes pre-ordenar tu pedido.</p>
+                <div class="upsell-buttons" style="margin-top: 20px;">
+                    <button id="btn-pre-order" class="btn-add-order">Pre-ordenar</button>
+                    <button id="btn-info-closed" class="btn-back-to-cart" style="margin-top: 10px; width: 100%;">Vuelve más tarde</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- LÓGICA DE HORARIO VENEZUELA (UTC-4) ---
+            const verificarHorario = () => {
+                const now = new Date();
+                // Forzamos la obtención de la hora en la zona horaria de Caracas
+                const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
+                
+                const dia = caracasDate.getDay(); // 0 (Dom) a 6 (Sáb)
+                const hora = caracasDate.getHours();
+                const minutos = caracasDate.getMinutes();
+                const tiempoTotalMinutos = (hora * 60) + minutos;
+
+                let estaAbierto = false;
+
+                // Lunes (1) a Viernes (5): 5:00 PM (1020 min) a 10:30 PM (1350 min)
+                if (dia >= 1 && dia <= 5) {
+                    if (tiempoTotalMinutos >= 1020 && tiempoTotalMinutos <= 1350) {
+                        estaAbierto = true;
+                    }
+                } 
+                // Sábado (6) y Domingo (0): 1:00 PM (780 min) a 10:30 PM (1350 min)
+                else {
+                    if (tiempoTotalMinutos >= 780 && tiempoTotalMinutos <= 1350) {
+                        estaAbierto = true;
+                    }
+                }
+
+                if (!estaAbierto) {
+                    document.getElementById('modal-closed').style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+
+            verificarHorario();
+
             const logoCarga = document.querySelector('.contenedor-logo');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
@@ -710,12 +777,18 @@
             const modalBuildNext = document.getElementById('modal-build-next');
             const btnContinueBuilding = document.getElementById('btn-continue-building');
             const btnViewCartNow = document.getElementById('btn-view-cart-now');
+            
+            const modalClosed = document.getElementById('modal-closed');
+            const btnPreOrder = document.getElementById('btn-pre-order');
+            const btnInfoClosed = document.getElementById('btn-info-closed');
 
             const cerrarFunc = () => {
                 modal.style.display = 'none';
                 modalUpsell.style.display = 'none';
                 modalReminder.style.display = 'none';
                 modalBuildNext.style.display = 'none';
+                // No cerramos modalClosed aquí para que los botones internos manejen su lógica
+                if (modalClosed.style.display !== 'flex') document.body.style.overflow = 'auto';
                 document.body.style.overflow = 'auto';
             };
 
@@ -945,6 +1018,7 @@
                 cerrarFunc();
 
                 if (wasArmando) {
+                    // Si se activó la personalización individual, mostramos el siguiente paso y saltamos bebidas
                     modalBuildNext.style.display = 'flex';
                 } else if (esHamburguesa && !upsellMostrado) {
                     const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
@@ -1098,6 +1172,15 @@
                 currentMainQty = 1;
                 mainQtyVal.innerText = 1;
                 window.location.reload();
+            });
+
+            // Eventos para el Modal de Tienda Cerrada
+            btnPreOrder.addEventListener('click', () => {
+                modalClosed.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            btnInfoClosed.addEventListener('click', () => {
+                alert("¡Te esperamos pronto! Abrimos a las " + (new Date().getDay() >= 1 && new Date().getDay() <= 5 ? "5:00 PM" : "1:00 PM"));
             });
 
             function updateTotal() {
