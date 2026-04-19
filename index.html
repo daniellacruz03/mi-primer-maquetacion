@@ -15,10 +15,39 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
         .closed-store-content .modal-title {
-            color: #f7941d !important; /* Color naranja de la marca */
+            color: #e31c1c !important; /* Rojo vibrante Burger House */
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .closed-store-content .modal-description {
             color: #cccccc !important;
+        }
+        
+        /* Nuevo estilo para el botón informativo 'Vuelve más tarde' */
+        #btn-info-closed {
+            background: #000 !important;
+            border: 2px solid #e31c1c !important;
+            color: #ffffff !important;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: default;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            animation: alert-pulse-red 2s infinite; /* Animación de pulso */
+        }
+
+        @keyframes alert-pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(227, 28, 28, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(227, 28, 28, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(227, 28, 28, 0);
+            }
         }
     </style>
 </head>
@@ -681,12 +710,12 @@
     <div id="modal-closed" class="modal" style="display: none; z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
             <div class="modal-details">
-                <img src="logobh.jpeg" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #f7941d;">
+                <img src="logobh.jpeg" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #e31c1c;">
                 <h2 class="modal-title">¡Hola! Estamos cerrados</h2>
                 <p class="modal-description">Nuestro horario de atención es:<br><br>
-                <b>Lunes a Viernes:</b> 5:00 PM - 10:30 PM<br>
-                <b>Sábados y Domingos:</b> 1:00 PM - 10:30 PM</p>
-                <p class="modal-description" style="margin-top: 15px; font-weight: bold; color: #f7941d;">Estamos cerrados por ahora, pero puedes pre-ordenar tu pedido.</p>
+                <b style="color: #e31c1c;">Lunes a Viernes:</b> 5:00 PM - 10:30 PM<br>
+                <b style="color: #e31c1c;">Sábados y Domingos:</b> 1:00 PM - 10:30 PM</p>
+                <p class="modal-description" style="margin-top: 15px; font-weight: bold; color: #ffffff;">Puedes pre-ordenar tu pedido ahora mismo.</p>
                 <div class="upsell-buttons" style="margin-top: 20px;">
                     <button id="btn-pre-order" class="btn-add-order">Pre-ordenar</button>
                     <button id="btn-info-closed" class="btn-back-to-cart" style="margin-top: 10px; width: 100%;">Vuelve más tarde</button>
