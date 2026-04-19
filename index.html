@@ -82,14 +82,14 @@
         .builder-container {
             background: #1a1a1a;
             padding: 30px 20px;
-            border-radius: 20px;
+            border-radius: 30px;
             border: 2px solid #e31c1c;
-            margin: 40px 0;
+            max-width: 600px;
+            width: 95%;
         }
         .builder-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
             justify-content: space-between;
         }
         .builder-group {
@@ -108,6 +108,11 @@
             margin-bottom: 12px;
             cursor: pointer;
             font-size: 1.1rem;
+        }
+        .builder-scroll {
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 10px;
         }
         .builder-item input { margin-right: 12px; accent-color: #e31c1c; width: 18px; height: 18px; }
         #selected-list { color: #888; font-style: italic; margin-bottom: 10px; min-height: 1.2em; }
@@ -382,32 +387,54 @@
             </div>
         </section>
 
-        <section id="burger-builder" class="builder-container">
-            <h2 class="seccion-titulo">Arma tu propia Burger</h2>
-            <div class="builder-grid">
-                <div class="builder-group">
-                    <h3>Ingredientes Base</h3>
-                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Pan" data-price="1.00"> Pan de Papa ($1.00)</label>
-                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Carne" data-price="2.00"> Carne 150g ($2.00)</label>
-                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Pollo" data-price="2.00"> Pollo Crispy ($2.00)</label>
-                </div>
-                <div class="builder-group">
-                    <h3>Extras Premium</h3>
-                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Queso" data-price="0.50"> Queso Americano ($0.50)</label>
-                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Tocineta" data-price="1.00"> Tocineta ($1.00)</label>
-                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Huevo" data-price="0.50"> Huevo Frito ($0.50)</label>
-                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Pepinillos" data-price="0.20"> Pepinillos ($0.20)</label>
+        <!-- Modal Pop-up Constructor (Publicidad) -->
+        <div id="modal-builder-popup" class="modal">
+            <div class="modal-content builder-container">
+                <button class="close-modal" id="close-builder-popup">&times;</button>
+                <div class="modal-details">
+                    <h2 class="seccion-titulo" style="margin-top: 0; border: none;">¡ARMA TU PROPIA BURGER!</h2>
+                    <p class="modal-description">Diseña tu combinación perfecta con todos nuestros toppings.</p>
+                    
+                    <div class="builder-scroll">
+                        <div class="builder-grid">
+                            <div class="builder-group">
+                                <h3>Bases</h3>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Pan de Papa" data-price="1.00"> Pan de Papa ($1.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Carne 150g" data-price="2.00"> Carne 150g ($2.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Pollo Crispy" data-price="3.00"> Pollo Crispy ($3.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Chuleta" data-price="3.50"> Chuleta ($3.50)</label>
+                            </div>
+                            <div class="builder-group">
+                                <h3>Toppings y Salsas</h3>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Queso" data-price="1.20"> Extra Queso ($1.20)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Tocineta" data-price="2.00"> Extra Tocineta ($2.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Huevo" data-price="1.00"> Extra Huevito ($1.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Pepinillos" data-price="1.20"> Extra Pepinillos ($1.20)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Pollo" data-price="3.00"> Extra Pollo ($3.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Salsa BBQ" data-price="1.00"> Salsa BBQ ($1.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Mayonesa" data-price="1.00"> Mayonesa ($1.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Queso Fundido" data-price="1.00"> Queso Fundido ($1.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Salsa de la Casa" data-price="0.00"> Salsa de la Casa ($0.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Ketchup" data-price="0.00"> Ketchup ($0.00)</label>
+                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Mostaza" data-price="0.00"> Mostaza ($0.00)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="builder-summary" style="text-align: center; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;">
+                        <p id="selected-list">Selecciona ingredientes para empezar</p>
+                        <div class="item-price-wrapper" style="justify-content: center; margin-bottom: 20px;">
+                            <span id="builder-total" class="item-price" style="font-size: 2.5rem;">$0.00</span>
+                            <span class="item-ref">REF</span>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="btn-add-builder" class="btn-add-order">Añadir al pedido</button>
+                            <button id="btn-skip-builder" class="btn-back-to-cart" style="background: rgba(255,255,255,0.05); flex: 1;">Ver menú</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="builder-summary" style="text-align: center; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;">
-                <p id="selected-list">Selecciona ingredientes para empezar</p>
-                <div class="item-price-wrapper" style="justify-content: center; margin-bottom: 20px;">
-                    <span id="builder-total" class="item-price" style="font-size: 2.5rem;">$0.00</span>
-                    <span class="item-ref">REF</span>
-                </div>
-                <button id="btn-add-builder" class="btn-add-order" style="width: auto; padding: 12px 50px;">Añadir al pedido</button>
-            </div>
-        </section>
+        </div>
 
         <section id="bebidas">
             <h2 class="seccion-titulo">Bebidas</h2>
@@ -578,26 +605,6 @@
                     <div class="extras-grid">
                         <div class="extra-card" data-extra-price="1.20">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Pepinillos</span> <span class="extra-cost">+$1.20</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">0</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
-                        <div class="extra-card" data-extra-price="3.00">
-                            <div class="extra-info-text">
-                                <span class="extra-name">Extra Pollo</span> <span class="extra-cost">+$3.00</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">0</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
-                        <div class="extra-card" data-extra-price="1.20">
-                            <div class="extra-info-text">
                                 <span class="extra-name">Extra Carne</span> <span class="extra-cost">+$1.20</span>
                             </div>
                             <div class="extra-counter">
@@ -686,13 +693,34 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
+                        <!-- Nuevos Toppings agregados para paridad total con el constructor -->
+                        <div class="extra-card" data-extra-price="1.20">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Extra Pepinillos</span> <span class="extra-cost">+$1.20</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="3.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Extra Pollo Crispy</span> <span class="extra-cost">+$3.00</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
                                 <span class="extra-name">Pepinillos</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">SÍ</span>
+                                <span class="extra-qty-val">SÍ</span> <!-- Para quitar lo que ya trae la burger original -->
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -873,6 +901,7 @@
             const builderTotalEl = document.getElementById('builder-total');
             const selectedListEl = document.getElementById('selected-list');
             const btnAddBuilder = document.getElementById('btn-add-builder');
+            const modalBuilderPopup = document.getElementById('modal-builder-popup');
 
             const updateBuilder = () => {
                 let total = 0;
@@ -912,9 +941,15 @@
                 });
 
                 actualizarInterfazCarrito();
-                abrirCarritoConFeedback();
-                // Resetear constructor
+                modalBuilderPopup.style.display = 'none';
+                modalBuildNext.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
                 builderInputs.forEach(i => i.checked = false);
+                updateBuilder();
+            });
+
+            document.getElementById('close-builder-popup').onclick = document.getElementById('btn-skip-builder').onclick = () => {
+                modalBuilderPopup.style.display = 'none';
                 updateBuilder();
             });
 
@@ -927,7 +962,8 @@
                     databaseURL: "https://TU-PROYECTO-default-rtdb.firebaseio.com", // URL que aparece en la sección Realtime Database
                     projectId: "TU_PROJECT_ID_AQUI" // El ID único de tu proyecto en Firebase
                 };
-                if (typeof firebase !== 'undefined' && firebaseConfig.databaseURL.includes('firebaseio')) {
+                // Cambiamos la validación para que funcione con cualquier región de Firebase
+                if (typeof firebase !== 'undefined' && firebaseConfig.databaseURL && !firebaseConfig.databaseURL.includes('TU-PROYECTO')) {
                     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
                     const db = firebase.database();
                     
@@ -1085,6 +1121,11 @@
                 logoCarga.addEventListener('transitionend', () => {
                     logoCarga.style.display = 'none';
                     menu.classList.add('mostrar-menu');
+                    // MOSTRAR POPUP DE CONSTRUCTOR COMO PUBLICIDAD
+                    if (document.getElementById('modal-closed').style.display !== 'flex') {
+                        modalBuilderPopup.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                    }
                     cartBtn.classList.remove('cart-btn-hidden');
                 }, { once: true });
             }, 3000);
@@ -1269,19 +1310,15 @@
             btnAddOrderMain.addEventListener('click', agregarAlPedido);
             
             btnVariationHelper.addEventListener('click', () => {
-                isArmandoPedido = true;
-                warningText.innerText = "¡Entendido! Arma tu hamburguesa: sigue cambiando lo que quieras y luego añádela al pedido.";
-                btnVariationHelper.classList.add('hidden');
-                btnAddOrderMain.classList.add('btn-highlight');
-                
-                currentMainQty = 1;
-                mainQtyVal.innerText = currentMainQty;
-                updateTotal();
+                cerrarFunc();
+                modalBuilderPopup.style.display = 'flex'; // Envía al constructor completo
+                document.body.style.overflow = 'hidden';
             });
 
             btnContinueBuilding.addEventListener('click', () => {
                 cerrarFunc();
-                if (lastItemClicked) lastItemClicked.click();
+                modalBuilderPopup.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             });
 
             btnViewCartNow.addEventListener('click', () => {
