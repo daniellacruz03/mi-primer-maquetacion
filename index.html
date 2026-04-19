@@ -51,61 +51,28 @@
             }
         }
 
-        /* Estilos para el selector de tiempo tipo "Rodillo" (Subir y bajar) */
-        .time-picker-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
+        /* Estilo para Entrada de Hora Manual e Intuitiva */
+        .manual-time-container {
+            margin: 25px 0;
+            text-align: center;
+        }
+        #preorder-time-manual {
             background: #000;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #333;
-            height: 150px;
-            overflow: hidden;
-            position: relative;
-        }
-        .time-wheel {
-            height: 100%;
-            overflow-y: auto;
-            scroll-snap-type: y mandatory;
-            flex: 1;
-            scrollbar-width: none; /* Ocultar scroll en Firefox */
-        }
-        .time-wheel::-webkit-scrollbar { display: none; } /* Ocultar scroll en Chrome/Safari */
-
-        .time-wheel-item {
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border: 2px solid #e31c1c;
             color: #fff;
-            font-size: 1.8rem;
             font-family: 'Oswald', sans-serif;
-            scroll-snap-align: center;
-            opacity: 0.3;
-            transition: opacity 0.2s;
-        }
-        /* El item central (seleccionado) tiene más opacidad */
-        .time-wheel-item.active {
-            opacity: 1;
-            color: #e31c1c;
-        }
-        .time-picker-overlay {
-            position: absolute;
-            top: 50px;
-            left: 0;
+            font-size: 3rem; /* Tamaño grande para fácil lectura */
+            text-align: center;
+            padding: 15px;
+            border-radius: 15px;
             width: 100%;
-            height: 50px;
-            border-top: 1px solid #e31c1c;
-            border-bottom: 1px solid #e31c1c;
-            pointer-events: none;
-            background: rgba(227, 28, 28, 0.05);
+            outline: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(227, 28, 28, 0.2);
         }
-        .time-separator {
-            font-size: 1.5rem;
-            color: #fff;
-            padding-bottom: 5px;
+        #preorder-time-manual::-webkit-calendar-picker-indicator {
+            filter: invert(1); /* Hace que el icono del reloj sea blanco */
+            cursor: pointer;
         }
     </style>
 </head>
@@ -789,19 +756,8 @@
                 <h2 class="modal-title">¿A qué hora lo quieres?</h2>
                 <p class="modal-description">Indica a qué hora deseas recibir tu pedido (dentro de nuestro horario de atención).</p>
                 
-                <div class="time-picker-container">
-                    <div class="time-picker-overlay"></div>
-                    <div id="wheel-hours" class="time-wheel">
-                        <!-- Horas del 1 al 12 -->
-                    </div>
-                    <div class="time-separator">:</div>
-                    <div id="wheel-minutes" class="time-wheel">
-                        <!-- Minutos 00, 15, 30, 45 -->
-                    </div>
-                    <div id="wheel-ampm" class="time-wheel">
-                        <div class="time-wheel-item">AM</div>
-                        <div class="time-wheel-item">PM</div>
-                    </div>
+                <div class="manual-time-container">
+                    <input type="time" id="preorder-time-manual">
                 </div>
 
                 <div class="upsell-buttons">
@@ -902,9 +858,7 @@
             const btnInfoClosed = document.getElementById('btn-info-closed');
             
             const modalPreOrderTime = document.getElementById('modal-preorder-time');
-            const wheelHours = document.getElementById('wheel-hours');
-            const wheelMinutes = document.getElementById('wheel-minutes');
-            const wheelAmPm = document.getElementById('wheel-ampm');
+            const preorderTimeManual = document.getElementById('preorder-time-manual');
             const btnConfirmTime = document.getElementById('btn-confirm-time');
             const btnAtOpening = document.getElementById('btn-at-opening');
 
@@ -1304,81 +1258,28 @@
                 window.location.reload();
             });
 
-            const initWheelPicker = () => {
-                // Llenar Horas
-                wheelHours.innerHTML = '<div class="time-wheel-item"></div>'; 
-                for(let i=1; i<=12; i++) {
-                    const div = document.createElement('div');
-                    div.className = 'time-wheel-item';
-                    div.innerText = i;
-                    wheelHours.appendChild(div);
-                }
-                wheelHours.innerHTML += '<div class="time-wheel-item"></div>';
-
-                // Llenar Minutos
-                wheelMinutes.innerHTML = '<div class="time-wheel-item"></div>';
-                ['00', '15', '30', '45'].forEach(m => {
-                    const div = document.createElement('div');
-                    div.className = 'time-wheel-item';
-                    div.innerText = m;
-                    wheelMinutes.appendChild(div);
-                });
-                wheelMinutes.innerHTML += '<div class="time-wheel-item"></div>';
-
-                // Función para detectar cuál está activo en el centro
-                const handleScroll = (wheel) => {
-                    const items = wheel.querySelectorAll('.time-wheel-item');
-                    const center = wheel.scrollTop + wheel.offsetHeight / 2;
-                    items.forEach(item => {
-                        if (item.innerText === "") return;
-                        const itemCenter = item.offsetTop + item.offsetHeight / 2;
-                        if (Math.abs(center - itemCenter) < 25) {
-                            item.classList.add('active');
-                        } else {
-                            item.classList.remove('active');
-                        }
-                    });
-                };
-
-                [wheelHours, wheelMinutes, wheelAmPm].forEach(w => {
-                    w.onscroll = () => handleScroll(w);
-                });
-
-                // Posicionamiento inicial sugerido
-                setTimeout(() => {
-                    wheelHours.scrollTop = 50 * 7; 
-                    wheelMinutes.scrollTop = 50 * 1;
-                }, 100);
-            };
-
-            const getSelectedTimeFromWheels = () => {
-                const h = wheelHours.querySelector('.active')?.innerText;
-                const m = wheelMinutes.querySelector('.active')?.innerText;
-                const p = wheelAmPm.querySelector('.active')?.innerText;
-                return (h && m && p) ? `${h}:${m} ${p}` : null;
-            };
-
             // Eventos para el Modal de Tienda Cerrada
             btnPreOrder.addEventListener('click', () => {
-                initWheelPicker();
                 selectedPreOrderTime = null;
                 modalClosed.style.display = 'none';
                 modalPreOrderTime.style.display = 'flex';
             });
             
             btnConfirmTime.addEventListener('click', () => {
-                selectedPreOrderTime = getSelectedTimeFromWheels();
-                if (!selectedPreOrderTime) return alert("Por favor, desliza para elegir una hora.");
+                const timeVal = preorderTimeManual.value;
+                if (!timeVal) return alert("Por favor, selecciona una hora.");
 
                 // Validación contra el horario de Venezuela
                 const now = new Date();
                 const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
                 const dia = caracasDate.getDay();
                 
-                let [time, period] = selectedPreOrderTime.split(' ');
-                let [hours, mins] = time.split(':').map(Number);
-                if (period === 'PM' && hours !== 12) hours += 12;
-                if (period === 'AM' && hours === 12) hours = 0;
+                let [hours, mins] = timeVal.split(':').map(Number);
+                
+                // Convertir para mostrar en formato 12h en el mensaje final
+                let displayHours = hours % 12 || 12;
+                let ampm = hours >= 12 ? 'PM' : 'AM';
+                selectedPreOrderTime = `${displayHours}:${mins.toString().padStart(2, '0')} ${ampm}`;
                 
                 const totalMin = hours * 60 + mins;
                 const minMin = (dia >= 1 && dia <= 5) ? 1020 : 780; // 5pm o 1pm
