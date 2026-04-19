@@ -6,6 +6,9 @@
     <title>Burger House | Menú</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/jpeg" href="logobh.jpeg">
+    <!-- Firebase SDK para el contador de usuarios -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         /* Estilos para el Modal de Tienda Cerrada */
         .closed-store-content {
@@ -74,6 +77,40 @@
             filter: invert(1); /* Hace que el icono del reloj sea blanco */
             cursor: pointer;
         }
+
+        /* Estilos Constructor de Hamburguesas */
+        .builder-container {
+            background: #1a1a1a;
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 2px solid #e31c1c;
+            margin: 40px 0;
+        }
+        .builder-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: space-between;
+        }
+        .builder-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        .builder-group h3 {
+            color: #e31c1c;
+            font-family: 'Oswald', sans-serif;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .builder-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .builder-item input { margin-right: 12px; accent-color: #e31c1c; width: 18px; height: 18px; }
+        #selected-list { color: #888; font-style: italic; margin-bottom: 10px; min-height: 1.2em; }
     </style>
 </head>
 <body>
@@ -342,6 +379,33 @@
                     <span class="item-price">$8</span>
                     <span class="item-ref">REF</span>
                 </div>
+            </div>
+        </section>
+
+        <section id="burger-builder" class="builder-container">
+            <h2 class="seccion-titulo">Arma tu propia Burger</h2>
+            <div class="builder-grid">
+                <div class="builder-group">
+                    <h3>Ingredientes Base</h3>
+                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Pan" data-price="1.00"> Pan de Papa ($1.00)</label>
+                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Carne" data-price="2.00"> Carne 150g ($2.00)</label>
+                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Pollo" data-price="2.00"> Pollo Crispy ($2.00)</label>
+                </div>
+                <div class="builder-group">
+                    <h3>Extras Premium</h3>
+                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Queso" data-price="0.50"> Queso Americano ($0.50)</label>
+                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Tocineta" data-price="1.00"> Tocineta ($1.00)</label>
+                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Huevo" data-price="0.50"> Huevo Frito ($0.50)</label>
+                    <label class="builder-item"><input type="checkbox" class="builder-input" name="Pepinillos" data-price="0.20"> Pepinillos ($0.20)</label>
+                </div>
+            </div>
+            <div class="builder-summary" style="text-align: center; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;">
+                <p id="selected-list">Selecciona ingredientes para empezar</p>
+                <div class="item-price-wrapper" style="justify-content: center; margin-bottom: 20px;">
+                    <span id="builder-total" class="item-price" style="font-size: 2.5rem;">$0.00</span>
+                    <span class="item-ref">REF</span>
+                </div>
+                <button id="btn-add-builder" class="btn-add-order" style="width: auto; padding: 12px 50px;">Añadir al pedido</button>
             </div>
         </section>
 
@@ -803,6 +867,75 @@
             };
 
             verificarHorario();
+
+            // --- LÓGICA CONSTRUCTOR DE HAMBURGUESAS ---
+            const builderInputs = document.querySelectorAll('.builder-input');
+            const builderTotalEl = document.getElementById('builder-total');
+            const selectedListEl = document.getElementById('selected-list');
+            const btnAddBuilder = document.getElementById('btn-add-builder');
+
+            const updateBuilder = () => {
+                let total = 0;
+                let selected = [];
+                builderInputs.forEach(input => {
+                    if (input.checked) {
+                        total += parseFloat(input.dataset.price);
+                        selected.push(input.name);
+                    }
+                });
+                builderTotalEl.innerText = `$${total.toFixed(2)}`;
+                selectedListEl.innerText = selected.length > 0 ? `Seleccionado: ${selected.join(', ')}` : "Selecciona ingredientes para empezar";
+            };
+
+            builderInputs.forEach(input => input.addEventListener('change', updateBuilder));
+
+            btnAddBuilder.addEventListener('click', () => {
+                let total = 0;
+                let extras = [];
+                builderInputs.forEach(input => {
+                    if (input.checked) {
+                        const price = parseFloat(input.dataset.price);
+                        total += price;
+                        extras.push({ nombre: input.name, qty: 1, val: 'SÍ', isToggle: false, precio: price });
+                    }
+                });
+
+                if (total === 0) return alert("¡Debes seleccionar al menos un ingrediente!");
+
+                carrito.push({
+                    id: 'custom-' + Date.now(),
+                    nombre: "Burger Personalizada",
+                    cantidad: 1,
+                    precioUnitario: total,
+                    extras: extras,
+                    subtotal: total
+                });
+
+                actualizarInterfazCarrito();
+                abrirCarritoConFeedback();
+                // Resetear constructor
+                builderInputs.forEach(i => i.checked = false);
+                updateBuilder();
+            });
+
+            // --- CONTADOR DE USUARIOS PRIVADO (FIREBASE) ---
+            const initUserCounter = () => {
+                // Nota: Reemplaza con tus credenciales de Firebase Console
+                const config = { databaseURL: "https://TU-PROYECTO.firebaseio.com" };
+                if (typeof firebase !== 'undefined' && config.databaseURL.includes('firebaseio')) {
+                    firebase.initializeApp(config);
+                    const db = firebase.database();
+                    const myRef = db.ref('online_users').push();
+                    db.ref('.info/connected').on('value', s => { if(s.val()) myRef.onDisconnect().remove(); myRef.set(true); });
+                    db.ref('online_users').on('value', s => {
+                        window.statsPrivadas = s.numChildren(); // Variable consultable desde la terminal
+                        console.log(`[DASHBOARD PRIVADO] Usuarios activos: ${window.statsPrivadas}`);
+                    });
+                } else {
+                    console.log("[SISTEMA] Contador activo en modo local (Configura Firebase para datos reales).");
+                }
+            };
+            initUserCounter();
 
             const logoCarga = document.querySelector('.contenedor-logo');
             const menu = document.getElementById('main-menu');
