@@ -49,6 +49,37 @@
                 box-shadow: 0 0 0 0 rgba(227, 28, 28, 0);
             }
         }
+
+        /* Estilos para el selector de slots de tiempo intuitivo */
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+        .time-slot {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            padding: 12px 5px;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .time-slot.selected {
+            background: #e31c1c;
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(227, 28, 28, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -732,12 +763,12 @@
                 <p class="modal-description">Indica a qué hora deseas recibir tu pedido (dentro de nuestro horario de atención).</p>
                 
                 <div style="margin: 20px 0;">
-                    <input type="time" id="preorder-time-input" style="width: 100%; padding: 15px; border-radius: 10px; background: #000; border: 1px solid #e31c1c; color: #fff; font-size: 1.5rem; text-align: center; font-family: 'Oswald', sans-serif;">
+                    <div id="time-slots-container" class="time-slots-grid"></div>
                 </div>
 
                 <div class="upsell-buttons">
                     <button id="btn-confirm-time" class="btn-add-order">Confirmar Hora</button>
-                    <button id="btn-at-opening" class="btn-back-to-cart" style="margin-top: 10px; width: 100%; border: 1px solid #e31c1c;">Procesar al abrir</button>
+                    <button id="btn-at-opening" class="btn-add-order" style="margin-top: 10px; width: 100%;">Procesar al abrir</button>
                 </div>
             </div>
         </div>
@@ -833,7 +864,7 @@
             const btnInfoClosed = document.getElementById('btn-info-closed');
             
             const modalPreOrderTime = document.getElementById('modal-preorder-time');
-            const preorderTimeInput = document.getElementById('preorder-time-input');
+            const timeSlotsContainer = document.getElementById('time-slots-container');
             const btnConfirmTime = document.getElementById('btn-confirm-time');
             const btnAtOpening = document.getElementById('btn-at-opening');
 
@@ -1233,38 +1264,48 @@
                 window.location.reload();
             });
 
+            const generarSlots = () => {
+                timeSlotsContainer.innerHTML = '';
+                const now = new Date();
+                const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
+                const dia = caracasDate.getDay();
+                
+                let startHour = (dia >= 1 && dia <= 5) ? 17 : 13;
+                let endHour = 22;
+
+                for (let h = startHour; h <= endHour; h++) {
+                    for (let m = 0; m < 60; m += 30) {
+                        // No pasamos de las 10:30 PM
+                        if (h === 22 && m > 30) break;
+                        
+                        const ampm = h >= 12 ? 'PM' : 'AM';
+                        const displayHour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+                        const timeStr = `${displayHour}:${m === 0 ? '00' : m} ${ampm}`;
+
+                        const slot = document.createElement('div');
+                        slot.className = 'time-slot';
+                        slot.innerText = timeStr;
+                        slot.onclick = () => {
+                            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                            slot.classList.add('selected');
+                            selectedPreOrderTime = timeStr;
+                        };
+                        timeSlotsContainer.appendChild(slot);
+                    }
+                }
+            };
+
             // Eventos para el Modal de Tienda Cerrada
             btnPreOrder.addEventListener('click', () => {
+                generarSlots();
+                selectedPreOrderTime = null;
                 modalClosed.style.display = 'none';
                 modalPreOrderTime.style.display = 'flex';
             });
             
             btnConfirmTime.addEventListener('click', () => {
-                const timeVal = preorderTimeInput.value;
-                if (!timeVal) return alert("Por favor, selecciona una hora.");
+                if (!selectedPreOrderTime) return alert("Por favor, selecciona un horario de la lista.");
 
-                const [h, m] = timeVal.split(':').map(Number);
-                const totalMin = h * 60 + m;
-                const now = new Date();
-                const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
-                const dia = caracasDate.getDay();
-
-                let valid = false;
-                let range = "";
-                if (dia >= 1 && dia <= 5) {
-                    range = "5:00 PM a 10:30 PM";
-                    if (totalMin >= 1020 && totalMin <= 1350) valid = true;
-                } else {
-                    range = "1:00 PM a 10:30 PM";
-                    if (totalMin >= 780 && totalMin <= 1350) valid = true;
-                }
-
-                if (!valid) {
-                    alert(`Lo sentimos, la hora debe estar entre las ${range}`);
-                    return;
-                }
-
-                selectedPreOrderTime = timeVal;
                 isPreOrder = true;
                 modalPreOrderTime.style.display = 'none';
                 document.body.style.overflow = 'auto';
