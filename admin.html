@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Burger House</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/jpeg" href="logobh.jpeg">
+    <!-- Firebase SDK v8.10.0 (Misma versión que el sitio principal) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0;
+        }
+        .admin-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid var(--primary-color);
+            padding: 50px 30px;
+            border-radius: 30px;
+            text-align: center;
+            width: 95%;
+            max-width: 450px;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+        }
+        #user-count {
+            font-family: var(--font-heading);
+            font-size: clamp(6rem, 20vw, 9rem);
+            color: var(--primary-color);
+            line-height: 1;
+            text-shadow: 0 0 40px rgba(230, 0, 0, 0.5);
+            margin: 20px 0;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        input[type="password"] {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px;
+            border-radius: 15px;
+            color: white;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        .hidden { display: none !important; }
+        .live-indicator { color: #28a745; font-size: 0.8rem; font-weight: bold; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+    <div class="admin-card">
+        <div id="login-view">
+            <h1 class="titulo-principal" style="font-size: 2.5rem; margin-bottom: 25px;">CONTROL PANEL</h1>
+            <input type="password" id="master-key" placeholder="Ingrese Master Key">
+            <button id="btn-login" class="btn-add-order">Desbloquear</button>
+        </div>
+
+        <div id="dashboard-view" class="hidden">
+            <div class="live-indicator">● LIVE TRACKING</div>
+            <h2 class="seccion-titulo" style="margin: 10px 0; border: none;">CLIENTES ONLINE</h2>
+            <div id="user-count">0</div>
+            <p style="color: var(--text-muted); font-family: var(--font-heading); letter-spacing: 3px; font-size: 1.1rem;">EN TIEMPO REAL</p>
+        </div>
+    </div>
+
+    <script>
+        // IMPORTANTE: Usa los mismos datos que en tu index.html
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            databaseURL: "https://TU-PROYECTO.firebaseio.com",
+            projectId: "TU_PROYECTO_ID"
+        };
+
+        const MASTER_KEY = "BURGER2024"; // Define tu contraseña aquí
+
+        document.getElementById('btn-login').onclick = () => {
+            if (document.getElementById('master-key').value === MASTER_KEY) {
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+                
+                firebase.database().ref('online_users').on('value', s => {
+                    const count = s.numChildren();
+                    document.getElementById('user-count').innerText = count;
+                    document.getElementById('user-count').style.transform = 'scale(1.1)';
+                    setTimeout(() => document.getElementById('user-count').style.transform = 'scale(1)', 150);
+                });
+            } else { alert("Clave Incorrecta"); }
+        };
+    </script>
+</body>
+</html>

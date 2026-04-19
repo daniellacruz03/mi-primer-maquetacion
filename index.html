@@ -126,11 +126,11 @@
     </div>
 
     <div class="background-decor">
-        <img src="papas flotantes.png" alt="" class="corner-item papa-top-left" aria-hidden="true" loading="lazy">
+        <img src="./papas%20flotantes.png" alt="" class="corner-item papa-top-left" aria-hidden="true" loading="lazy">
         <img src="hamburguesa.png" alt="" class="corner-item papa-top-right" aria-hidden="true" loading="lazy">
-        <img src="burger-flotante.png" alt="" class="corner-item burger-bottom-left" aria-hidden="true" loading="lazy">
+        <img src="./burger-flotante.png" alt="" class="corner-item burger-bottom-left" aria-hidden="true" loading="lazy">
         <img src="nuggets.png" alt="" class="corner-item nuggets-bottom-left" aria-hidden="true" loading="lazy">
-        <img src="plato-completo.png" alt="" class="corner-item plato-bottom-right" aria-hidden="true" loading="lazy">
+        <img src="./plato-completo.png" alt="" class="corner-item plato-bottom-right" aria-hidden="true" loading="lazy">
     </div>
 
     <main id="main-menu" class="menu-container">
@@ -920,15 +920,32 @@
 
             // --- CONTADOR DE USUARIOS PRIVADO (FIREBASE) ---
             const initUserCounter = () => {
-                // Nota: Reemplaza con tus credenciales de Firebase Console
-                const config = { databaseURL: "https://TU-PROYECTO.firebaseio.com" };
-                if (typeof firebase !== 'undefined' && config.databaseURL.includes('firebaseio')) {
-                    firebase.initializeApp(config);
+                const firebaseConfig = {
+                    apiKey: "TU_API_KEY",
+                    databaseURL: "https://TU-PROYECTO-default-rtdb.firebaseio.com", 
+                    projectId: "TU_PROYECTO_ID"
+                };
+
+                window.statsPrivadas = 0; // Para que lo consultes en consola escribiendo: statsPrivadas
+
+                if (typeof firebase !== 'undefined' && firebaseConfig.databaseURL.includes('firebaseio')) {
+                    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
                     const db = firebase.database();
-                    const myRef = db.ref('online_users').push();
-                    db.ref('.info/connected').on('value', s => { if(s.val()) myRef.onDisconnect().remove(); myRef.set(true); });
-                    db.ref('online_users').on('value', s => {
-                        window.statsPrivadas = s.numChildren(); // Variable consultable desde la terminal
+                    
+                    // Crear una referencia única para esta sesión de navegador
+                    const userSessionRef = db.ref('online_users').push();
+
+                    // Lógica onDisconnect: Firebase eliminará este ID cuando el usuario cierre la pestaña
+                    db.ref('.info/connected').on('value', (snapshot) => {
+                        if (snapshot.val() === true) {
+                            userSessionRef.onDisconnect().remove();
+                            userSessionRef.set(true); // Registra entrada
+                        }
+                    });
+
+                    // Escuchar cambios en tiempo real
+                    db.ref('online_users').on('value', (snapshot) => {
+                        window.statsPrivadas = snapshot.numChildren();
                         console.log(`[DASHBOARD PRIVADO] Usuarios activos: ${window.statsPrivadas}`);
                     });
                 } else {
