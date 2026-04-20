@@ -110,11 +110,11 @@
     </div>
 
     <div class="background-decor">
-        <img src="papas flotantes.png" alt="" class="corner-item papa-top-left" aria-hidden="true" loading="lazy">
+        <img src="papas%20flotantes.PNG" alt="" class="corner-item papa-top-left" aria-hidden="true" loading="lazy">
         <img src="hamburguesa.png" alt="" class="corner-item papa-top-right" aria-hidden="true" loading="lazy">
-        <img src="burger-flotante.png" alt="" class="corner-item burger-bottom-left" aria-hidden="true" loading="lazy">
+        <img src="burger-flotante.PNG" alt="" class="corner-item burger-bottom-left" aria-hidden="true" loading="lazy">
         <img src="nuggets.png" alt="" class="corner-item nuggets-bottom-left" aria-hidden="true" loading="lazy">
-        <img src="plato-completo.png" alt="" class="corner-item plato-bottom-right" aria-hidden="true" loading="lazy">
+        <img src="plato-completo.PNG" alt="" class="corner-item plato-bottom-right" aria-hidden="true" loading="lazy">
     </div>
 
     <main id="main-menu" class="menu-container">
@@ -838,6 +838,7 @@
 
             verificarHorario();
 
+            // --- DECLARACIÓN DE VARIABLES DEL DOM (INICIALIZACIÓN AL PRINCIPIO) ---
             const logoCarga = document.querySelector('.contenedor-logo');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
@@ -848,6 +849,32 @@
             const modalImg = document.getElementById('modal-img');
             const mainQtyVal = document.getElementById('main-qty-val');
             const extrasContainer = document.querySelector('.modal-extras-container');
+            const cartBtn = document.getElementById('cart-floating-btn');
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const closeCart = document.getElementById('close-cart');
+            const cartBadge = document.getElementById('cart-badge');
+            const cartItemsContainer = document.getElementById('cart-items-container');
+            const cartGrandTotal = document.getElementById('cart-grand-total');
+            const cartItemsView = document.getElementById('cart-items-view');
+            const checkoutView = document.getElementById('checkout-view');
+            const modalUpsell = document.getElementById('modal-upsell');
+            const btnUpsellAdd = document.getElementById('btn-upsell-add');
+            const btnUpsellMore = document.getElementById('btn-upsell-more');
+            const btnUpsellCancel = document.getElementById('btn-upsell-cancel');
+            const modalReminder = document.getElementById('modal-reminder');
+            const btnReminderOk = document.getElementById('btn-reminder-ok');
+            const btnNewOrder = document.getElementById('btn-new-order');
+            const warningBox = document.getElementById('warning-box');
+            const warningText = document.getElementById('warning-text');
+            const btnVariationHelper = document.getElementById('btn-variation-helper');
+            const btnAddOrderMain = modal.querySelector('.btn-add-order');
+            const modalBuildNext = document.getElementById('modal-build-next');
+            const btnContinueBuilding = document.getElementById('btn-continue-building');
+            const btnViewCartNow = document.getElementById('btn-view-cart-now');
+            const modalClosed = document.getElementById('modal-closed');
+            const btnPreOrder = document.getElementById('btn-pre-order');
+
+            // --- VARIABLES DE ESTADO ---
             let basePrice = 0;
             let currentMainQty = 1;
             let esHamburguesa = false;
@@ -856,38 +883,15 @@
             let upsellMostrado = false;
             let isArmandoPedido = false;
             let lastItemClicked = null;
-            let carrito = [];
             let drinkSugerida = null;
-
-            const cartBtn = document.getElementById('cart-floating-btn');
-            const cartSidebar = document.getElementById('cart-sidebar');
-            const closeCart = document.getElementById('close-cart');
-            const cartBadge = document.getElementById('cart-badge');
-            const cartItemsContainer = document.getElementById('cart-items-container');
-            const cartGrandTotal = document.getElementById('cart-grand-total');
-
-            const cartItemsView = document.getElementById('cart-items-view');
-            const checkoutView = document.getElementById('checkout-view');
-
-            const modalUpsell = document.getElementById('modal-upsell');
-            const btnUpsellAdd = document.getElementById('btn-upsell-add');
-            const btnUpsellMore = document.getElementById('btn-upsell-more');
-            const btnUpsellCancel = document.getElementById('btn-upsell-cancel');
-
-            const modalReminder = document.getElementById('modal-reminder');
-            const btnReminderOk = document.getElementById('btn-reminder-ok');
-            const btnNewOrder = document.getElementById('btn-new-order');
-            const warningBox = document.getElementById('warning-box');
-            const warningText = document.getElementById('warning-text');
-            const btnVariationHelper = document.getElementById('btn-variation-helper');
-            const btnAddOrderMain = modal.querySelector('.btn-add-order');
             
-            const modalBuildNext = document.getElementById('modal-build-next');
-            const btnContinueBuilding = document.getElementById('btn-continue-building');
-            const btnViewCartNow = document.getElementById('btn-view-cart-now');
+            // PERSISTENCIA: Cargar carrito desde localStorage
+            let carrito = JSON.parse(localStorage.getItem('bh_cart')) || [];
             
-            const modalClosed = document.getElementById('modal-closed');
-            const btnPreOrder = document.getElementById('btn-pre-order');
+            // Sincronizar UI al cargar (Ahora las variables DOM ya están listas)
+            if (carrito.length > 0) {
+                actualizarInterfazCarrito();
+            }
 
             const cerrarFunc = () => {
                 modal.style.display = 'none';
@@ -898,6 +902,11 @@
                 if (modalClosed.style.display !== 'flex') document.body.style.overflow = 'auto';
                 document.body.style.overflow = 'auto';
             };
+
+            // Helper para persistencia
+            function guardarCarrito() {
+                localStorage.setItem('bh_cart', JSON.stringify(carrito));
+            }
 
             function abrirCarritoConFeedback() {
                 setTimeout(() => {
@@ -920,6 +929,8 @@
                     checkoutView.classList.add('hidden');
                     cartItemsView.classList.remove('hidden');
                 }
+                
+                guardarCarrito(); // Persistir cada vez que cambia
 
                 carrito.forEach((item, index) => {
                     total += item.subtotal;
@@ -1062,16 +1073,24 @@
                     }
                     
                     valSpan.innerText = isToggle ? (currentVal === 1 ? 'SÍ' : 'NO') : currentVal;
-
-                    // Lógica de exclusión: Si marca "SIN Pepinillos" (NO), resetear el Extra a 0
+                    
                     const nameText = card.querySelector('.extra-name').innerText;
-                    if (isToggle && nameText === 'Pepinillos' && valSpan.innerText === 'NO') {
-                        document.querySelectorAll('.extra-card').forEach(c => {
-                            if (c.querySelector('.extra-name').innerText === 'Extra Pepinillos') {
-                                c.querySelector('.extra-qty-val').innerText = '0';
-                            }
-                        });
+
+                    // CONFLICTO DE INGREDIENTES: Lógica bidireccional
+                    if (nameText === 'Pepinillos' && valSpan.innerText === 'NO') {
+                        const extraCard = Array.from(document.querySelectorAll('.extra-card'))
+                            .find(c => c.querySelector('.extra-name').innerText === 'Extra Pepinillos');
+                        if (extraCard) extraCard.querySelector('.extra-qty-val').innerText = '0';
+                    } 
+                    
+                    if (nameText === 'Extra Pepinillos' && currentVal > 0) {
+                        const toggleCard = Array.from(document.querySelectorAll('.extra-card'))
+                            .find(c => c.querySelector('.extra-name').innerText === 'Pepinillos');
+                        if (toggleCard) {
+                            toggleCard.querySelector('.extra-qty-val').innerText = 'SÍ';
+                        }
                     }
+
                     updateTotal();
                 });
             });
@@ -1088,6 +1107,9 @@
             });
 
             const agregarAlPedido = () => {
+                // CERO VS VACÍO: Validación de seguridad
+                if (currentMainQty < 1) return;
+
                 const wasArmando = isArmandoPedido;
                 const extrasSeleccionados = [];
                 document.querySelectorAll('.extra-card').forEach(card => {
@@ -1117,13 +1139,17 @@
                     }
                 });
 
+                // PRECISIÓN DECIMAL: Cálculo basado en números, no en strings de UI
+                const totalExtrasUnitarios = extrasSeleccionados.reduce((acc, e) => acc + e.precio, 0);
+                const subtotalCalculado = (basePrice + totalExtrasUnitarios) * currentMainQty;
+
                 const itemPedido = {
                     id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
                     nombre: modalTitle.innerText,
                     cantidad: currentMainQty,
                     precioUnitario: basePrice,
                     extras: extrasSeleccionados,
-                    subtotal: parseFloat(modalPrice.innerText.replace('$', ''))
+                    subtotal: Number(subtotalCalculado.toFixed(2))
                 };
 
                 carrito.push(itemPedido);
@@ -1266,21 +1292,21 @@
 
                 let totalPedido = 0;
                 carrito.forEach(item => {
-                    let itemTexto = `${item.cantidad} ${item.nombre}`;
-                    if (item.extras && item.extras.length > 0) {
-                        const extrasStr = item.extras.map(e => {
-                            const cleanName = e.nombre.replace(/^Extra\s+/i, '');
-                            if (e.isToggle && e.val === 'NO') return `SIN ${cleanName}`;
-                            return `+ Extra ${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
-                        }).join(', ');
-                        itemTexto += ` (${extrasStr})`;
-                    }
-                    mensaje += `${itemTexto}\n`;
+                    // FORMATO WHATSAPP: Diferenciación clara para cocina
+                    const sin = item.extras.filter(e => e.isToggle && e.val === 'NO')
+                        .map(e => e.nombre.replace(/^Extra\s+/i, ''));
+                    const con = item.extras.filter(e => !(e.isToggle && e.val === 'NO'))
+                        .map(e => `${e.qty > 1 ? e.qty + ' ' : ''}${e.nombre.replace(/^Extra\s+/i, '')}`);
+
+                    mensaje += `*${item.cantidad}x ${item.nombre}*\n`;
+                    if (con.length > 0) mensaje += `   + EXTRAS: ${con.join(', ')}\n`;
+                    if (sin.length > 0) mensaje += `   - QUITAR: ${sin.join(', ')}\n`;
+                    
                     totalPedido += item.subtotal;
                 });
 
                 const direccionCompleta = `${avenida}, ${edificio}${referencia ? ` (Ref: ${referencia})` : ''}`;
-                mensaje += `\nTotal del pedido: $${totalPedido.toFixed(2)} REF\n`;
+                mensaje += `\n*Total del pedido: $${totalPedido.toFixed(2)} REF*\n`;
                 mensaje += `Mi dirección es: ${direccionCompleta}`;
 
                 if (mapsLink) {
@@ -1298,6 +1324,9 @@
                 const numeroWhatsApp = "584127510090";
                 const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
                 
+                // Limpiar persistencia tras pedido exitoso
+                localStorage.removeItem('bh_cart');
+
                 pedidoConfirmado = true;
                 history.pushState({ orderSent: true }, "");
                 
