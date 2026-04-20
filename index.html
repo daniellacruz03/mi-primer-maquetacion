@@ -137,6 +137,28 @@
 
         @keyframes blink { to { visibility: hidden; } }
 
+        /* --- Botón de Notificaciones --- */
+        #notify-btn {
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-family: var(--terminal-font);
+            padding: 12px 25px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.2s ease;
+        }
+        #notify-btn:hover {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            box-shadow: 0 0 20px rgba(230, 57, 70, 0.5);
+            text-shadow: 0 0 8px var(--neon-red);
+            transform: scale(1.02);
+        }
+
         .signature {
             margin-top: 40px;
             font-size: 0.7rem;
@@ -170,6 +192,8 @@
 
         <div class="timer" id="timer">[00:00:00:00]</div>
 
+        <button id="notify-btn">> ACTIVAR_ALERTA_LANZAMIENTO</button>
+
         <p class="signature">> [BURGUER HOUSE_v1.0] [MERIDA_VZLA]</p>
     </div>
 
@@ -200,16 +224,44 @@
         }
         setInterval(drawMatrix, 50);
 
-        // Timer Técnico Infinito
+        // --- Contador Regresivo Funcional ---
         const timerEl = document.getElementById('timer');
-        function updateTimer() {
-            const h = Math.floor(Math.random() * 24).toString().padStart(2, '0');
-            const m = Math.floor(Math.random() * 60).toString().padStart(2, '0');
-            const s = Math.floor(Math.random() * 60).toString().padStart(2, '0');
-            const ms = Math.floor(Math.random() * 99).toString().padStart(2, '0');
-            timerEl.innerText = `[${h}:${m}:${s}:${ms}]`;
+        const targetDate = new Date("May 1, 2026 00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                timerEl.innerText = "[SISTEMA_ONLINE]";
+                timerEl.style.animation = "none";
+                return;
+            }
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            const s = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+
+            timerEl.innerText = `[${d}:${h}:${m}:${s}]`;
         }
-        setInterval(updateTimer, 80);
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- Sistema de Notificaciones ---
+        const notifyBtn = document.getElementById('notify-btn');
+        notifyBtn.addEventListener('click', () => {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    alert("SISTEMA: Alertas activadas. Te avisaremos cuando el sabor esté listo.");
+                    new Notification("¡Configuración exitosa! Te avisaremos al abrir.", {
+                        icon: "logobh.PNG",
+                        body: "El sistema de Burger House te notificará el lanzamiento."
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
