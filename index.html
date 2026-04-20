@@ -6,9 +6,6 @@
     <title>Burger House | Menú</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/jpeg" href="logobh.jpeg">
-    <!-- Firebase SDK para el contador de usuarios -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         /* Estilos para el Modal de Tienda Cerrada */
         .closed-store-content {
@@ -18,104 +15,11 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
         .closed-store-content .modal-title {
-            color: #e31c1c !important; /* Rojo vibrante Burger House */
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #f7941d !important; /* Color naranja de la marca */
         }
         .closed-store-content .modal-description {
             color: #cccccc !important;
         }
-        
-        /* Nuevo estilo para el botón informativo 'Vuelve más tarde' */
-        #btn-info-closed {
-            background: #e31c1c !important; /* Fondo rojo */
-            border: 2px solid #000 !important;  /* Borde negro */
-            color: #000000 !important;       /* Texto negro */
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.2rem;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: default;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            animation: alert-pulse-red 2s infinite; /* Animación de pulso */
-        }
-
-        @keyframes alert-pulse-red {
-            0% {
-                box-shadow: 0 0 0 0 rgba(227, 28, 28, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 15px rgba(227, 28, 28, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(227, 28, 28, 0);
-            }
-        }
-
-        /* Estilo para Entrada de Hora Manual e Intuitiva */
-        .manual-time-container {
-            margin: 25px 0;
-            text-align: center;
-        }
-        #preorder-time-manual {
-            background: #000;
-            border: 2px solid #e31c1c;
-            color: #fff;
-            font-family: 'Oswald', sans-serif;
-            font-size: 3rem; /* Tamaño grande para fácil lectura */
-            text-align: center;
-            padding: 15px;
-            border-radius: 15px;
-            width: 100%;
-            outline: none;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(227, 28, 28, 0.2);
-        }
-        #preorder-time-manual::-webkit-calendar-picker-indicator {
-            filter: invert(1); /* Hace que el icono del reloj sea blanco */
-            cursor: pointer;
-        }
-
-        /* Estilos Constructor de Hamburguesas */
-        .builder-container {
-            background: #1a1a1a;
-            padding: 30px 20px;
-            border-radius: 30px;
-            border: 2px solid #e31c1c;
-            max-width: 600px;
-            width: 95%;
-        }
-        .builder-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .builder-group {
-            flex: 1;
-            min-width: 250px;
-        }
-        .builder-group h3 {
-            color: #e31c1c;
-            font-family: 'Oswald', sans-serif;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #333;
-        }
-        .builder-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        .builder-scroll {
-            max-height: 50vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-        .builder-item input { margin-right: 12px; accent-color: #e31c1c; width: 18px; height: 18px; }
-        #selected-list { color: #888; font-style: italic; margin-bottom: 10px; min-height: 1.2em; }
     </style>
 </head>
 <body>
@@ -131,11 +35,11 @@
     </div>
 
     <div class="background-decor">
-        <img src="./papas%20flotantes.png" alt="" class="corner-item papa-top-left" aria-hidden="true" loading="lazy">
+        <img src="papas flotantes.png" alt="" class="corner-item papa-top-left" aria-hidden="true" loading="lazy">
         <img src="hamburguesa.png" alt="" class="corner-item papa-top-right" aria-hidden="true" loading="lazy">
-        <img src="./burger-flotante.png" alt="" class="corner-item burger-bottom-left" aria-hidden="true" loading="lazy">
+        <img src="burger-flotante.png" alt="" class="corner-item burger-bottom-left" aria-hidden="true" loading="lazy">
         <img src="nuggets.png" alt="" class="corner-item nuggets-bottom-left" aria-hidden="true" loading="lazy">
-        <img src="./plato-completo.png" alt="" class="corner-item plato-bottom-right" aria-hidden="true" loading="lazy">
+        <img src="plato-completo.png" alt="" class="corner-item plato-bottom-right" aria-hidden="true" loading="lazy">
     </div>
 
     <main id="main-menu" class="menu-container">
@@ -387,55 +291,6 @@
             </div>
         </section>
 
-        <!-- Modal Pop-up Constructor (Publicidad) -->
-        <div id="modal-builder-popup" class="modal">
-            <div class="modal-content builder-container">
-                <button class="close-modal" id="close-builder-popup">&times;</button>
-                <div class="modal-details">
-                    <h2 class="seccion-titulo" style="margin-top: 0; border: none;">¡ARMA TU PROPIA BURGER!</h2>
-                    <p class="modal-description">Diseña tu combinación perfecta con todos nuestros toppings.</p>
-                    
-                    <div class="builder-scroll">
-                        <div class="builder-grid">
-                            <div class="builder-group">
-                                <h3>Bases</h3>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Pan de Papa" data-price="1.00"> Pan de Papa ($1.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Carne 150g" data-price="2.00"> Carne 150g ($2.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Pollo Crispy" data-price="3.00"> Pollo Crispy ($3.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Chuleta" data-price="3.50"> Chuleta ($3.50)</label>
-                            </div>
-                            <div class="builder-group">
-                                <h3>Toppings y Salsas</h3>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Queso" data-price="1.20"> Extra Queso ($1.20)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Tocineta" data-price="2.00"> Extra Tocineta ($2.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Huevo" data-price="1.00"> Extra Huevito ($1.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Pepinillos" data-price="1.20"> Extra Pepinillos ($1.20)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Extra Pollo" data-price="3.00"> Extra Pollo ($3.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Salsa BBQ" data-price="1.00"> Salsa BBQ ($1.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Mayonesa" data-price="1.00"> Mayonesa ($1.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Queso Fundido" data-price="1.00"> Queso Fundido ($1.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Salsa de la Casa" data-price="0.00"> Salsa de la Casa ($0.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Ketchup" data-price="0.00"> Ketchup ($0.00)</label>
-                                <label class="builder-item"><input type="checkbox" class="builder-input" name="Mostaza" data-price="0.00"> Mostaza ($0.00)</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="builder-summary" style="text-align: center; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;">
-                        <p id="selected-list">Selecciona ingredientes para empezar</p>
-                        <div class="item-price-wrapper" style="justify-content: center; margin-bottom: 20px;">
-                            <span id="builder-total" class="item-price" style="font-size: 2.5rem;">$0.00</span>
-                            <span class="item-ref">REF</span>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <button id="btn-add-builder" class="btn-add-order">Añadir al pedido</button>
-                            <button id="btn-skip-builder" class="btn-back-to-cart" style="background: rgba(255,255,255,0.05); flex: 1;">Ver menú</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <section id="bebidas">
             <h2 class="seccion-titulo">Bebidas</h2>
             <div class="menu-item">
@@ -605,6 +460,26 @@
                     <div class="extras-grid">
                         <div class="extra-card" data-extra-price="1.20">
                             <div class="extra-info-text">
+                                <span class="extra-name">Extra Pepinillos</span> <span class="extra-cost">+$1.20</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="3.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Extra Pollo</span> <span class="extra-cost">+$3.00</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.20">
+                            <div class="extra-info-text">
                                 <span class="extra-name">Extra Carne</span> <span class="extra-cost">+$1.20</span>
                             </div>
                             <div class="extra-counter">
@@ -693,34 +568,13 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <!-- Nuevos Toppings agregados para paridad total con el constructor -->
-                        <div class="extra-card" data-extra-price="1.20">
-                            <div class="extra-info-text">
-                                <span class="extra-name">Extra Pepinillos</span> <span class="extra-cost">+$1.20</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">0</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
-                        <div class="extra-card" data-extra-price="3.00">
-                            <div class="extra-info-text">
-                                <span class="extra-name">Extra Pollo Crispy</span> <span class="extra-cost">+$3.00</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">0</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
                                 <span class="extra-name">Pepinillos</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">SÍ</span> <!-- Para quitar lo que ya trae la burger original -->
+                                <span class="extra-qty-val">SÍ</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -827,34 +681,15 @@
     <div id="modal-closed" class="modal" style="display: none; z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
             <div class="modal-details">
-                <img src="logobh.jpeg" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #e31c1c;">
+                <img src="logobh.jpeg" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #f7941d;">
                 <h2 class="modal-title">¡Hola! Estamos cerrados</h2>
                 <p class="modal-description">Nuestro horario de atención es:<br><br>
-                <b style="color: #e31c1c;">Lunes a Viernes:</b> 5:00 PM - 10:30 PM<br>
-                <b style="color: #e31c1c;">Sábados y Domingos:</b> 1:00 PM - 10:30 PM</p>
-                <p class="modal-description" style="margin-top: 15px; font-weight: bold; color: #ffffff;">Puedes pre-ordenar tu pedido ahora mismo.</p>
+                <b>Lunes a Viernes:</b> 5:00 PM - 10:30 PM<br>
+                <b>Sábados y Domingos:</b> 1:00 PM - 10:30 PM</p>
+                <p class="modal-description" style="margin-top: 15px; font-weight: bold; color: #f7941d;">Estamos cerrados por ahora, pero puedes pre-ordenar tu pedido.</p>
                 <div class="upsell-buttons" style="margin-top: 20px;">
                     <button id="btn-pre-order" class="btn-add-order">Pre-ordenar</button>
                     <button id="btn-info-closed" class="btn-back-to-cart" style="margin-top: 10px; width: 100%;">Vuelve más tarde</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Selección de Hora Pre-orden -->
-    <div id="modal-preorder-time" class="modal" style="display: none; z-index: 10001;">
-        <div class="modal-content upsell-content closed-store-content">
-            <div class="modal-details">
-                <h2 class="modal-title">¿A qué hora lo quieres?</h2>
-                <p class="modal-description">Indica a qué hora deseas recibir tu pedido (dentro de nuestro horario de atención).</p>
-                
-                <div class="manual-time-container">
-                    <input type="time" id="preorder-time-manual">
-                </div>
-
-                <div class="upsell-buttons">
-                    <button id="btn-confirm-time" class="btn-add-order">Confirmar Hora</button>
-                    <button id="btn-at-opening" class="btn-add-order" style="margin-top: 10px; width: 100%;">Procesar al abrir</button>
                 </div>
             </div>
         </div>
@@ -896,66 +731,10 @@
 
             verificarHorario();
 
-            // --- LÓGICA CONSTRUCTOR DE HAMBURGUESAS ---
-            const builderInputs = document.querySelectorAll('.builder-input');
-            const builderTotalEl = document.getElementById('builder-total');
-            const selectedListEl = document.getElementById('selected-list');
-            const btnAddBuilder = document.getElementById('btn-add-builder');
-            const modalBuilderPopup = document.getElementById('modal-builder-popup');
-
-            const updateBuilder = () => {
-                let total = 0;
-                let selected = [];
-                builderInputs.forEach(input => {
-                    if (input.checked) {
-                        total += parseFloat(input.dataset.price);
-                        selected.push(input.name);
-                    }
-                });
-                builderTotalEl.innerText = `$${total.toFixed(2)}`;
-                selectedListEl.innerText = selected.length > 0 ? `Seleccionado: ${selected.join(', ')}` : "Selecciona ingredientes para empezar";
-            };
-
-            builderInputs.forEach(input => input.addEventListener('change', updateBuilder));
-
-            btnAddBuilder.addEventListener('click', () => {
-                let total = 0;
-                let extras = [];
-                builderInputs.forEach(input => {
-                    if (input.checked) {
-                        const price = parseFloat(input.dataset.price);
-                        total += price;
-                        extras.push({ nombre: input.name, qty: 1, val: 'SÍ', isToggle: false, precio: price });
-                    }
-                });
-
-                if (total === 0) return alert("¡Debes seleccionar al menos un ingrediente!");
-
-                carrito.push({
-                    id: 'custom-' + Date.now(),
-                    nombre: "Burger Personalizada",
-                    cantidad: 1,
-                    precioUnitario: total,
-                    extras: extras,
-                    subtotal: total
-                });
-
-                actualizarInterfazCarrito();
-                modalBuilderPopup.style.display = 'none';
-                modalBuildNext.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-                builderInputs.forEach(i => i.checked = false);
-                updateBuilder();
-            });
-
-            document.getElementById('close-builder-popup').onclick = document.getElementById('btn-skip-builder').onclick = () => {
-                modalBuilderPopup.style.display = 'none';
-                updateBuilder();
-            };
-
             const logoCarga = document.querySelector('.contenedor-logo');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
+            const closeModal = document.querySelector('.close-modal');
             const modalTitle = document.querySelector('.modal-title');
             const modalDesc = document.querySelector('.modal-description');
             const modalPrice = document.querySelector('.modal-price');
@@ -968,7 +747,6 @@
             let pedidoConfirmado = false;
             let upsellMostrado = false;
             let isArmandoPedido = false;
-            let isPreOrder = false;
             let lastItemClicked = null;
             let carrito = [];
             let drinkSugerida = null;
@@ -1003,19 +781,14 @@
             const modalClosed = document.getElementById('modal-closed');
             const btnPreOrder = document.getElementById('btn-pre-order');
             const btnInfoClosed = document.getElementById('btn-info-closed');
-            
-            const modalPreOrderTime = document.getElementById('modal-preorder-time');
-            const preorderTimeManual = document.getElementById('preorder-time-manual');
-            const btnConfirmTime = document.getElementById('btn-confirm-time');
-            const btnAtOpening = document.getElementById('btn-at-opening');
 
             const cerrarFunc = () => {
                 modal.style.display = 'none';
                 modalUpsell.style.display = 'none';
                 modalReminder.style.display = 'none';
                 modalBuildNext.style.display = 'none';
-                modalPreOrderTime.style.display = 'none';
-                if (modalClosed.style.display !== 'flex' && modalPreOrderTime.style.display !== 'flex') document.body.style.overflow = 'auto';
+                // No cerramos modalClosed aquí para que los botones internos manejen su lógica
+                if (modalClosed.style.display !== 'flex') document.body.style.overflow = 'auto';
                 document.body.style.overflow = 'auto';
             };
 
@@ -1083,17 +856,14 @@
                 logoCarga.addEventListener('transitionend', () => {
                     logoCarga.style.display = 'none';
                     menu.classList.add('mostrar-menu');
-                    // MOSTRAR POPUP DE CONSTRUCTOR COMO PUBLICIDAD
-                    if (document.getElementById('modal-closed').style.display !== 'flex') {
-                        modalBuilderPopup.style.display = 'flex';
-                        document.body.style.overflow = 'hidden';
-                    }
                     cartBtn.classList.remove('cart-btn-hidden');
                 }, { once: true });
             }, 3000);
 
             cartBtn.addEventListener('click', () => cartSidebar.classList.remove('cart-closed'));
             closeCart.addEventListener('click', () => cartSidebar.classList.add('cart-closed'));
+
+            closeModal.addEventListener('click', cerrarFunc);
 
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -1270,15 +1040,19 @@
             btnAddOrderMain.addEventListener('click', agregarAlPedido);
             
             btnVariationHelper.addEventListener('click', () => {
-                cerrarFunc();
-                modalBuilderPopup.style.display = 'flex'; // Envía al constructor completo
-                document.body.style.overflow = 'hidden';
+                isArmandoPedido = true;
+                warningText.innerText = "¡Entendido! Arma tu hamburguesa: sigue cambiando lo que quieras y luego añádela al pedido.";
+                btnVariationHelper.classList.add('hidden');
+                btnAddOrderMain.classList.add('btn-highlight');
+                
+                currentMainQty = 1;
+                mainQtyVal.innerText = currentMainQty;
+                updateTotal();
             });
 
             btnContinueBuilding.addEventListener('click', () => {
                 cerrarFunc();
-                modalBuilderPopup.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+                if (lastItemClicked) lastItemClicked.click();
             });
 
             btnViewCartNow.addEventListener('click', () => {
@@ -1358,10 +1132,6 @@
                 mensaje += `\nTotal del pedido: $${totalPedido.toFixed(2)} REF\n`;
                 mensaje += `Mi dirección es: ${direccionCompleta}`;
 
-                if (isPreOrder && selectedPreOrderTime) {
-                    mensaje += `\n\n🕒 PRE-ORDEN PROGRAMADA PARA LAS: ${selectedPreOrderTime}`;
-                }
-
                 if (mapsLink) {
                     mensaje += `\n📍 Ubicación exacta: ${mapsLink}`;
                 }
@@ -1406,52 +1176,9 @@
 
             // Eventos para el Modal de Tienda Cerrada
             btnPreOrder.addEventListener('click', () => {
-                selectedPreOrderTime = null;
                 modalClosed.style.display = 'none';
-                modalPreOrderTime.style.display = 'flex';
-            });
-            
-            btnConfirmTime.addEventListener('click', () => {
-                const timeVal = preorderTimeManual.value;
-                if (!timeVal) return alert("Por favor, selecciona una hora.");
-
-                // Validación contra el horario de Venezuela
-                const now = new Date();
-                const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
-                const dia = caracasDate.getDay();
-                
-                let [hours, mins] = timeVal.split(':').map(Number);
-                
-                // Convertir para mostrar en formato 12h en el mensaje final
-                let displayHours = hours % 12 || 12;
-                let ampm = hours >= 12 ? 'PM' : 'AM';
-                selectedPreOrderTime = `${displayHours}:${mins.toString().padStart(2, '0')} ${ampm}`;
-                
-                const totalMin = hours * 60 + mins;
-                const minMin = (dia >= 1 && dia <= 5) ? 1020 : 780; // 5pm o 1pm
-                const maxMin = 1350; // 10:30pm
-
-                if (totalMin < minMin || totalMin > maxMin) {
-                    const range = (dia >= 1 && dia <= 5) ? "5:00 PM a 10:30 PM" : "1:00 PM a 10:30 PM";
-                    return alert(`Lo sentimos, el horario elegido debe estar entre las ${range}`);
-                }
-
-                isPreOrder = true;
-                modalPreOrderTime.style.display = 'none';
                 document.body.style.overflow = 'auto';
             });
-
-            btnAtOpening.addEventListener('click', () => {
-                const now = new Date();
-                const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
-                const dia = caracasDate.getDay();
-                // Apertura: 5pm (LV) o 1pm (SD)
-                selectedPreOrderTime = (dia >= 1 && dia <= 5) ? "17:00 (Apertura)" : "13:00 (Apertura)";
-                isPreOrder = true;
-                modalPreOrderTime.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-
             btnInfoClosed.addEventListener('click', () => {
                 alert("¡Te esperamos pronto! Abrimos a las " + (new Date().getDay() >= 1 && new Date().getDay() <= 5 ? "5:00 PM" : "1:00 PM"));
             });
@@ -1492,16 +1219,16 @@
         });
     </script>
     <!--
-      _        _______  _______  _______           _______          
-     ( \      (  ___  )(  ____ \(  ____ )|\     /|(  ____ \|\     /|
-     | (      | (   ) || (    \/| (    )|| )   ( || (    \/| )   ( |
-     | |      | (___) || |      | (____)|| |   | || (_____ | (___) |
-     | |      |  ___  || |      |     __)| |   | |(_____  )|  ___  |
-     | |      | (   ) || |      | (\ (   | |   | |      ) || (   ) |
-     | (____/\| )   ( || (____/\| ) \ \__| (___) |/\____) || )   ( |
-     (_______/|/     \|(_______/|/   \__/(_______)\_______)|/     \|
+_        _______  _______  _______           _______          
+( \      (  ___  )(  ____ \(  ____ )|\     /|(  ____ \|\     /|
+| (      | (   ) || (    \/| (    )|| )   ( || (    \/| )   ( |
+| |      | (___) || |      | (____)|| |   | || (_____ | (___) |
+| |      |  ___  || |      |     __)| |   | |(_____  )|  ___  |
+| |      | (   ) || |      | (\ (   | |   | |      ) || (   ) |
+(____/\| )   ( || (____/\| ) \ \__| (___) |/\____) || )   ( |
+(_______/|/     \|(_______/|/   \__/(_______)\_______)|/     \|
 
-                                  B Y   L A C R U S H
+B Y   L A C R U S H
     -->
 </body>
 </html>
