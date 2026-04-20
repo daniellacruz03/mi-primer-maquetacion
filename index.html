@@ -962,11 +962,8 @@
                     databaseURL: "https://burguer-house-17e76-default-rtdb.firebaseio.com", // URL que aparece en la sección Realtime Database
                     projectId: "burguer-house-17e76" // El ID único de tu proyecto en Firebase
                 };
-
-                // Nueva validación: Solo arranca si el usuario cambió el ID de proyecto por el real
-                const isConfigured = firebaseConfig.projectId === "burguer-house-17e76";
-
-                if (typeof firebase !== 'undefined' && isConfigured) {
+                // Cambiamos la validación para que funcione con cualquier región de Firebase
+                if (typeof firebase !== 'undefined' && firebaseConfig.databaseURL && !firebaseConfig.databaseURL.includes('TU-PROYECTO')) {
                     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
                     const db = firebase.database();
                     
@@ -1055,9 +1052,14 @@
                 modalReminder.style.display = 'none';
                 modalBuildNext.style.display = 'none';
                 modalPreOrderTime.style.display = 'none';
-                if (modalClosed.style.display !== 'flex' && modalPreOrderTime.style.display !== 'flex') document.body.style.overflow = 'auto';
+                modalClosed.style.display = 'none';
                 document.body.style.overflow = 'auto';
             };
+
+            // Seleccionamos TODOS los botones de cerrar de todos los modales
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', cerrarFunc);
+            });
 
             function abrirCarritoConFeedback() {
                 setTimeout(() => {
@@ -1134,8 +1136,6 @@
 
             cartBtn.addEventListener('click', () => cartSidebar.classList.remove('cart-closed'));
             closeCart.addEventListener('click', () => cartSidebar.classList.add('cart-closed'));
-
-            closeModal.addEventListener('click', cerrarFunc);
 
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', () => {
