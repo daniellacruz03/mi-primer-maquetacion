@@ -958,12 +958,15 @@
                 window.statsPrivadas = 0; // Variable global accesible desde la consola del navegador
 
                 const firebaseConfig = {
-                    apiKey: "PEGA_AQUI_TU_API_KEY", // Se encuentra en Configuración del Proyecto > General
-                    databaseURL: "https://TU-PROYECTO-default-rtdb.firebaseio.com", // URL que aparece en la sección Realtime Database
-                    projectId: "TU_PROJECT_ID_AQUI" // El ID único de tu proyecto en Firebase
+                    apiKey: "AIzaSyCOIK3Xc_IzKvDc1hmO5aAdLST0KE8f9P8", // Se encuentra en Configuración del Proyecto > General
+                    databaseURL: "https://burguer-house-17e76-default-rtdb.firebaseio.com", // URL que aparece en la sección Realtime Database
+                    projectId: "burguer-house-17e76" // El ID único de tu proyecto en Firebase
                 };
-                // Cambiamos la validación para que funcione con cualquier región de Firebase
-                if (typeof firebase !== 'undefined' && firebaseConfig.databaseURL && !firebaseConfig.databaseURL.includes('TU-PROYECTO')) {
+
+                // Nueva validación: Solo arranca si el usuario cambió el ID de proyecto por el real
+                const isConfigured = firebaseConfig.projectId === "burguer-house-17e76";
+
+                if (typeof firebase !== 'undefined' && isConfigured) {
                     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
                     const db = firebase.database();
                     
@@ -992,7 +995,6 @@
             const logoCarga = document.querySelector('.contenedor-logo');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
-            const closeModal = document.querySelector('.close-modal');
             const modalTitle = document.querySelector('.modal-title');
             const modalDesc = document.querySelector('.modal-description');
             const modalPrice = document.querySelector('.modal-price');
