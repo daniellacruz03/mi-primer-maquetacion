@@ -16,6 +16,7 @@
         }
         .closed-store-content .modal-title {
             color: #ff0000 !important; /* Rojo oficial de la marca */
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3);
         }
         .closed-store-content .modal-description {
             color: #cccccc !important;
@@ -370,84 +371,84 @@
             <h2 class="seccion-titulo">Bebidas</h2>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola Bombita 355 ML</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cocacolabombita.png">
                     <span class="item-price">$1</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola Bombita Light 355 ML</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cocacolalight.png">
                     <span class="item-price">$1</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola Bombita Zero 355 ML</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cocacolalatazero.png">
                     <span class="item-price">$1</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola Lata 350 ML</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cocacolalataclasica.png">
                     <span class="item-price">$1,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola 1L</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cocacolabotella.png">
                     <span class="item-price">$1,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Pepsi 1L</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="pepsi1l.png">
                     <span class="item-price">$1,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Manzanita 1L</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="gaseosa.png">
                     <span class="item-price">$1,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">7Up 1L</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="7up.png">
                     <span class="item-price">$1,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Lipton Durazno</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="lipton.png">
                     <span class="item-price">$1,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Lipton Limón</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="lipton.png">
                     <span class="item-price">$1,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola 1.5L</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cocacolabotella.png">
                     <span class="item-price">$2,5</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola 2L</span></div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cocacolabotella.png">
                     <span class="item-price">$3</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -527,7 +528,7 @@
                             <svg class="warning-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                             <p id="warning-text" class="warning-text"></p>
                         </div>
-                        <button type="button" id="btn-variation-helper" class="btn-variation-helper pulse-animation hidden">✨ PERSONALIZAR MI HAMBURGUESA</button>
+                        <button type="button" id="btn-variation-helper" class="btn-variation-helper pulse-animation hidden">Personalizar Mi Hamburguesa</button>
                     </div>
                 </div>
 
@@ -586,7 +587,7 @@
                         </div>
                         <div class="extra-card" data-extra-price="1.00">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Huevito</span> <span class="extra-cost">+$1.00</span>
+                                <span class="extra-name">Extra Huevito Sorpresa</span> <span class="extra-cost">+$1.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -614,13 +615,13 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="1.00">
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
-                                <span class="extra-name">Servicio de salsa BBQ</span> <span class="extra-cost">+$1.00</span>
+                                <span class="extra-name">Servicio de salsa BBQ</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">0</span>
+                                <span class="extra-qty-val">NO</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -646,6 +647,26 @@
                         </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
+                                <span class="extra-name">Servicio de Ketchup</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">NO</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Servicio de Mostaza</span> <span class="extra-cost">+$1.00</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
+                            <div class="extra-info-text">
                                 <span class="extra-name">Pepinillos</span>
                             </div>
                             <div class="extra-counter">
@@ -661,26 +682,6 @@
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
                                 <span class="extra-qty-val">SÍ</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
-                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
-                            <div class="extra-info-text">
-                                <span class="extra-name">Extra Ketchup</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">NO</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
-                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
-                            <div class="extra-info-text">
-                                <span class="extra-name">Extra Mostaza</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">NO</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -783,6 +784,18 @@
         </div>
     </div>
 
+    <div id="modal-personalize-intro" class="modal">
+        <div class="modal-content upsell-content">
+            <div class="modal-details">
+                <h2 class="modal-title">Personalización Individual</h2>
+                <p class="modal-description">Arma tu primera hamburguesa, ponla en el carrito y luego sigue con la siguiente hasta completar tu pedido.</p>
+                <div class="upsell-buttons">
+                    <button id="btn-intro-start" class="btn-add-order">¡Entendido!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Tienda Cerrada -->
     <div id="modal-closed" class="modal" style="display: none; z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
@@ -792,7 +805,7 @@
                 <p class="modal-description">Nuestro horario de atención es:<br><br>
                 <b>Lunes a Viernes:</b> 5:00 PM - 10:30 PM<br>
                 <b>Sábados y Domingos:</b> 1:00 PM - 10:30 PM</p>
-                <p class="modal-description" style="margin-top: 15px; font-weight: bold; color: #ff0000;">Estamos cerrados por ahora, pero puedes pre-ordenar tu pedido.</p>
+                <p class="modal-description" style="margin-top: 15px; font-weight: bold; color: #ff0000; text-shadow: 0.5px 0.5px 0px rgba(255, 255, 255, 0.3);">Estamos cerrados por ahora, pero puedes pre-ordenar tu pedido.</p>
                 <div class="upsell-buttons" style="margin-top: 20px;">
                     <button id="btn-pre-order" class="btn-add-order">Pre-ordenar</button>
                 </div>
@@ -859,6 +872,7 @@
             const checkoutView = document.getElementById('checkout-view');
             const modalUpsell = document.getElementById('modal-upsell');
             const btnUpsellAdd = document.getElementById('btn-upsell-add');
+            const modalUpsellImg = modalUpsell.querySelector('.upsell-img'); // Nueva variable para la imagen del upsell
             const btnUpsellMore = document.getElementById('btn-upsell-more');
             const btnUpsellCancel = document.getElementById('btn-upsell-cancel');
             const modalReminder = document.getElementById('modal-reminder');
@@ -869,6 +883,8 @@
             const btnVariationHelper = document.getElementById('btn-variation-helper');
             const btnAddOrderMain = modal.querySelector('.btn-add-order');
             const modalBuildNext = document.getElementById('modal-build-next');
+            const modalPersonalizeIntro = document.getElementById('modal-personalize-intro');
+            const btnIntroStart = document.getElementById('btn-intro-start');
             const btnContinueBuilding = document.getElementById('btn-continue-building');
             const btnViewCartNow = document.getElementById('btn-view-cart-now');
             const modalClosed = document.getElementById('modal-closed');
@@ -898,6 +914,7 @@
                 modalUpsell.style.display = 'none';
                 modalReminder.style.display = 'none';
                 modalBuildNext.style.display = 'none';
+                modalPersonalizeIntro.style.display = 'none';
                 // No cerramos modalClosed aquí para que los botones internos manejen su lógica
                 if (modalClosed.style.display !== 'flex') document.body.style.overflow = 'auto';
                 document.body.style.overflow = 'auto';
@@ -992,11 +1009,12 @@
                     basePrice = parseFloat(priceStr.replace('$', '').replace(',', '.'));
 
                     esKids = !!item.closest('#kids');
+                    const esNuggets = name.toLowerCase().includes('nuggets');
                     esHamburguesa = !!item.closest('#hamburguesas') || esKids;
                     isArmandoPedido = false;
                     
                     if (extrasContainer) {
-                        extrasContainer.style.display = esHamburguesa ? 'block' : 'none';
+                        extrasContainer.style.display = (esHamburguesa || esNuggets) ? 'block' : 'none';
                     }
 
                     modalTitle.innerText = name;
@@ -1018,7 +1036,9 @@
 
                         let visible = true;
                         if (esKids) {
-                            visible = (nameText === 'Extra Huevito');
+                            visible = (nameText === 'Extra Huevito Sorpresa');
+                        } else if (esNuggets) {
+                            visible = nameLower.includes('salsa') || nameLower.includes('ketchup') || nameLower.includes('mostaza') || nameLower.includes('mayonesa') || nameLower.includes('queso');
                         } else {
                             if (nameLower === 'pepinillos') {
                                 visible = tienePepinillos;
@@ -1039,7 +1059,7 @@
                             if (['pepinillos', 'pan', 'lechuga', 'salsa de la casa'].includes(nameLower)) {
                                 valSpan.innerText = 'SÍ';
                             } else {
-                                valSpan.innerText = nameLower.includes('extra') ? 'NO' : 'SÍ';
+                                valSpan.innerText = (nameLower.includes('extra') || nameLower.includes('servicio')) ? 'NO' : 'SÍ';
                             }
                         } else {
                             valSpan.innerText = '0';
@@ -1049,7 +1069,14 @@
                     updateTotal(); 
                     warningBox.classList.add('hidden');
                     btnVariationHelper.classList.add('hidden');
-                    modalImg.src = "hamburguesa.png"; 
+
+                    // Determinar la imagen a mostrar en el modal
+                    const itemImageSrc = item.querySelector('.item-price-wrapper').dataset.imgSrc;
+                    if (itemImageSrc) {
+                        modalImg.src = itemImageSrc;
+                    } else {
+                        modalImg.src = "hamburguesa.png"; // Imagen por defecto para hamburguesas u otros
+                    }
 
                     modal.style.display = 'flex';
                     document.body.style.overflow = 'hidden';
@@ -1176,18 +1203,20 @@
                 if (wasArmando) {
                     // Si se activó la personalización individual, mostramos el siguiente paso y saltamos bebidas
                     modalBuildNext.style.display = 'flex';
-                } else if (esHamburguesa && !upsellMostrado) {
+            } else if (esHamburguesa) {
                     const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
                     const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
+                    const suggestedDrinkImgSrc = randomElement.querySelector('.item-price-wrapper').dataset.imgSrc;
                     
                     drinkSugerida = {
                         nombre: randomElement.querySelector('.item-name').innerText,
-                        precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.'))
+                        precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.')),
+                        imgSrc: suggestedDrinkImgSrc // Guardamos la ruta de la imagen
                     };
 
                     modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
+                    modalUpsellImg.src = drinkSugerida.imgSrc; // Asignamos la imagen
                     modalUpsell.style.display = 'flex';
-                    upsellMostrado = true;
                 } else {
                     abrirCarritoConFeedback();
                 }
@@ -1196,6 +1225,15 @@
             btnAddOrderMain.addEventListener('click', agregarAlPedido);
             
             btnVariationHelper.addEventListener('click', () => {
+                modalPersonalizeIntro.style.display = 'flex';
+            });
+
+            btnIntroStart.addEventListener('click', () => {
+                modalPersonalizeIntro.style.display = 'none';
+                startCustomizationFlow();
+            });
+
+            function startCustomizationFlow() {
                 // 1. Reiniciar cantidad de la hamburguesa principal a 1
                 currentMainQty = 1;
                 mainQtyVal.innerText = currentMainQty;
@@ -1224,16 +1262,37 @@
 
                 // 4. Posicionar el scroll al inicio de la sección de extras
                 extrasContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
+            }
 
             btnContinueBuilding.addEventListener('click', () => {
                 cerrarFunc();
-                if (lastItemClicked) lastItemClicked.click();
+                if (lastItemClicked) {
+                    lastItemClicked.click();
+                    // Forzamos el modo personalización para la siguiente unidad
+                    isArmandoPedido = true;
+                    updateTotal();
+                }
             });
 
             btnViewCartNow.addEventListener('click', () => {
                 cerrarFunc();
-                abrirCarritoConFeedback();
+                const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
+                if (drinksElements.length > 0) {
+                    const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
+                    const suggestedDrinkImgSrc = randomElement.querySelector('.item-price-wrapper').dataset.imgSrc;
+                    
+                    drinkSugerida = {
+                        nombre: randomElement.querySelector('.item-name').innerText,
+                        precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.')),
+                        imgSrc: suggestedDrinkImgSrc
+                    };
+
+                    modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
+                    modalUpsellImg.src = drinkSugerida.imgSrc;
+                    modalUpsell.style.display = 'flex';
+                } else {
+                    abrirCarritoConFeedback();
+                }
             });
 
             btnUpsellCancel.addEventListener('click', () => {
@@ -1397,7 +1456,9 @@
                             card.style.display = 'none';
                             valSpan.innerText = 'SÍ'; // Forzamos SÍ internamente si hay extra
                         } else {
-                            card.style.display = (tieneIngrediente && !esKids) ? 'flex' : 'none';
+                            const esNuggetsLocal = modalTitle.innerText.toLowerCase().includes('nuggets');
+                            const esSalsaParaNuggets = esNuggetsLocal && (nameLower.includes('salsa') || nameLower.includes('ketchup') || nameLower.includes('mostaza') || nameLower.includes('mayonesa') || nameLower.includes('queso'));
+                            card.style.display = (tieneIngrediente && !esKids || esSalsaParaNuggets) ? 'flex' : 'none';
                         }
                     }
 
@@ -1409,12 +1470,9 @@
                 modalPrice.innerText = `$${finalTotal.toFixed(2)}`;
                 btnAddOrderMain.classList.remove('btn-highlight');
 
-                if (currentMainQty > 1) {
+                if (currentMainQty > 1 && esHamburguesa && !esKids) {
                     warningText.innerText = `Nota: Si aumentas la cantidad, todas tendrán los mismos extras.`;
                     warningBox.classList.remove('hidden');
-                    btnVariationHelper.classList.remove('hidden');
-                } else if (extraTotal > 0) {
-                    warningBox.classList.add('hidden');
                     btnVariationHelper.classList.remove('hidden');
                 } else {
                     warningBox.classList.add('hidden');
