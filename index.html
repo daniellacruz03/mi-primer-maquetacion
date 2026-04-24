@@ -20,41 +20,102 @@
             box-sizing: border-box;
         }
 
+        html { background-color: #000; }
+
         body {
-            background-color: var(--bg-color);
-            background: radial-gradient(circle at center, var(--glow-red) 0%, var(--bg-color) 100%);
+            background: url('brasas.jpg') center/cover no-repeat fixed;
+            min-height: 100vh;
             color: #ffffff;
             font-family: var(--font-main);
             height: 100vh;
             overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+
+        /* Preloader Estilo Menu */
+        .contenedor-logo {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                radial-gradient(circle at 50% 120%, rgba(255, 90, 20, 0.16) 0%, rgba(255, 90, 20, 0) 46%),
+                linear-gradient(180deg, #000000 0%, #070707 55%, #120404 100%);
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .preloader-inner {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            text-align: center;
+            gap: 20px;
         }
 
-        .falling-burgers {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
+        .logo-glow-wrap {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: grid;
+            place-items: center;
         }
 
-        .burger-particle {
+        .logo-glow-wrap::before {
+            content: "";
             position: absolute;
-            width: 30px;
-            height: 30px;
-            background: url('hamburguesa.png') no-repeat center/contain;
-            opacity: 0.3;
-            animation: fall linear infinite;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.5) 0%, transparent 70%);
+            animation: grill-glow 2s ease-in-out infinite;
         }
 
-        @keyframes fall {
-            0% { transform: translateY(-100px) rotate(0deg); }
-            100% { transform: translateY(110vh) rotate(360deg); }
+        .logo-animado {
+            width: 150px;
+            border-radius: 50%;
+            border: 3px solid #ff4500;
+            box-shadow: 0 0 25px rgba(255, 69, 0, 0.4);
+            animation: logo-pulse-fire 1.8s ease-in-out infinite;
+        }
+
+        .preloader-bar {
+            width: 250px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preloader-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #8b0000, #ff0000, #ff8c00);
+            transition: width 0.2s;
+        }
+
+        .preloader-caption {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contenedor-logo.ocultar {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Animaciones */
+        @keyframes grill-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes logo-pulse-fire {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .container {
@@ -62,6 +123,10 @@
             width: 90%;
             max-width: 800px;
             display: flex;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
             flex-direction: column;
             align-items: center;
         }
@@ -80,6 +145,7 @@
             border: 3px solid var(--brand-red);
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
             animation: pulse 2s infinite ease-in-out;
+            background-color: transparent;
         }
 
         @keyframes pulse {
@@ -98,6 +164,7 @@
             letter-spacing: -1px;
             margin-bottom: 40px;
             text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
         .countdown {
@@ -115,17 +182,20 @@
         .time-part span {
             font-size: clamp(1.5rem, 4vw, 2.5rem);
             font-weight: 700;
-            color: var(--brand-red);
-
+            color: #ffffff; /* Precios/Contadores en blanco */
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0.5px 0.5px 0px rgba(255, 255, 255, 0.2);
+            background: rgba(0,0,0,0.6);
+            padding: 5px 15px;
+            border-radius: 12px;
         }
 
         .time-part label {
             font-size: 0.7rem;
             text-transform: uppercase;
-            opacity: 0.5;
+            opacity: 1;
             margin-top: 5px;
             letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .cooking-text {
@@ -133,13 +203,26 @@
             letter-spacing: 8px;
             text-transform: uppercase;
             font-weight: 400;
-            opacity: 0.8;
+            opacity: 1;
             margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
     </style>
 </head>
 <body>
-    <div class="falling-burgers" id="burger-bg"></div>
+    <!-- Añadida la animación inicial del logo -->
+    <div class="contenedor-logo" id="preloader">
+        <div class="preloader-inner">
+            <div class="logo-glow-wrap">
+                <img src="logobh.PNG" alt="Logo" class="logo-animado">
+            </div>
+            <div class="preloader-bar">
+                <div id="preloader-progress" class="preloader-progress"></div>
+            </div>
+            <p class="preloader-caption">Encendiendo la parrilla</p>
+        </div>
+    </div>
+
     <div class="container">
         <div class="logo-wrapper">
             <img src="logobh.PNG" alt="Burger House" class="main-logo">
@@ -162,19 +245,22 @@
         const hoursEl = document.getElementById('hours');
         const minsEl = document.getElementById('mins');
         const secsEl = document.getElementById('secs');
-        
-        function createBurgers() {
-            const bg = document.getElementById('burger-bg');
-            for (let i = 0; i < 15; i++) {
-                const burger = document.createElement('div');
-                burger.className = 'burger-particle';
-                burger.style.left = Math.random() * 100 + 'vw';
-                burger.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                burger.style.animationDelay = (Math.random() * 5) + 's';
-                bg.appendChild(burger);
-            }
-        }
-        createBurgers();
+
+        // Lógica del Preloader
+        document.addEventListener('DOMContentLoaded', () => {
+            const progress = document.getElementById('preloader-progress');
+            const preloader = document.getElementById('preloader');
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 8;
+                if (width >= 100) {
+                    width = 100;
+                    clearInterval(interval);
+                    setTimeout(() => preloader.classList.add('ocultar'), 500);
+                }
+                progress.style.width = width + '%';
+            }, 150);
+        });
 
         const targetDate = new Date().getTime() + (15 * 24 * 60 * 60 * 1000);
 

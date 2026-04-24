@@ -7,15 +7,167 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="logobh.PNG?v=2">
     <style>
-        /* Estilos para el Modal de Tienda Cerrada */
+        body {
+            background-image:
+                url("../brasas.jpg"),
+                linear-gradient(to top, #000000 0%, #050505 46%, #130606 72%, #2a0a0a 100%) !important;
+            background-size: cover, cover !important;
+            background-repeat: no-repeat, no-repeat !important;
+            background-position: bottom center, center !important;
+            background-attachment: fixed, fixed !important;
+            min-height: 100vh;
+            color: #ffffff !important;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .contenedor-logo {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at 50% 120%, rgba(255, 90, 20, 0.16) 0%, rgba(255, 90, 20, 0) 46%),
+                linear-gradient(180deg, #000000 0%, #070707 55%, #120404 100%);
+            overflow: hidden;
+            transition: opacity 0.9s ease, filter 0.9s ease;
+        }
+
+        .contenedor-logo::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px),
+                radial-gradient(circle at 80% 42%, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px);
+            background-size: 6px 6px, 7px 7px;
+            opacity: 0.2;
+        }
+
+        .contenedor-logo::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 16%;
+            width: 320px;
+            height: 130px;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse at center, rgba(255, 100, 20, 0.28) 0%, rgba(255, 100, 20, 0) 72%);
+            filter: blur(7px);
+            animation: preloader-heat 2.4s ease-in-out infinite;
+        }
+
+        .preloader-inner {
+            position: relative;
+            z-index: 2;
+            width: min(82vw, 360px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logo-glow-wrap {
+            position: relative;
+            width: 190px;
+            height: 190px;
+            display: grid;
+            place-items: center;
+        }
+
+        .logo-glow-wrap::before {
+            content: "";
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 133, 26, 0.66) 0%, rgba(255, 133, 26, 0.14) 45%, rgba(255, 133, 26, 0) 75%);
+            filter: blur(5px);
+            animation: grill-glow 2.1s ease-in-out infinite;
+        }
+
+        .logo-animado {
+            width: 165px !important;
+            max-width: 165px !important;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 70, 40, 0.95);
+            box-shadow: 0 0 28px rgba(255, 88, 24, 0.45);
+            animation: logo-pulse-fire 1.8s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preloader-bar {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preloader-progress {
+            width: 0%;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #8b0000 0%, #ff0000 55%, #ff6a00 100%);
+            box-shadow: 0 0 16px rgba(255, 106, 0, 0.45);
+            transition: width 0.18s ease;
+            position: relative;
+        }
+
+        .preloader-progress::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: -3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 214, 130, 0.95) 0%, rgba(255, 214, 130, 0) 72%);
+            filter: blur(0.5px);
+        }
+
+        .preloader-sparks span {
+            position: absolute;
+            bottom: -2px;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #ffb347;
+            opacity: 0;
+            animation: spark-rise 1.7s linear infinite;
+        }
+
+        .preloader-sparks span:nth-child(1) { left: 18%; animation-delay: 0s; }
+        .preloader-sparks span:nth-child(2) { left: 37%; animation-delay: 0.35s; }
+        .preloader-sparks span:nth-child(3) { left: 57%; animation-delay: 0.8s; }
+        .preloader-sparks span:nth-child(4) { left: 73%; animation-delay: 1.1s; }
+        .preloader-sparks span:nth-child(5) { left: 88%; animation-delay: 1.35s; }
+
+        .preloader-caption {
+            font-size: 0.72rem;
+            letter-spacing: 2.8px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .contenedor-logo.ocultar {
+            opacity: 0;
+            filter: blur(2px);
+            visibility: hidden;
+        }
         .closed-store-content {
-            background-color: #121212 !important; /* Fondo ultra oscuro */
+            background-color: #121212 !important;
             color: #ffffff !important;
             border: 1px solid #333;
+            border-radius: 40px !important;
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
         .closed-store-content .modal-title {
-            color: #ff0000 !important; /* Rojo oficial de la marca */
+            color: #ff0000 !important;
             text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3);
         }
         .closed-store-content .modal-description {
@@ -25,9 +177,8 @@
             background-color: #ff0000 !important;
         }
 
-        /* Rediseño de la alerta de cantidad y botón de variación */
         .warning-box {
-            background-color: #f7941d !important; /* Color naranja de la marca */
+            background-color: #f7941d !important;
             border-radius: 12px !important;
             padding: 8px 15px !important;
             margin: 10px auto !important;
@@ -37,7 +188,7 @@
             justify-content: center;
             gap: 8px;
         }
-        .warning-icon { display: none !important; } /* Ocultamos el icono para usar el emoji del texto */
+        .warning-icon { display: none !important; }
         .warning-text {
             font-size: 0.85rem !important;
             margin: 0 !important;
@@ -46,8 +197,8 @@
             text-align: center;
         }
         .btn-variation-helper {
-            background-color: #ffc107 !important; /* Amarillo brillante */
-            color: #000 !important; /* Texto negro */
+            background-color: #ffc107 !important;
+            color: #000 !important;
             font-weight: 900 !important;
             border-radius: 50px !important;
             border: none !important;
@@ -70,41 +221,387 @@
             100% { transform: scale(1); }
         }
 
-        /* Estilo para el botón flotante y el icono de delivery */
         #cart-floating-btn {
-            background-color: #000 !important; /* Fondo negro solicitado */
+            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
+            border-top: 1px solid rgba(255,255,255,0.3) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            width: 55px !important;
-            height: 55px !important;
+            width: 58px !important;
+            height: 58px !important;
             border-radius: 50% !important;
+            transition: transform 0.22s ease, filter 0.22s ease !important;
+        }
+
+        #cart-floating-btn:hover {
+            transform: scale(1.1);
+            filter: brightness(1.06);
         }
 
         .icono-moto {
-            width: 30px !important; /* Ancho solicitado de 30px */
+            width: 30px !important;
             height: auto !important;
-            background-color: transparent !important; /* Eliminamos fondos anteriores */
+            background-color: transparent !important;
             border-radius: 0 !important;
             padding: 0 !important;
-            filter: brightness(0) invert(1); /* Convierte el icono negro en blanco para que resalte sobre el rojo */
+            filter: brightness(0) invert(1);
+        }
+
+        #cart-floating-btn .icono-moto {
+            filter: brightness(0) invert(1) !important;
         }
 
         #cart-badge {
             position: absolute !important;
             top: -2px !important;
             right: -2px !important;
-            z-index: 10 !important; /* Asegura que el número quede por encima de la bolsa */
+            z-index: 10 !important;
+            width: 22px !important;
+            height: 22px !important;
+            border-radius: 50% !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+            background: rgba(0, 0, 0, 0.9) !important;
+            color: #ffffff !important;
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .background-decor {
+            z-index: 6 !important;
+            pointer-events: auto;
+        }
+
+        .corner-item {
+            z-index: 6;
+            pointer-events: auto;
+            opacity: 0.9;
+            filter: drop-shadow(0 10px 18px rgba(255, 140, 0, 0.5));
+            animation: floating 11s ease-in-out infinite !important;
+            transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+        }
+
+        .papa-top-left,
+        .papa-top-right,
+        .burger-bottom-left,
+        .plato-bottom-right {
+            filter: blur(1.5px) drop-shadow(0 10px 20px rgba(255, 140, 0, 0.45));
+        }
+
+        .nuggets-bottom-left {
+            filter: drop-shadow(0 10px 20px rgba(255, 140, 0, 0.55));
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-13px); }
+        }
+
+        .papa-top-right { animation-delay: -2.5s !important; }
+        .burger-bottom-left { animation-delay: -4s !important; }
+        .nuggets-bottom-left { animation-delay: -1.5s !important; }
+        .plato-bottom-right { animation-delay: -3.2s !important; }
+
+        .corner-item:hover {
+            transform: translateY(-6px) scale(1.02);
+            opacity: 1;
+            filter: drop-shadow(0 12px 22px rgba(255, 175, 70, 0.62));
+        }
+
+        .menu-container {
+            background: rgba(10, 10, 10, 0.85);
+            padding: 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            filter: blur(8px);
+        }
+
+        .menu-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 140, 0, 0) 0%, rgba(255, 140, 0, 0.55) 50%, rgba(255, 140, 0, 0) 100%);
+            pointer-events: none;
+        }
+
+        .menu-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 24px;
+            background: linear-gradient(180deg, rgba(255, 140, 0, 0.08) 0%, rgba(255, 140, 0, 0) 100%);
+            pointer-events: none;
+        }
+
+        .menu-container.mostrar-menu {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        @keyframes grill-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes logo-pulse-fire {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .menu-item {
+            border-radius: 36px !important;
+            background: rgba(18, 18, 18, 0.55) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin-bottom: 15px !important;
+            padding: 18px 20px !important;
+            position: relative;
+            transition: transform 0.28s ease;
+        }
+
+        .menu-item::after {
+            display: none;
+        }
+
+        .menu-item:hover {
+            transform: translateX(5px);
+        }
+
+        .item-name, .seccion-titulo, .titulo-principal {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .seccion-titulo {
+            color: #ffffff !important;
+        }
+
+        .menu-item .item-name {
+            transition: color 0.28s ease;
+        }
+
+        .menu-item:hover .item-name {
+            color: inherit !important;
+        }
+
+        .badge-best,
+        .badge-new {
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 999px !important;
+            padding: 2px 8px !important;
+            font-size: 0.65rem !important;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            font-weight: 700 !important;
+            box-shadow: none !important;
+        }
+
+        .badge-best {
+            background: #28a745 !important;
+        }
+
+        .badge-new {
+            background: #ff0000 !important;
+        }
+
+        .item-price-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 104px;
+            padding: 8px 16px 7px;
+            margin-right: 10px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%);
+            border-top: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transform: scale(1);
+            transition: transform 0.25s ease, filter 0.25s ease;
+            transform-origin: center right;
+        }
+
+        .item-price {
+            color: #ffffff !important;
+            background: transparent !important;
+            font-size: 1.45rem;
+            font-weight: 900 !important;
+            line-height: 1;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+        }
+
+        .item-ref {
+            color: #ffffff !important;
+            background: transparent !important;
+            font-size: 0.64rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.4px;
+            opacity: 0.95;
+            margin-top: 3px;
+            line-height: 1;
+            text-align: center;
+            align-self: center;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+        }
+
+        .menu-item:hover .item-price-wrapper {
+            transform: scale(1.05);
+            filter: brightness(1.08) saturate(1.06);
+        }
+
+        #cart-sidebar {
+            background: rgba(10, 10, 10, 0.85) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top-left-radius: 26px;
+            overflow: hidden;
+        }
+
+        .cart-header {
+            position: relative;
+            border-bottom: none !important;
+        }
+
+        .cart-header::after {
+            content: "";
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 0, 0, 0) 0%, rgba(255, 90, 70, 0.65) 50%, rgba(255, 0, 0, 0) 100%);
+        }
+
+        #close-cart {
+            background: #ff1f1f !important;
+            color: #ffffff !important;
+            box-shadow: 0 6px 14px rgba(255, 31, 31, 0.35);
+        }
+
+        #btn-go-checkout {
+            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
+            border: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        #cart-grand-total {
+            color: #ffffff !important;
+            font-weight: 900 !important;
+            font-size: 1.75rem !important;
+            text-shadow: 0 2px 12px rgba(255, 255, 255, 0.18);
+        }
+
+        .cart-item-row {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .cart-item-info h4 {
+            color: #f3f3f3 !important;
+        }
+
+        .cart-item-extras {
+            color: #d8b77a !important;
+        }
+
+        .modal {
+            background: rgba(0, 0, 0, 0.72) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+        }
+
+        .modal-content {
+            background: rgba(15, 15, 15, 0.9) !important;
+            border-radius: 30px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55) !important;
+            overflow: hidden;
+        }
+
+        .modal-title {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-description {
+            color: #f0f0f0 !important;
+            line-height: 1.55;
+        }
+
+        .modal .btn-add-order,
+        #btn-upsell-add {
+            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
+            border: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+            color: #ffffff !important;
+        }
+
+        .modal .btn-back-to-cart,
+        #btn-upsell-more {
+            background: linear-gradient(180deg, #c65b00 0%, #ff8a00 100%) !important;
+            border: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.28) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+        }
+
+        #btn-upsell-cancel,
+        .modal .btn-large-cancel {
+            background: transparent !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            color: rgba(255, 255, 255, 0.78) !important;
+            box-shadow: none !important;
+        }
+
+        #btn-upsell-cancel:hover,
+        .modal .btn-large-cancel:hover {
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.42) !important;
+            background: rgba(255, 255, 255, 0.05) !important;
         }
     </style>
 </head>
 <body>
 
-    <div class="contenedor-logo">
-        <img src="logobh.PNG" alt="Logo" class="logo-animado">
+    <div class="contenedor-logo" id="preloader">
+        <div class="preloader-inner">
+            <div class="logo-glow-wrap">
+                <img src="logobh.PNG" alt="Logo" class="logo-animado">
+            </div>
+            <div class="preloader-bar" aria-hidden="true">
+                <div id="preloader-progress" class="preloader-progress"></div>
+            </div>
+            <p class="preloader-caption">Encendiendo la parrilla</p>
+        </div>
     </div>
 
-    <!-- Botón Flotante del Carrito -->
     <div id="cart-floating-btn" class="cart-btn-hidden">
         <span id="cart-badge">0</span>
         <img src="bolsadelivery.png" alt="Delivery" class="icono-moto">
@@ -456,7 +953,6 @@
         </section>
     </main>
 
-    <!-- Barra Lateral del Carrito -->
     <div id="cart-sidebar" class="cart-closed">
         <div class="cart-header">
             <h2>
@@ -796,7 +1292,6 @@
         </div>
     </div>
 
-    <!-- Modal de Tienda Cerrada -->
     <div id="modal-closed" class="modal" style="display: none; z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
             <div class="modal-details">
@@ -815,27 +1310,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- LÓGICA DE HORARIO VENEZUELA (UTC-4) ---
             let isPreOrder = false;
             const verificarHorario = () => {
                 const now = new Date();
-                // Forzamos la obtención de la hora en la zona horaria de Caracas
                 const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
                 
-                const dia = caracasDate.getDay(); // 0 (Dom) a 6 (Sáb)
+                const dia = caracasDate.getDay();
                 const hora = caracasDate.getHours();
                 const minutos = caracasDate.getMinutes();
                 const tiempoTotalMinutos = (hora * 60) + minutos;
 
                 let estaAbierto = false;
 
-                // Lunes (1) a Viernes (5): 5:00 PM (1020 min) a 10:30 PM (1350 min)
                 if (dia >= 1 && dia <= 5) {
                     if (tiempoTotalMinutos >= 1020 && tiempoTotalMinutos <= 1350) {
                         estaAbierto = true;
                     }
                 } 
-                // Sábado (6) y Domingo (0): 1:00 PM (780 min) a 10:30 PM (1350 min)
                 else {
                     if (tiempoTotalMinutos >= 780 && tiempoTotalMinutos <= 1350) {
                         estaAbierto = true;
@@ -851,8 +1342,7 @@
 
             verificarHorario();
 
-            // --- DECLARACIÓN DE VARIABLES DEL DOM (INICIALIZACIÓN AL PRINCIPIO) ---
-            const logoCarga = document.querySelector('.contenedor-logo');
+            const logoCarga = document.getElementById('preloader');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
             const closeModal = document.querySelector('.close-modal');
@@ -872,7 +1362,7 @@
             const checkoutView = document.getElementById('checkout-view');
             const modalUpsell = document.getElementById('modal-upsell');
             const btnUpsellAdd = document.getElementById('btn-upsell-add');
-            const modalUpsellImg = modalUpsell.querySelector('.upsell-img'); // Nueva variable para la imagen del upsell
+            const modalUpsellImg = modalUpsell.querySelector('.upsell-img');
             const btnUpsellMore = document.getElementById('btn-upsell-more');
             const btnUpsellCancel = document.getElementById('btn-upsell-cancel');
             const modalReminder = document.getElementById('modal-reminder');
@@ -889,11 +1379,12 @@
             const btnViewCartNow = document.getElementById('btn-view-cart-now');
             const modalClosed = document.getElementById('modal-closed');
             const btnPreOrder = document.getElementById('btn-pre-order');
+            const preloaderProgress = document.getElementById('preloader-progress');
 
-            // --- VARIABLES DE ESTADO ---
             let basePrice = 0;
             let currentMainQty = 1;
             let esHamburguesa = false;
+            let esComboHouse = false;
             let esKids = false;
             let pedidoConfirmado = false;
             let upsellMostrado = false;
@@ -901,10 +1392,8 @@
             let lastItemClicked = null;
             let drinkSugerida = null;
             
-            // PERSISTENCIA: Cargar carrito desde localStorage
             let carrito = JSON.parse(localStorage.getItem('bh_cart')) || [];
             
-            // Sincronizar UI al cargar (Ahora las variables DOM ya están listas)
             if (carrito.length > 0) {
                 actualizarInterfazCarrito();
             }
@@ -915,14 +1404,32 @@
                 modalReminder.style.display = 'none';
                 modalBuildNext.style.display = 'none';
                 modalPersonalizeIntro.style.display = 'none';
-                // No cerramos modalClosed aquí para que los botones internos manejen su lógica
-                if (modalClosed.style.display !== 'flex') document.body.style.overflow = 'auto';
                 document.body.style.overflow = 'auto';
             };
 
-            // Helper para persistencia
             function guardarCarrito() {
                 localStorage.setItem('bh_cart', JSON.stringify(carrito));
+            }
+
+            function mostrarUpsellBebidaAleatoria() {
+                const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
+                if (drinksElements.length === 0) {
+                    abrirCarritoConFeedback();
+                    return;
+                }
+
+                const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
+                const suggestedDrinkImgSrc = randomElement.querySelector('.item-price-wrapper').dataset.imgSrc;
+                
+                drinkSugerida = {
+                    nombre: randomElement.querySelector('.item-name').innerText,
+                    precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.')),
+                    imgSrc: suggestedDrinkImgSrc
+                };
+
+                modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
+                modalUpsellImg.src = drinkSugerida.imgSrc;
+                modalUpsell.style.display = 'flex';
             }
 
             function abrirCarritoConFeedback() {
@@ -947,7 +1454,7 @@
                     cartItemsView.classList.remove('hidden');
                 }
                 
-                guardarCarrito(); // Persistir cada vez que cambia
+                guardarCarrito();
 
                 carrito.forEach((item, index) => {
                     total += item.subtotal;
@@ -984,16 +1491,22 @@
                 cartGrandTotal.innerHTML = `$${total.toFixed(2)} <span class="cart-ref-total">REF</span>`;
             }
 
-            setTimeout(() => {
-                logoCarga.style.transition = 'opacity 1s ease';
-                logoCarga.style.opacity = '0';
-
-                logoCarga.addEventListener('transitionend', () => {
-                    logoCarga.style.display = 'none';
-                    menu.classList.add('mostrar-menu');
-                    cartBtn.classList.remove('cart-btn-hidden');
-                }, { once: true });
-            }, 3000);
+            window.addEventListener('load', () => {
+                let width = 0;
+                const interval = setInterval(() => {
+                    width += Math.random() * 8;
+                    if (width >= 100) {
+                        width = 100;
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            logoCarga.classList.add('ocultar');
+                            menu.classList.add('mostrar-menu');
+                            if (cartBtn) cartBtn.classList.remove('cart-btn-hidden');
+                        }, 500);
+                    }
+                    if (preloaderProgress) preloaderProgress.style.width = width + '%';
+                }, 150);
+            });
 
             cartBtn.addEventListener('click', () => cartSidebar.classList.remove('cart-closed'));
             closeCart.addEventListener('click', () => cartSidebar.classList.add('cart-closed'));
@@ -1010,11 +1523,12 @@
 
                     esKids = !!item.closest('#kids');
                     const esNuggets = name.toLowerCase().includes('nuggets');
+                    esComboHouse = name.toLowerCase().includes('combo house');
                     esHamburguesa = !!item.closest('#hamburguesas') || esKids;
                     isArmandoPedido = false;
                     
                     if (extrasContainer) {
-                        extrasContainer.style.display = (esHamburguesa || esNuggets) ? 'block' : 'none';
+                        extrasContainer.style.display = (esHamburguesa || esNuggets) && !esComboHouse ? 'block' : 'none';
                     }
 
                     modalTitle.innerText = name;
@@ -1045,11 +1559,11 @@
                             } else if (nameLower === 'salsa de la casa') {
                                 visible = tieneSalsa;
                             } else if (nameLower === 'lechuga' || nameLower === 'extra lechuga') {
-                                visible = tieneLechuga; // Solo visible si está en la descripción original
+                                visible = tieneLechuga;
                             } else if (nameLower === 'pan') {
                                 visible = tienePan;
                             } else if (nameLower === 'extra pepinillos') {
-                                visible = true; // El extra siempre debe estar disponible para añadir
+                                visible = true;
                             }
                         }
 
@@ -1070,12 +1584,11 @@
                     warningBox.classList.add('hidden');
                     btnVariationHelper.classList.add('hidden');
 
-                    // Determinar la imagen a mostrar en el modal
                     const itemImageSrc = item.querySelector('.item-price-wrapper').dataset.imgSrc;
                     if (itemImageSrc) {
                         modalImg.src = itemImageSrc;
                     } else {
-                        modalImg.src = "hamburguesa.png"; // Imagen por defecto para hamburguesas u otros
+                        modalImg.src = "hamburguesa.png";
                     }
 
                     modal.style.display = 'flex';
@@ -1103,7 +1616,6 @@
                     
                     const nameText = card.querySelector('.extra-name').innerText;
 
-                    // CONFLICTO DE INGREDIENTES: Lógica bidireccional
                     if (nameText === 'Pepinillos' && valSpan.innerText === 'NO') {
                         const extraCard = Array.from(document.querySelectorAll('.extra-card'))
                             .find(c => c.querySelector('.extra-name').innerText === 'Extra Pepinillos');
@@ -1134,7 +1646,6 @@
             });
 
             const agregarAlPedido = () => {
-                // CERO VS VACÍO: Validación de seguridad
                 if (currentMainQty < 1) return;
 
                 const wasArmando = isArmandoPedido;
@@ -1148,8 +1659,6 @@
                     let incluir = false;
                     if (!isToggle && qty > 0) incluir = true;
                     if (isToggle) {
-                        // Solo incluimos el "SIN" si la opción era visible para el usuario (estaba en la receta)
-                        // y el usuario decidió marcarla como "NO".
                         const esVisible = card.style.display !== 'none';
                         if (esVisible && ['Salsa de la Casa', 'Pepinillos', 'Pan', 'Lechuga'].includes(nombre) && valText === 'NO') incluir = true;
                         if (nombre.toLowerCase().includes('extra') && valText === 'SÍ') incluir = true;
@@ -1166,7 +1675,6 @@
                     }
                 });
 
-                // PRECISIÓN DECIMAL: Cálculo basado en números, no en strings de UI
                 const totalExtrasUnitarios = extrasSeleccionados.reduce((acc, e) => acc + e.precio, 0);
                 const subtotalCalculado = (basePrice + totalExtrasUnitarios) * currentMainQty;
 
@@ -1201,22 +1709,9 @@
                 cerrarFunc();
 
                 if (wasArmando) {
-                    // Si se activó la personalización individual, mostramos el siguiente paso y saltamos bebidas
                     modalBuildNext.style.display = 'flex';
-            } else if (esHamburguesa) {
-                    const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
-                    const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
-                    const suggestedDrinkImgSrc = randomElement.querySelector('.item-price-wrapper').dataset.imgSrc;
-                    
-                    drinkSugerida = {
-                        nombre: randomElement.querySelector('.item-name').innerText,
-                        precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.')),
-                        imgSrc: suggestedDrinkImgSrc // Guardamos la ruta de la imagen
-                    };
-
-                    modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
-                    modalUpsellImg.src = drinkSugerida.imgSrc; // Asignamos la imagen
-                    modalUpsell.style.display = 'flex';
+                } else if (esHamburguesa && !esComboHouse) {
+                    mostrarUpsellBebidaAleatoria();
                 } else {
                     abrirCarritoConFeedback();
                 }
@@ -1234,11 +1729,9 @@
             });
 
             function startCustomizationFlow() {
-                // 1. Reiniciar cantidad de la hamburguesa principal a 1
                 currentMainQty = 1;
                 mainQtyVal.innerText = currentMainQty;
 
-                // 2. Reiniciar extras a su estado inicial consistente
                 const descLower = modalDesc.innerText.toLowerCase();
                 document.querySelectorAll('.extra-card').forEach(card => {
                     const valSpan = card.querySelector('.extra-qty-val');
@@ -1256,11 +1749,9 @@
                     }
                 });
 
-                // 3. Activar modo personalización y actualizar la interfaz (cambia el mensaje naranja)
                 isArmandoPedido = true;
                 updateTotal();
 
-                // 4. Posicionar el scroll al inicio de la sección de extras
                 extrasContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
@@ -1268,7 +1759,6 @@
                 cerrarFunc();
                 if (lastItemClicked) {
                     lastItemClicked.click();
-                    // Forzamos el modo personalización para la siguiente unidad
                     isArmandoPedido = true;
                     updateTotal();
                 }
@@ -1276,23 +1766,7 @@
 
             btnViewCartNow.addEventListener('click', () => {
                 cerrarFunc();
-                const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
-                if (drinksElements.length > 0) {
-                    const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
-                    const suggestedDrinkImgSrc = randomElement.querySelector('.item-price-wrapper').dataset.imgSrc;
-                    
-                    drinkSugerida = {
-                        nombre: randomElement.querySelector('.item-name').innerText,
-                        precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.')),
-                        imgSrc: suggestedDrinkImgSrc
-                    };
-
-                    modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
-                    modalUpsellImg.src = drinkSugerida.imgSrc;
-                    modalUpsell.style.display = 'flex';
-                } else {
-                    abrirCarritoConFeedback();
-                }
+                mostrarUpsellBebidaAleatoria();
             });
 
             btnUpsellCancel.addEventListener('click', () => {
@@ -1351,7 +1825,6 @@
 
                 let totalPedido = 0;
                 carrito.forEach(item => {
-                    // FORMATO WHATSAPP: Diferenciación clara para cocina
                     const sin = item.extras.filter(e => e.isToggle && e.val === 'NO')
                         .map(e => e.nombre.replace(/^Extra\s+/i, ''));
                     const con = item.extras.filter(e => !(e.isToggle && e.val === 'NO'))
@@ -1383,7 +1856,6 @@
                 const numeroWhatsApp = "584127510090";
                 const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
                 
-                // Limpiar persistencia tras pedido exitoso
                 localStorage.removeItem('bh_cart');
 
                 pedidoConfirmado = true;
@@ -1421,7 +1893,6 @@
                 window.location.reload();
             });
 
-            // Eventos para el Modal de Tienda Cerrada
             btnPreOrder.addEventListener('click', () => {
                 modalClosed.style.display = 'none';
                 document.body.style.overflow = 'auto';
@@ -1431,7 +1902,6 @@
                 let extraTotal = 0;
                 let extraPepinillosQty = 0;
 
-                // 1. Detectar si hay Extra Pepinillos activo
                 document.querySelectorAll('.extra-card').forEach(card => {
                     if (card.querySelector('.extra-name').innerText === 'Extra Pepinillos') {
                         extraPepinillosQty = parseInt(card.querySelector('.extra-qty-val').innerText);
@@ -1444,7 +1914,6 @@
                     const valSpan = card.querySelector('.extra-qty-val');
                     const descLower = modalDesc.innerText.toLowerCase();
                     
-                    // 2. Sincronizar visibilidad de ingredientes base con la receta
                     if (['pepinillos', 'pan', 'lechuga', 'salsa de la casa', 'extra lechuga'].includes(nameLower)) {
                         let tieneIngrediente = false;
                         if (nameLower === 'pepinillos') tieneIngrediente = descLower.includes('pepinillo');
@@ -1454,7 +1923,7 @@
 
                         if (nameLower === 'pepinillos' && extraPepinillosQty > 0) {
                             card.style.display = 'none';
-                            valSpan.innerText = 'SÍ'; // Forzamos SÍ internamente si hay extra
+                            valSpan.innerText = 'SÍ';
                         } else {
                             const esNuggetsLocal = modalTitle.innerText.toLowerCase().includes('nuggets');
                             const esSalsaParaNuggets = esNuggetsLocal && (nameLower.includes('salsa') || nameLower.includes('ketchup') || nameLower.includes('mostaza') || nameLower.includes('mayonesa') || nameLower.includes('queso'));
@@ -1470,7 +1939,7 @@
                 modalPrice.innerText = `$${finalTotal.toFixed(2)}`;
                 btnAddOrderMain.classList.remove('btn-highlight');
 
-                if (currentMainQty > 1 && esHamburguesa && !esKids) {
+                if (currentMainQty > 1 && esHamburguesa && !esKids && !esComboHouse) {
                     warningText.innerText = `Nota: Si aumentas la cantidad, todas tendrán los mismos extras.`;
                     warningBox.classList.remove('hidden');
                     btnVariationHelper.classList.remove('hidden');
@@ -1490,17 +1959,5 @@
             }
         });
     </script>
-    <!--
-_        _______  _______  _______           _______          
-( \      (  ___  )(  ____ \(  ____ )|\     /|(  ____ \|\     /|
-| (      | (   ) || (    \/| (    )|| )   ( || (    \/| )   ( |
-| |      | (___) || |      | (____)|| |   | || (_____ | (___) |
-| |      |  ___  || |      |     __)| |   | |(_____  )|  ___  |
-| |      | (   ) || |      | (\ (   | |   | |      ) || (   ) |
-(____/\| )   ( || (____/\| ) \ \__| (___) |/\____) || )   ( |
-(_______/|/     \|(_______/|/   \__/(_______)\_______)|/     \|
-
-B Y   L A C R U S H
-    -->
 </body>
 </html>
