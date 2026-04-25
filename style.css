@@ -399,7 +399,7 @@ h1 {
     width: 80px;
     margin-bottom: 15px;
     object-fit: contain;
-    filter: brightness(0) saturate(100%) invert(11%) sepia(94%) saturate(7441%) hue-rotate(358deg) brightness(96%) contrast(113%);
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5)) !important;
 }
 
 @keyframes zoomIn {
@@ -803,7 +803,11 @@ h1 {
 .btn-checkout-final {
     background: #25D366;
     font-size: 1.3rem;
-    margin-top: 15px;
+    margin-top: 25px;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    border: 2px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
 }
 
@@ -817,7 +821,15 @@ h1 {
     .btn-checkout-final:hover { background: #128C7E; transform: translateY(-2px); }
 }
 
-#checkout-view { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+#checkout-view { 
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    max-height: 75vh; 
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
+}
 
 #btn-back-to-cart {
     background: var(--primary-color);
