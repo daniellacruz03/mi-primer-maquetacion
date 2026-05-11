@@ -11,6 +11,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Default styles for body background */
         body {
             background-image:
                 url("brasas.jpg"),
@@ -18,10 +19,17 @@
             background-size: cover, cover !important;
             background-repeat: no-repeat, no-repeat !important;
             background-position: bottom center, center !important;
-            background-attachment: fixed, fixed !important;
+            background-attachment: fixed, fixed !important; /* Default to fixed */
             min-height: 100vh;
             color: #ffffff !important;
             font-family: 'Poppins', sans-serif;
+        }
+
+        /* Mobile-specific optimizations */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll, scroll !important; /* Change to scroll on mobile */
+            }
         }
 
         .contenedor-logo {
@@ -1563,7 +1571,6 @@
                         extrasContainer.style.display = (esHamburguesa || esNuggets) && !esComboHouse ? 'block' : 'none';
                     }
 
-                    // --- START REORDERING LOGIC: Costed items first, then toggle items ---
                     const extrasGrid = document.querySelector('.extras-grid');
                     const extraCards = Array.from(extrasGrid.children);
                     const costedExtras = [];
@@ -1577,10 +1584,9 @@
                         }
                     });
 
-                    extrasGrid.innerHTML = ''; // Clear the grid
-                    costedExtras.forEach(card => extrasGrid.appendChild(card)); // Append costed extras
-                    toggleExtras.forEach(card => extrasGrid.appendChild(card)); // Append toggle extras
-                    // --- END REORDERING LOGIC ---
+                    extrasGrid.innerHTML = '';
+                    costedExtras.forEach(card => extrasGrid.appendChild(card));
+                    toggleExtras.forEach(card => extrasGrid.appendChild(card));
 
                     modalTitle.innerText = name;
                     modalDesc.innerText = desc;
