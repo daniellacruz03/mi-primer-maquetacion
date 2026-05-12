@@ -626,6 +626,57 @@
         .checkout-form input::placeholder {
             color: rgba(255, 255, 255, 0.5) !important;
         }
+
+        /* Ajustes de impacto visual para la comida */
+        .modal-image-container {
+            width: 100%;
+            height: 440px; /* Ganamos 40px más de altura para que la comida no compita con el texto */
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        #modal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Hace que la imagen llene todo el espacio */
+            object-position: center 98%; /* Apunta casi al final de la foto para empujar el producto hacia arriba */
+            transform: scale(1.3); /* Un zoom de 1.3 es el punto dulce para que se vea gigante pero completa */
+            filter: brightness(1.1) contrast(1.15); /* Resalta el brillo de la carne y colores */
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Degradado para eliminar el borde plano y dar profundidad */
+        .modal-image-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 15, 15, 1) 8%, rgba(15, 15, 15, 0) 60%);
+            pointer-events: none;
+        }
+
+        /* Estilo general para los detalles de cualquier modal */
+        .modal-details {
+            padding: 15px 25px 30px !important;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* SOLO para la ventana de la hamburguesa: subimos el texto para que pise la foto */
+        #modal-hamburguesa .modal-details {
+            margin-top: -45px;
+        }
+
+        /* Ajuste para las imágenes de sugerencias (bebidas/otros) */
+        .upsell-img {
+            width: 180px;
+            height: 180px;
+            display: block;
+            margin: 0 auto 10px;
+            object-fit: contain;
+            transform: scale(1.15); /* Mantenemos el acercamiento épico */
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8));
+        }
     </style>
 </head>
 <body>
@@ -670,7 +721,7 @@
                     <span class="item-name">Cheese House</span>
                     <p class="item-desc">Pan de papa, carne, tocineta, triple queso americano, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="cheese house.jpg">
                     <span class="item-price">$9,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -682,7 +733,7 @@
                     <span class="item-name">House Classics</span>
                     <p class="item-desc">Pan de papa, carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="houseclasic.jpg">
                     <span class="item-price">$9,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -694,7 +745,7 @@
                     <span class="item-name">Baby Crispy</span>
                     <p class="item-desc">Pan de papa, pollo crispy, salsa de la casa, servicio de papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="baby crispy.jpg">
                     <span class="item-price">$8,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -705,7 +756,7 @@
                     <span class="item-name">Crispy House</span>
                     <p class="item-desc">Pan de papa, pollo crispy, tocineta, doble queso americano, pepinillos, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="crispy house.jpg">
                     <span class="item-price">$12,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -716,7 +767,7 @@
                     <span class="item-name">Junior Crispy</span>
                     <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="junior crispy.jpg">
                     <span class="item-price">$10,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -727,7 +778,7 @@
                     <span class="item-name">Combo House</span>
                     <p class="item-desc">4 Burgers (carne 100gr), papas fritas y Pepsi de litro.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="combo house.jpg">
                     <span class="item-price">$24,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -738,7 +789,7 @@
                     <span class="item-name">Grand House Burger</span>
                     <p class="item-desc">Pan de papa, triple carne, tocineta, pepinillo, triple queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="grand house.jpg">
                     <span class="item-price">$14,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -749,7 +800,7 @@
                     <span class="item-name">Pork House</span>
                     <p class="item-desc">Pan de papa, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="pork house.jpg">
                     <span class="item-price">$11,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -760,7 +811,7 @@
                     <span class="item-name">Chicken House</span>
                     <p class="item-desc">Pan de papa, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="chiken house.jpg">
                     <span class="item-price">$9,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -771,7 +822,7 @@
                     <span class="item-name">Big House</span>
                     <p class="item-desc">Pan de papa, doble carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="big house.jpg">
                     <span class="item-price">$12,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -782,7 +833,7 @@
                     <span class="item-name">Town House</span>
                     <p class="item-desc">Pan de papa, carne, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="town house.jpg">
                     <span class="item-price">$12,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -793,7 +844,7 @@
                     <span class="item-name">Titan House</span>
                     <p class="item-desc">Pan de papa, triple carne, tocineta, queso americano, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="titan house.jpg">
                     <span class="item-price">$12,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -804,7 +855,7 @@
                     <span class="item-name">House Special</span>
                     <p class="item-desc">Pan de papa, pollo, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="house especial.jpg">
                     <span class="item-price">$14,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -815,7 +866,7 @@
                     <span class="item-name">House Tower</span>
                     <p class="item-desc">Pan de papa, carne, chuleta, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="house tower.jpg">
                     <span class="item-price">$17,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -829,7 +880,7 @@
                     <span class="item-name">House Salad</span>
                     <p class="item-desc">Lechuga, crotones, tocineta, queso parmesano, pechuga 200gr, salsa de la casa.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="ensalada.jpg">
                     <span class="item-price">$9,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -843,7 +894,7 @@
                     <span class="item-name">Kids House</span>
                     <p class="item-desc">Pan de papa, carne, queso americano, papas fritas, huevito sorpresa y juguito.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="kids house.jpg">
                     <span class="item-price">$9,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -857,7 +908,7 @@
                     <span class="item-name">Servicio de Papas con Topping</span>
                     <p class="item-desc">Papas fritas, salsa de queso y topping de tocineta.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="papacontoppings.jpg">
                     <span class="item-price">$7,49</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -867,7 +918,7 @@
                     <span class="item-name">Servicio de Tequeños</span>
                     <p class="item-desc">Tequeños (6 unidades).</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="tequeños.jpg">
                     <span class="item-price">$5,99</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -897,7 +948,7 @@
                     <span class="item-name">Servicio de Nuggets</span>
                     <p class="item-desc">Nuggets de pollo súper crujientes.</p>
                 </div>
-                <div class="item-price-wrapper">
+                <div class="item-price-wrapper" data-img-src="nuggetsmenu.jpg">
                     <span class="item-price">$8</span>
                     <span class="item-ref">REF</span>
                 </div>
@@ -1567,6 +1618,14 @@
                     esHamburguesa = !!item.closest('#hamburguesas') || esKids;
                     isArmandoPedido = false;
                     
+                    // Aplicar clase de estilo según categoría (excluyendo bebidas)
+                    const esBebida = !!item.closest('#bebidas');
+                    if (!esBebida) {
+                        modal.querySelector('.modal-content').classList.add('food-modal');
+                    } else {
+                        modal.querySelector('.modal-content').classList.remove('food-modal');
+                    }
+
                     if (extrasContainer) {
                         extrasContainer.style.display = (esHamburguesa || esNuggets) && !esComboHouse ? 'block' : 'none';
                     }
