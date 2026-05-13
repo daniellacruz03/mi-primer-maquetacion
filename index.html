@@ -1457,6 +1457,7 @@
                     document.getElementById('modal-closed').classList.add('active');
                     document.body.style.overflow = 'hidden';
                     isPreOrder = true;
+                    history.pushState({ overlay: true }, "");
                 }
             };
 
@@ -1524,6 +1525,7 @@
                 modalReminder.classList.remove('active');
                 modalBuildNext.classList.remove('active');
                 modalPersonalizeIntro.classList.remove('active');
+                modalClosed.classList.remove('active');
                 document.body.style.overflow = 'auto';
             };
 
@@ -1550,6 +1552,7 @@
                 modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
                 modalUpsellImg.src = drinkSugerida.imgSrc;
                 modalUpsell.classList.add('active');
+                history.pushState({ overlay: true }, "");
             }
 
             function abrirCarritoConFeedback() {
@@ -1628,10 +1631,20 @@
                 }, 150);
             });
 
-            cartBtn.addEventListener('click', () => cartSidebar.classList.remove('cart-closed'));
-            closeCart.addEventListener('click', () => cartSidebar.classList.add('cart-closed'));
+            cartBtn.addEventListener('click', () => {
+                cartSidebar.classList.remove('cart-closed');
+                history.pushState({ overlay: true }, "");
+            });
 
-            closeModal.addEventListener('click', cerrarFunc);
+            closeCart.addEventListener('click', () => {
+                if (history.state && history.state.overlay) history.back();
+                else cartSidebar.classList.add('cart-closed');
+            });
+
+            closeModal.addEventListener('click', () => {
+                if (history.state && history.state.overlay) history.back();
+                else cerrarFunc();
+            });
 
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -1740,6 +1753,7 @@
 
                     modal.classList.add('active');
                     document.body.style.overflow = 'hidden';
+                    history.pushState({ overlay: true }, "");
                 });
             });
 
@@ -1856,7 +1870,7 @@
                 cerrarFunc();
 
                 if (wasArmando) {
-                    modalBuildNext.style.display = 'flex';
+                    modalBuildNext.classList.add('active');
                 } else if (esHamburguesa && !esComboHouse) {
                     mostrarUpsellBebidaAleatoria();
                 } else {
@@ -1868,6 +1882,7 @@
             
             btnVariationHelper.addEventListener('click', () => {
                 modalPersonalizeIntro.classList.add('active');
+                history.pushState({ overlay: true }, "");
             });
 
             btnIntroStart.addEventListener('click', () => {
@@ -1948,11 +1963,15 @@
                 if (carrito.length === 0) return alert("Añade algo al carrito primero");
                 cartItemsView.classList.add('hidden');
                 checkoutView.classList.remove('hidden');
+                history.pushState({ overlay: true, checkout: true }, "");
             });
 
             document.getElementById('btn-back-to-cart').addEventListener('click', () => {
-                checkoutView.classList.add('hidden');
-                cartItemsView.classList.remove('hidden');
+                if (history.state && history.state.checkout) history.back();
+                else {
+                    checkoutView.classList.add('hidden');
+                    cartItemsView.classList.remove('hidden');
+                }
             });
 
             document.getElementById('form-delivery').addEventListener('submit', (e) => {
@@ -2017,6 +2036,20 @@
                 if (pedidoConfirmado) {
                     modalReminder.classList.add('active');
                     history.pushState({ orderSent: true }, "");
+                    return;
+                }
+
+                const modalAbierto = document.querySelector('.modal.active');
+                const carritoAbierto = !cartSidebar.classList.contains('cart-closed');
+
+                if (modalAbierto || carritoAbierto) {
+                    if (!checkoutView.classList.contains('hidden') && (!e.state || !e.state.checkout)) {
+                        checkoutView.classList.add('hidden');
+                        cartItemsView.classList.remove('hidden');
+                    } else {
+                        cerrarFunc();
+                        cartSidebar.classList.add('cart-closed');
+                    }
                 }
             });
 
