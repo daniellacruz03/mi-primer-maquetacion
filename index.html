@@ -9,10 +9,18 @@
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
+            /* Ocultar barra de scroll para Chrome, Safari y Opera */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
         }
 
         /* Default styles for body background */
         body {
+            scroll-behavior: smooth;
             background-image:
                 url("brasas.jpg"),
                 linear-gradient(to top, #000000 0%, #050505 46%, #130606 72%, #2a0a0a 100%) !important;
@@ -30,6 +38,15 @@
             body {
                 background-attachment: scroll, scroll !important; /* Change to scroll on mobile */
             }
+        }
+
+        html {
+            scroll-snap-type: y proximity;
+        }
+
+        section {
+            scroll-snap-align: start;
+            scroll-margin-top: 20px;
         }
 
         .contenedor-logo {
@@ -547,6 +564,18 @@
             background: rgba(0, 0, 0, 0.72) !important;
             backdrop-filter: blur(12px) !important;
             -webkit-backdrop-filter: blur(12px) !important;
+            /* Estilos para fade-in suave */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            display: flex !important; /* Se mantiene flex para centrado */
+            pointer-events: none;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .modal-content {
@@ -1383,7 +1412,7 @@
         </div>
     </div>
 
-    <div id="modal-closed" class="modal" style="display: none; z-index: 10000;">
+    <div id="modal-closed" class="modal" style="z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
             <div class="modal-details">
                 <img src="logobh.PNG" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #ff0000;">
@@ -1425,7 +1454,7 @@
                 }
 
                 if (!estaAbierto) {
-                    document.getElementById('modal-closed').style.display = 'flex';
+                    document.getElementById('modal-closed').classList.add('active');
                     document.body.style.overflow = 'hidden';
                     isPreOrder = true;
                 }
@@ -1490,11 +1519,11 @@
             }
 
             const cerrarFunc = () => {
-                modal.style.display = 'none';
-                modalUpsell.style.display = 'none';
-                modalReminder.style.display = 'none';
-                modalBuildNext.style.display = 'none';
-                modalPersonalizeIntro.style.display = 'none';
+                modal.classList.remove('active');
+                modalUpsell.classList.remove('active');
+                modalReminder.classList.remove('active');
+                modalBuildNext.classList.remove('active');
+                modalPersonalizeIntro.classList.remove('active');
                 document.body.style.overflow = 'auto';
             };
 
@@ -1520,7 +1549,7 @@
 
                 modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
                 modalUpsellImg.src = drinkSugerida.imgSrc;
-                modalUpsell.style.display = 'flex';
+                modalUpsell.classList.add('active');
             }
 
             function abrirCarritoConFeedback() {
@@ -1709,7 +1738,7 @@
                         modalImg.src = "hamburguesa.png";
                     }
 
-                    modal.style.display = 'flex';
+                    modal.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 });
             });
@@ -1838,11 +1867,11 @@
             btnAddOrderMain.addEventListener('click', agregarAlPedido);
             
             btnVariationHelper.addEventListener('click', () => {
-                modalPersonalizeIntro.style.display = 'flex';
+                modalPersonalizeIntro.classList.add('active');
             });
 
             btnIntroStart.addEventListener('click', () => {
-                modalPersonalizeIntro.style.display = 'none';
+                modalPersonalizeIntro.classList.remove('active');
                 startCustomizationFlow();
             });
 
@@ -1981,12 +2010,12 @@
                 
                 window.open(url, '_blank');
                 cartSidebar.classList.add('cart-closed');
-                modalReminder.style.display = 'flex';
+                modalReminder.classList.add('active');
             });
 
             window.addEventListener('popstate', (e) => {
                 if (pedidoConfirmado) {
-                    modalReminder.style.display = 'flex';
+                    modalReminder.classList.add('active');
                     history.pushState({ orderSent: true }, "");
                 }
             });
@@ -2012,7 +2041,7 @@
             });
 
             btnPreOrder.addEventListener('click', () => {
-                modalClosed.style.display = 'none';
+                modalClosed.classList.remove('active');
                 document.body.style.overflow = 'auto';
             });
 
