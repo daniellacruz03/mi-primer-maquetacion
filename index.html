@@ -21,13 +21,10 @@
         /* Default styles for body background */
         body {
             scroll-behavior: smooth;
-            background-image:
-                url("brasas.webp"),
-                linear-gradient(to top, #000000 0%, #050505 46%, #130606 72%, #2a0a0a 100%) !important;
-            background-size: cover, cover !important;
-            background-repeat: no-repeat, no-repeat !important;
-            background-position: bottom center, center !important;
-            background-attachment: fixed, fixed !important; /* Default to fixed */
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('brasas.webp') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-attachment: fixed !important;
             min-height: 100vh;
             color: #ffffff !important;
             font-family: 'Poppins', sans-serif;
@@ -404,6 +401,17 @@
             transition: transform 0.28s ease;
         }
 
+        .item-img-bg {
+            display: none; /* Oculto en desktop por defecto */
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 1;
+        }
+
         .menu-item::after {
             display: none;
         }
@@ -714,10 +722,10 @@
         /* --- OPTIMIZACIÓN MÓVIL --- */
         @media (max-width: 768px) {
             body {
-                /* Fondo estático que ocupa toda la pantalla sin scroll */
-                background-attachment: fixed, fixed !important;
+                background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('brasas.webp') !important;
+                background-attachment: fixed !important;
                 background-size: cover !important;
-                background-position: center bottom !important;
+                background-position: center !important;
                 -webkit-overflow-scrolling: touch;
                 scroll-behavior: smooth;
             }
@@ -751,27 +759,111 @@
                 margin: 0 !important;
             }
 
-            .menu-item {
-                padding: 10px 14px !important;
-                margin-bottom: 8px !important;
-                border-radius: 20px !important;
+            section:not(#bebidas) .menu-item {
+                height: 220px !important;
+                padding: 0 !important;
+                margin-bottom: 15px !important;
+                border-radius: 25px !important;
+                overflow: hidden !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-end !important;
+                position: relative !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
                 will-change: transform;
             }
 
-            .item-name { font-size: 0.95rem !important; }
-            .item-desc { 
-                font-size: 0.72rem !important; 
-                line-height: 1.3 !important;
-                margin-top: 2px !important;
-                opacity: 0.8;
+            section:not(#bebidas) .item-img-bg {
+                display: block !important;
+                object-position: center 40% !important;
             }
 
-            .item-price-wrapper {
+            /* Clase para ajustar fotos donde la hamburguesa está muy abajo */
+            section:not(#bebidas) .ajuste-crispy {
+                object-position: center 70% !important;
+            }
+
+            section:not(#bebidas) .menu-item::after {
+                display: block !important;
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.85) 90%) !important;
+                z-index: 2;
+            }
+
+            section:not(#bebidas) .item-info {
+                position: relative;
+                z-index: 3;
+                padding: 15px !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+
+            section:not(#bebidas) .item-name { 
+                font-size: 1.15rem !important; 
+                font-weight: 800 !important;
+                color: #ffffff !important;
+            }
+
+            section:not(#bebidas) .item-desc { 
+                font-size: 0.75rem !important; 
+                line-height: 1.3 !important;
+                margin-top: 2px !important;
+                color: rgba(255, 255, 255, 0.9) !important;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            section:not(#bebidas) .item-price-wrapper {
+                position: absolute !important;
+                bottom: 12px !important;
+                right: 12px !important;
+                z-index: 4;
                 min-width: 82px !important;
                 padding: 4px 10px !important;
                 margin-right: 0 !important;
-                transform: scale(0.9);
+                transform: scale(0.85);
                 transform-origin: right center;
+            }
+
+            /* Estilo de lista compacta exclusivo para bebidas en móvil */
+            #bebidas .menu-item {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 12px 18px !important;
+                height: auto !important;
+                margin-bottom: 8px !important;
+                border-radius: 20px !important;
+                background: rgba(25, 25, 25, 0.6) !important;
+            }
+
+            #bebidas .item-info {
+                width: auto !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                position: static !important;
+                z-index: 1 !important;
+            }
+
+            #bebidas .item-price-wrapper {
+                position: static !important;
+                min-width: 70px !important;
+                transform: scale(0.85) !important;
+                margin: 0 !important;
+            }
+
+            .badge-best, .badge-new {
+                position: relative !important;
+                display: inline-block !important;
+                top: 0 !important;
+                left: 0 !important;
+                z-index: 4;
+                margin: 0 0 6px 0 !important;
             }
 
             .item-price { font-size: 1.1rem !important; }
@@ -884,6 +976,7 @@
             <h2 class="seccion-titulo">Hamburguesas</h2>
             
             <div class="menu-item">
+                <img src="cheese house.webp" class="item-img-bg" alt="Cheese House">
                 <div class="item-info">
                     <span class="badge-best">LAS MÁS VENDIDAS</span>
                     <span class="item-name">Cheese House</span>
@@ -896,6 +989,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="houseclasic.webp" class="item-img-bg" alt="House Classics">
                 <div class="item-info">
                     <span class="badge-best">LAS MÁS VENDIDAS</span>
                     <span class="item-name">House Classics</span>
@@ -908,6 +1002,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="baby crispy.webp" class="item-img-bg ajuste-crispy" alt="Baby Crispy">
                 <div class="item-info">
                     <span class="badge-new">NUEVA</span>
                     <span class="item-name">Baby Crispy</span>
@@ -920,6 +1015,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="crispy house.webp" class="item-img-bg" alt="Crispy House">
                 <div class="item-info">
                     <span class="item-name">Crispy House</span>
                     <p class="item-desc">Pan de papa, pollo crispy, tocineta, doble queso americano, pepinillos, lechuga, salsa de la casa, papas fritas.</p>
@@ -931,6 +1027,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy">
                 <div class="item-info">
                     <span class="item-name">Junior Crispy</span>
                     <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -942,6 +1039,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="combo house.webp" class="item-img-bg" alt="Combo House">
                 <div class="item-info">
                     <span class="item-name">Combo House</span>
                     <p class="item-desc">4 Burgers (carne 100gr), papas fritas y Pepsi de litro.</p>
@@ -953,6 +1051,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="grand house.webp" class="item-img-bg" alt="Grand House Burger">
                 <div class="item-info">
                     <span class="item-name">Grand House Burger</span>
                     <p class="item-desc">Pan de papa, triple carne, tocineta, pepinillo, triple queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -964,6 +1063,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="pork house.webp" class="item-img-bg" alt="Pork House">
                 <div class="item-info">
                     <span class="item-name">Pork House</span>
                     <p class="item-desc">Pan de papa, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -975,6 +1075,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="chiken house.webp" class="item-img-bg" alt="Chicken House">
                 <div class="item-info">
                     <span class="item-name">Chicken House</span>
                     <p class="item-desc">Pan de papa, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -986,6 +1087,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="big house.webp" class="item-img-bg" alt="Big House">
                 <div class="item-info">
                     <span class="item-name">Big House</span>
                     <p class="item-desc">Pan de papa, doble carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -997,6 +1099,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="town house.webp" class="item-img-bg" alt="Town House">
                 <div class="item-info">
                     <span class="item-name">Town House</span>
                     <p class="item-desc">Pan de papa, carne, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1008,6 +1111,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="titan house.webp" class="item-img-bg" alt="Titan House">
                 <div class="item-info">
                     <span class="item-name">Titan House</span>
                     <p class="item-desc">Pan de papa, triple carne, tocineta, queso americano, salsa de la casa, papas fritas.</p>
@@ -1019,6 +1123,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="house especial.webp" class="item-img-bg" alt="House Special">
                 <div class="item-info">
                     <span class="item-name">House Special</span>
                     <p class="item-desc">Pan de papa, pollo, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1030,6 +1135,7 @@
             </div>
 
             <div class="menu-item">
+                <img src="house tower.webp" class="item-img-bg" alt="House Tower">
                 <div class="item-info">
                     <span class="item-name">House Tower</span>
                     <p class="item-desc">Pan de papa, carne, chuleta, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1044,6 +1150,7 @@
         <section id="ensaladas">
             <h2 class="seccion-titulo">Ensaladas</h2>
             <div class="menu-item">
+                <img src="ensalada.webp" class="item-img-bg" alt="House Salad">
                 <div class="item-info">
                     <span class="item-name">House Salad</span>
                     <p class="item-desc">Lechuga, crotones, tocineta, queso parmesano, pechuga 200gr, salsa de la casa.</p>
@@ -1058,6 +1165,7 @@
         <section id="kids">
             <h2 class="seccion-titulo">Menú Kids</h2>
             <div class="menu-item">
+                <img src="kids house.webp" class="item-img-bg" alt="Kids House">
                 <div class="item-info">
                     <span class="item-name">Kids House</span>
                     <p class="item-desc">Pan de papa, carne, queso americano, papas fritas, huevito sorpresa y juguito.</p>
@@ -1072,6 +1180,7 @@
         <section id="servicios">
             <h2 class="seccion-titulo">Servicios</h2>
             <div class="menu-item">
+                <img src="papacontoppings.webp" class="item-img-bg" alt="Papas con Topping">
                 <div class="item-info">
                     <span class="item-name">Servicio de Papas con Topping</span>
                     <p class="item-desc">Papas fritas, salsa de queso y topping de tocineta.</p>
@@ -1082,6 +1191,7 @@
                 </div>
             </div>
             <div class="menu-item">
+                <img src="tequeños.webp" class="item-img-bg" alt="Tequeños">
                 <div class="item-info">
                     <span class="item-name">Servicio de Tequeños</span>
                     <p class="item-desc">Tequeños (6 unidades).</p>
@@ -1112,6 +1222,7 @@
                 </div>
             </div>
             <div class="menu-item">
+                <img src="nuggetsmenu.webp" class="item-img-bg" alt="Nuggets">
                 <div class="item-info">
                     <span class="item-name">Servicio de Nuggets</span>
                     <p class="item-desc">Nuggets de pollo súper crujientes.</p>
@@ -1457,6 +1568,16 @@
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
                                 <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Queso</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">SÍ</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -1826,8 +1947,8 @@
                     });
 
                     extrasGrid.innerHTML = '';
-                    costedExtras.forEach(card => extrasGrid.appendChild(card));
                     toggleExtras.forEach(card => extrasGrid.appendChild(card));
+                    costedExtras.forEach(card => extrasGrid.appendChild(card));
 
                     modalTitle.innerText = name;
                     modalDesc.innerText = desc;
@@ -1870,8 +1991,17 @@
                         card.style.display = visible ? 'flex' : 'none';
 
                         if (card.dataset.isToggle === "true") {
-                            if (['pepinillos', 'pan', 'lechuga', 'salsa de la casa'].includes(nameLower)) {
-                                valSpan.innerText = 'SÍ';
+                            const ingredientesBase = ['pepinillos', 'pan', 'lechuga', 'queso'];
+                            if (ingredientesBase.includes(nameLower)) {
+                                const existe = (nameLower === 'pan') || 
+                                              (nameLower === 'pepinillos' && tienePepinillos) || 
+                                              (nameLower === 'lechuga' && tieneLechuga) || 
+                                              (nameLower === 'queso' && descLower.includes('queso'));
+
+                                valSpan.innerText = existe ? 'SÍ' : 'NO';
+                            } else if (nameLower.includes('salsa')) {
+                                // Los servicios de salsa van en defecto en NO
+                                valSpan.innerText = 'NO';
                             } else {
                                 valSpan.innerText = (nameLower.includes('extra') || nameLower.includes('servicio')) ? 'NO' : 'SÍ';
                             }
@@ -2051,11 +2181,14 @@
                 document.querySelectorAll('.extra-card').forEach(card => {
                     const valSpan = card.querySelector('.extra-qty-val');
                     const nameLower = card.querySelector('.extra-name').innerText.toLowerCase();
+                    const descLower = modalDesc.innerText.toLowerCase();
+
                     if (card.dataset.isToggle === "true") {
-                        if (['pan', 'lechuga', 'salsa de la casa'].includes(nameLower)) {
-                            valSpan.innerText = 'SÍ';
-                        } else if (nameLower === 'pepinillos') {
-                            valSpan.innerText = descLower.includes('pepinillo') ? 'SÍ' : 'NO';
+                        if (['pan', 'lechuga', 'pepinillos', 'queso'].includes(nameLower)) {
+                            const matchIngrediente = (nameLower === 'pan') || descLower.includes(nameLower.slice(0, -1)) || descLower.includes(nameLower);
+                            valSpan.innerText = matchIngrediente ? 'SÍ' : 'NO';
+                        } else if (nameLower.includes('salsa') || nameLower.includes('extra') || nameLower.includes('servicio')) {
+                            valSpan.innerText = 'NO';
                         } else {
                             valSpan.innerText = nameLower.includes('extra') ? 'NO' : 'SÍ';
                         }
@@ -2247,11 +2380,13 @@
                     const valSpan = card.querySelector('.extra-qty-val');
                     const descLower = modalDesc.innerText.toLowerCase();
                     
-                    if (['pepinillos', 'pan', 'lechuga', 'salsa de la casa', 'extra lechuga'].includes(nameLower)) {
+                    if (['pepinillos', 'pan', 'lechuga', 'queso', 'salsa de la casa', 'extra lechuga'].includes(nameLower)) {
                         let tieneIngrediente = false;
                         if (nameLower === 'pepinillos') tieneIngrediente = descLower.includes('pepinillo');
                         else if (nameLower === 'pan') tieneIngrediente = descLower.includes('pan');
-                        else if (nameLower === 'lechuga' || nameLower === 'extra lechuga') tieneIngrediente = descLower.includes('lechuga');
+                        else if (nameLower === 'lechuga') tieneIngrediente = descLower.includes('lechuga');
+                        else if (nameLower === 'extra lechuga') tieneIngrediente = descLower.includes('lechuga');
+                        else if (nameLower === 'queso') tieneIngrediente = descLower.includes('queso');
                         else if (nameLower === 'salsa de la casa') tieneIngrediente = descLower.includes('salsa');
 
                         if (nameLower === 'pepinillos' && extraPepinillosQty > 0) {
