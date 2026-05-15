@@ -1658,12 +1658,17 @@
             }
 
             const cerrarFunc = () => {
-                modal.classList.remove('active');
-                modalUpsell.classList.remove('active');
-                modalReminder.classList.remove('active');
-                modalBuildNext.classList.remove('active');
-                modalPersonalizeIntro.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal && activeModal.id !== 'modal-closed') {
+                    history.back();
+                } else {
+                    modal.classList.remove('active');
+                    modalUpsell.classList.remove('active');
+                    modalReminder.classList.remove('active');
+                    modalBuildNext.classList.remove('active');
+                    modalPersonalizeIntro.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
             };
 
             function guardarCarrito() {
@@ -1689,6 +1694,7 @@
                 modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
                 modalUpsellImg.src = drinkSugerida.imgSrc;
                 modalUpsell.classList.add('active');
+                history.pushState({ ui: 'upsell' }, "");
             }
 
             function abrirCarritoConFeedback() {
@@ -1767,8 +1773,15 @@
                 }, 150);
             });
 
-            cartBtn.addEventListener('click', () => cartSidebar.classList.remove('cart-closed'));
-            closeCart.addEventListener('click', () => cartSidebar.classList.add('cart-closed'));
+            cartBtn.addEventListener('click', () => {
+                cartSidebar.classList.remove('cart-closed');
+                history.pushState({ ui: 'cart' }, "");
+            });
+            closeCart.addEventListener('click', () => {
+                if (!cartSidebar.classList.contains('cart-closed')) {
+                    history.back();
+                }
+            });
 
             closeModal.addEventListener('click', cerrarFunc);
 
@@ -1892,6 +1905,7 @@
                     }
 
                     modal.classList.add('active');
+                    history.pushState({ ui: 'modal' }, "");
                     document.body.style.overflow = 'hidden';
                 });
             });
@@ -2021,6 +2035,7 @@
             
             btnVariationHelper.addEventListener('click', () => {
                 modalPersonalizeIntro.classList.add('active');
+                history.pushState({ ui: 'personalize-intro' }, "");
             });
 
             btnIntroStart.addEventListener('click', () => {
@@ -2170,6 +2185,20 @@
                 if (pedidoConfirmado) {
                     modalReminder.classList.add('active');
                     history.pushState({ orderSent: true }, "");
+                    return;
+                }
+
+                const activeModal = document.querySelector('.modal.active');
+                const cartOpen = !cartSidebar.classList.contains('cart-closed');
+
+                if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
+                    modal.classList.remove('active');
+                    modalUpsell.classList.remove('active');
+                    modalReminder.classList.remove('active');
+                    modalBuildNext.classList.remove('active');
+                    modalPersonalizeIntro.classList.remove('active');
+                    cartSidebar.classList.add('cart-closed');
+                    document.body.style.overflow = 'auto';
                 }
             });
 
