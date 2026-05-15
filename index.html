@@ -2108,6 +2108,26 @@
             if (formDelivery) {
                 formDelivery.reset();
             }
+
+            // --- Optimización de Precarga de Imágenes ---
+            const precargarImagenes = () => {
+                // Selecciona automáticamente todos los nombres de imágenes del menú
+                const imagenesDelMenu = Array.from(document.querySelectorAll('[data-img-src]'))
+                    .map(el => el.dataset.imgSrc);
+                
+                // Agregamos elementos clave como el logo, fondo y placeholders
+                const activosEstaticos = ["logobh.webp", "brasas.webp", "bolsadelivery.webp", "hamburguesa.webp"];
+                const listaUnica = [...new Set([...imagenesDelMenu, ...activosEstaticos])];
+
+                listaUnica.forEach(src => {
+                    if (src) {
+                        const img = new Image();
+                        img.src = src;
+                    }
+                });
+            };
+
+            precargarImagenes();
         });
     </script>
 </body>
