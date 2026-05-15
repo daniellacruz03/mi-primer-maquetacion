@@ -662,7 +662,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover; /* Hace que la imagen llene todo el espacio */
-            object-position: center 98%; /* Apunta casi al final de la foto para empujar el producto hacia arriba */
+            object-position: center 85%; /* Bajamos la imagen para que la hamburguesa y las papas luzcan más centradas y apetitosas */
             transform: scale(1.3); /* Un zoom de 1.3 es el punto dulce para que se vea gigante pero completa */
             filter: brightness(1.1) contrast(1.15); /* Resalta el brillo de la carne y colores */
             transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -670,8 +670,13 @@
 
         /* Ajuste específico para imágenes que necesitan ser subidas para evitar el degradado (ej. Kids House, Pork House) */
         #modal-img.modal-img-bottom-aligned {
-            object-position: center 100% !important;
-            transform: scale(1.3) translateY(-10%) !important;
+            object-position: center 92% !important;
+            transform: scale(1.3) translateY(-5%) !important; /* Reducimos el desplazamiento hacia arriba para bajar el producto */
+        }
+
+        /* Ajuste específico para Junior Crispy para bajarla un poco más */
+        #modal-img.modal-img-junior-crispy-lower {
+            object-position: center 70% !important; /* Ajuste para que la Junior Crispy se vea completa */
         }
 
         /* Degradado para eliminar el borde plano y dar profundidad */
@@ -709,8 +714,10 @@
         /* --- OPTIMIZACIÓN MÓVIL --- */
         @media (max-width: 768px) {
             body {
-                /* Desactivar background-attachment: fixed en móvil para fluidez total */
-                background-attachment: scroll, scroll !important;
+                /* Fondo estático que ocupa toda la pantalla sin scroll */
+                background-attachment: fixed, fixed !important;
+                background-size: cover !important;
+                background-position: center bottom !important;
                 -webkit-overflow-scrolling: touch;
                 scroll-behavior: smooth;
             }
@@ -770,17 +777,56 @@
             .item-price { font-size: 1.1rem !important; }
             .item-ref { font-size: 0.55rem !important; }
 
-            /* Modal Optimizado */
+            /* --- AJUSTE DE IMÁGENES DE BEBIDAS Y MODAL --- */
             .modal-image-container {
-                height: 32vh !important;
+                height: 35vh !important;
+                max-height: 250px !important; /* Altura fija para control total en móviles */
+                position: relative;
+                z-index: 1 !important;
+                background: #000; /* Fondo negro para que no se vean bordes vacíos con 'contain' */
+            }
+
+            .modal-image-container::after {
+                /* Degradado superior a inferior para legibilidad del texto */
+                background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.9) 100%) !important;
+                z-index: 6 !important;
+            }
+            
+            /* Si no es comida (es bebida), reducimos el contenedor y la imagen */
+            .modal-content:not(.food-modal) .modal-image-container {
+                height: 22vh !important;
+                background: transparent !important;
+            }
+
+            .modal-content:not(.food-modal) #modal-img {
+                object-fit: contain !important;
+                transform: scale(0.8) !important; /* Reduce el tamaño gigante de la botella */
+                object-position: center center !important;
+            }
+
+            .upsell-img {
+                width: 110px !important; /* Imagen de bebida sugerida mucho más pequeña */
+                height: 110px !important;
+                transform: scale(1) !important;
+                margin-bottom: 5px !important;
             }
             
             #modal-img {
-                transform: scale(1.1) !important;
+                width: 100% !important;
+                height: 100% !important;
+                transform: scale(1.3) !important; /* Zoom para que el producto se vea gigante e imponente */
+                object-fit: cover !important; /* Asegura que la imagen cubra toda la tarjeta superior */
+                z-index: 5 !important; /* Prioridad visual sobre el contenedor de sombra */
+                position: relative;
+                object-position: center 85% !important; /* Centramos el foco en la carne y las papas */
             }
 
             .modal-details {
                 padding: 12px 18px 20px !important;
+                background: #0f0f0f !important; /* Fondo sólido para el texto */
+                margin-top: 0 !important; /* El texto comienza justo después de la imagen */
+                position: relative;
+                z-index: 10;
             }
 
             .extras-title {
@@ -1732,7 +1778,8 @@
                     const name = item.querySelector('.item-name').innerText;
                     const desc = item.querySelector('.item-desc') ? item.querySelector('.item-desc').innerText : "";
                     const priceStr = item.querySelector('.item-price').innerText;
-                    basePrice = parseFloat(priceStr.replace('$', '').replace(',', '.'));
+                    // Limpiamos el precio base de símbolos y aseguramos que el punto sea el decimal
+                    basePrice = parseFloat(priceStr.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
 
                     esKids = !!item.closest('#kids');
                     const esNuggets = name.toLowerCase().includes('nuggets');
@@ -1832,12 +1879,16 @@
                     }
 
                     // Aplicar clase especial si la imagen necesita ser ajustada para evitar el degradado
+                    // Primero, eliminamos todas las clases de ajuste de posición para evitar conflictos
+                    modalImg.classList.remove('modal-img-bottom-aligned');
+                    modalImg.classList.remove('modal-img-junior-crispy-lower');
+
                     const needsBottomAlignment = esKids || (name === 'Pork House') || (name === 'Servicio de Papas con Topping') || esNuggets;
 
                     if (needsBottomAlignment) {
                         modalImg.classList.add('modal-img-bottom-aligned');
-                    } else {
-                        modalImg.classList.remove('modal-img-bottom-aligned');
+                    } else if (name === 'Junior Crispy') {
+                        modalImg.classList.add('modal-img-junior-crispy-lower');
                     }
 
                     modal.classList.add('active');
@@ -2185,10 +2236,17 @@
                     }
 
                     const valText = valSpan.innerText;
-                    const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : parseInt(valText));
-                    extraTotal += qty * parseFloat(card.dataset.extraPrice);
+                    const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : (parseInt(valText) || 0));
+                    
+                    // Extraemos el valor del extra de forma segura del dataset
+                    const extraPriceRaw = card.dataset.extraPrice || "0";
+                    const extraPriceValue = parseFloat(extraPriceRaw.toString().replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
+                    extraTotal += qty * extraPriceValue;
                 });
-                const finalTotal = (basePrice + extraTotal) * currentMainQty;
+                // Cálculo final con seguro contra NaN
+                let finalTotal = (basePrice + extraTotal) * (currentMainQty || 1);
+                if (isNaN(finalTotal)) finalTotal = basePrice || 0;
+
                 modalPrice.innerText = `$${finalTotal.toFixed(2)}`;
                 btnAddOrderMain.classList.remove('btn-highlight');
 
