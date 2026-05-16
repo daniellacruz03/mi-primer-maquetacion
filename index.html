@@ -9,18 +9,15 @@
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
-            /* Ocultar barra de scroll para Chrome, Safari y Opera */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
         *::-webkit-scrollbar {
             display: none;
         }
 
-        /* Default styles for body background */
         body {
-            scroll-behavior: smooth;
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('brasas.webp') !important;
             background-size: cover !important;
             background-position: center !important;
@@ -30,13 +27,10 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        html {
-            scroll-snap-type: y proximity;
-        }
-
         section {
-            scroll-snap-align: start;
             scroll-margin-top: 20px;
+            content-visibility: auto;
+            contain-intrinsic-size: 1px 500px;
         }
 
         .contenedor-logo {
@@ -336,9 +330,9 @@
 
         .menu-container {
             background: rgba(10, 10, 10, 0.85);
-            padding: 30px;
+            padding: 30px 30px 400px;
             border-radius: 50px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             margin: 20px auto;
             max-width: 900px;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -393,8 +387,8 @@
             border-radius: 36px !important;
             background: rgba(18, 18, 18, 0.55) !important;
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             margin-bottom: 15px !important;
             padding: 18px 20px !important;
             position: relative;
@@ -402,7 +396,7 @@
         }
 
         .item-img-bg {
-            display: none; /* Oculto en desktop por defecto */
+            display: none;
             position: absolute;
             inset: 0;
             width: 100%;
@@ -571,6 +565,7 @@
             transition: opacity 0.4s ease, visibility 0.4s ease;
             display: flex !important; /* Se mantiene flex para centrado */
             pointer-events: none;
+            z-index: 6000;
         }
 
         .modal.active {
@@ -597,6 +592,44 @@
         .modal-description {
             color: #f0f0f0 !important;
             line-height: 1.55;
+            margin-bottom: 12px !important;
+        }
+
+        .search-container {
+            margin-bottom: 25px;
+            position: relative;
+            padding: 0 5px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 20px !important;
+            padding: 14px 20px !important;
+            color: #fff !important;
+            font-size: 0.95rem !important;
+            outline: none !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .search-input:focus {
+            border-color: rgba(255, 0, 0, 0.5) !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.15) !important;
+        }
+
+        #main-menu .menu-item.hidden-search,
+        #main-menu section.hidden-search {
+            display: none !important;
+        }
+
+        .modal-main-qty {
+            margin: 0 !important;
+        }
+
+        .modal-extras-container {
+            margin-top: 5px !important;
         }
 
         .modal .btn-add-order,
@@ -657,10 +690,9 @@
             color: rgba(255, 255, 255, 0.5) !important;
         }
 
-        /* Ajustes de impacto visual para la comida */
         .modal-image-container {
             width: 100%;
-            height: 440px; /* Ganamos 40px más de altura para que la comida no compita con el texto */
+            height: 440px;
             overflow: hidden;
             position: relative;
             background: #000;
@@ -669,25 +701,22 @@
         #modal-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Hace que la imagen llene todo el espacio */
-            object-position: center 85%; /* Bajamos la imagen para que la hamburguesa y las papas luzcan más centradas y apetitosas */
-            transform: scale(1.3); /* Un zoom de 1.3 es el punto dulce para que se vea gigante pero completa */
-            filter: brightness(1.1) contrast(1.15); /* Resalta el brillo de la carne y colores */
+            object-fit: cover;
+            object-position: center 85%;
+            transform: scale(1.3);
+            filter: brightness(1.1) contrast(1.15);
             transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* Ajuste específico para imágenes que necesitan ser subidas para evitar el degradado (ej. Kids House, Pork House) */
         #modal-img.modal-img-bottom-aligned {
             object-position: center 92% !important;
-            transform: scale(1.3) translateY(-5%) !important; /* Reducimos el desplazamiento hacia arriba para bajar el producto */
+            transform: scale(1.3) translateY(-5%) !important;
         }
 
-        /* Ajuste específico para Junior Crispy para bajarla un poco más */
         #modal-img.modal-img-junior-crispy-lower {
-            object-position: center 70% !important; /* Ajuste para que la Junior Crispy se vea completa */
+            object-position: center 70% !important;
         }
 
-        /* Degradado para eliminar el borde plano y dar profundidad */
         .modal-image-container::after {
             content: '';
             position: absolute;
@@ -696,47 +725,58 @@
             pointer-events: none;
         }
 
-        /* Estilo general para los detalles de cualquier modal */
         .modal-details {
             padding: 15px 25px 30px !important;
             position: relative;
             z-index: 10;
         }
 
-        /* SOLO para la ventana de la hamburguesa: subimos el texto para que pise la foto */
         #modal-hamburguesa .modal-details {
             margin-top: -45px;
         }
 
-        /* Ajuste para las imágenes de sugerencias (bebidas/otros) */
         .upsell-img {
             width: 180px;
             height: 180px;
             display: block;
             margin: 0 auto 10px;
             object-fit: contain;
-            transform: scale(1.15); /* Mantenemos el acercamiento épico */
+            transform: scale(1.15);
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8));
         }
 
-        /* --- OPTIMIZACIÓN MÓVIL --- */
         @media (max-width: 768px) {
             body {
                 background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('brasas.webp') !important;
-                background-attachment: fixed !important;
+                background-attachment: scroll !important;
                 background-size: cover !important;
                 background-position: center !important;
                 -webkit-overflow-scrolling: touch;
-                scroll-behavior: smooth;
             }
 
             .menu-container {
-                padding: 15px !important;
-                margin: 10px auto !important;
-                border-radius: 30px !important;
-                /* El desenfoque es pesado en Android, usamos una opacidad más sólida */
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 100vh !important;
+                min-height: 100vh !important;
+                margin: 0 !important;
+                padding: 20px 15px 60vh !important;
+                border-radius: 0 !important;
                 backdrop-filter: none !important;
                 background: rgba(10, 10, 10, 0.98) !important;
+                overflow-y: auto !important;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #cart-sidebar {
+                width: 100% !important;
+                height: 100vh !important;
+                min-height: 100vh !important;
+                border-radius: 0 !important;
+                top: 0 !important;
+                right: 0 !important;
+                overflow-y: auto !important;
             }
 
             .menu-header {
@@ -770,8 +810,9 @@
                 justify-content: flex-end !important;
                 position: relative !important;
                 border: 1px solid rgba(255, 255, 255, 0.1) !important;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
-                will-change: transform;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
             }
 
             section:not(#bebidas) .item-img-bg {
@@ -779,7 +820,6 @@
                 object-position: center 40% !important;
             }
 
-            /* Clase para ajustar fotos donde la hamburguesa está muy abajo */
             section:not(#bebidas) .ajuste-crispy {
                 object-position: center 70% !important;
             }
@@ -830,7 +870,6 @@
                 transform-origin: right center;
             }
 
-            /* Estilo de lista compacta exclusivo para bebidas en móvil */
             #bebidas .menu-item {
                 display: flex !important;
                 align-items: center !important;
@@ -840,6 +879,8 @@
                 margin-bottom: 8px !important;
                 border-radius: 20px !important;
                 background: rgba(25, 25, 25, 0.6) !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
             }
 
             #bebidas .item-info {
@@ -869,22 +910,19 @@
             .item-price { font-size: 1.1rem !important; }
             .item-ref { font-size: 0.55rem !important; }
 
-            /* --- AJUSTE DE IMÁGENES DE BEBIDAS Y MODAL --- */
             .modal-image-container {
                 height: 35vh !important;
-                max-height: 250px !important; /* Altura fija para control total en móviles */
+                max-height: 250px !important;
                 position: relative;
                 z-index: 1 !important;
-                background: #000; /* Fondo negro para que no se vean bordes vacíos con 'contain' */
+                background: #000;
             }
 
             .modal-image-container::after {
-                /* Degradado superior a inferior para legibilidad del texto */
                 background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.9) 100%) !important;
                 z-index: 6 !important;
             }
             
-            /* Si no es comida (es bebida), reducimos el contenedor y la imagen */
             .modal-content:not(.food-modal) .modal-image-container {
                 height: 22vh !important;
                 background: transparent !important;
@@ -892,12 +930,12 @@
 
             .modal-content:not(.food-modal) #modal-img {
                 object-fit: contain !important;
-                transform: scale(0.8) !important; /* Reduce el tamaño gigante de la botella */
+                transform: scale(0.8) !important;
                 object-position: center center !important;
             }
 
             .upsell-img {
-                width: 110px !important; /* Imagen de bebida sugerida mucho más pequeña */
+                width: 110px !important;
                 height: 110px !important;
                 transform: scale(1) !important;
                 margin-bottom: 5px !important;
@@ -906,17 +944,17 @@
             #modal-img {
                 width: 100% !important;
                 height: 100% !important;
-                transform: scale(1.3) !important; /* Zoom para que el producto se vea gigante e imponente */
-                object-fit: cover !important; /* Asegura que la imagen cubra toda la tarjeta superior */
-                z-index: 5 !important; /* Prioridad visual sobre el contenedor de sombra */
+                transform: scale(1.3) !important;
+                object-fit: cover !important;
+                z-index: 5 !important;
                 position: relative;
-                object-position: center 85% !important; /* Centramos el foco en la carne y las papas */
+                object-position: center 85% !important;
             }
 
             .modal-details {
                 padding: 12px 18px 20px !important;
-                background: #0f0f0f !important; /* Fondo sólido para el texto */
-                margin-top: 0 !important; /* El texto comienza justo después de la imagen */
+                background: #0f0f0f !important;
+                margin-top: 0 !important;
                 position: relative;
                 z-index: 10;
             }
@@ -952,7 +990,7 @@
     <div class="contenedor-logo" id="preloader">
         <div class="preloader-inner">
             <div class="logo-glow-wrap">
-                <img src="logobh.webp" alt="Logo" class="logo-animado">
+                <img src="logobh.webp" alt="Logo" class="logo-animado" width="165" height="165">
             </div>
             <div class="preloader-bar" aria-hidden="true">
                 <div id="preloader-progress" class="preloader-progress"></div>
@@ -963,20 +1001,24 @@
 
     <div id="cart-floating-btn" class="cart-btn-hidden">
         <span id="cart-badge">0</span>
-        <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto">
+        <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto" width="30" height="30">
     </div>
 
     <main id="main-menu" class="menu-container">
         <div class="menu-header">
-            <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo">
+            <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo" width="45" height="45">
             <h1 class="titulo-principal">NUESTRO MENÚ</h1>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="menu-search" class="search-input" placeholder="¿Qué se te antoja hoy? Buscar..." aria-label="Buscar productos">
         </div>
         
         <section id="hamburguesas">
             <h2 class="seccion-titulo">Hamburguesas</h2>
             
             <div class="menu-item">
-                <img src="cheese house.webp" class="item-img-bg" alt="Cheese House">
+                <img src="cheese house.webp" class="item-img-bg" alt="Cheese House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="badge-best">LAS MÁS VENDIDAS</span>
                     <span class="item-name">Cheese House</span>
@@ -989,7 +1031,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="houseclasic.webp" class="item-img-bg" alt="House Classics">
+                <img src="houseclasic.webp" class="item-img-bg" alt="House Classics" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="badge-best">LAS MÁS VENDIDAS</span>
                     <span class="item-name">House Classics</span>
@@ -1002,7 +1044,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="baby crispy.webp" class="item-img-bg ajuste-crispy" alt="Baby Crispy">
+                <img src="baby crispy.webp" class="item-img-bg ajuste-crispy" alt="Baby Crispy" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="badge-new">NUEVA</span>
                     <span class="item-name">Baby Crispy</span>
@@ -1015,7 +1057,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="crispy house.webp" class="item-img-bg" alt="Crispy House">
+                <img src="crispy house.webp" class="item-img-bg" alt="Crispy House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Crispy House</span>
                     <p class="item-desc">Pan de papa, pollo crispy, tocineta, doble queso americano, pepinillos, lechuga, salsa de la casa, papas fritas.</p>
@@ -1027,7 +1069,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy">
+                <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Junior Crispy</span>
                     <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1039,7 +1081,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="combo house.webp" class="item-img-bg" alt="Combo House">
+                <img src="combo house.webp" class="item-img-bg" alt="Combo House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Combo House</span>
                     <p class="item-desc">4 Burgers (carne 100gr), papas fritas y Pepsi de litro.</p>
@@ -1051,7 +1093,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="grand house.webp" class="item-img-bg" alt="Grand House Burger">
+                <img src="grand house.webp" class="item-img-bg" alt="Grand House Burger" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Grand House Burger</span>
                     <p class="item-desc">Pan de papa, triple carne, tocineta, pepinillo, triple queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1063,7 +1105,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="pork house.webp" class="item-img-bg" alt="Pork House">
+                <img src="pork house.webp" class="item-img-bg" alt="Pork House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Pork House</span>
                     <p class="item-desc">Pan de papa, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1075,7 +1117,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="chiken house.webp" class="item-img-bg" alt="Chicken House">
+                <img src="chiken house.webp" class="item-img-bg" alt="Chicken House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Chicken House</span>
                     <p class="item-desc">Pan de papa, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1087,7 +1129,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="big house.webp" class="item-img-bg" alt="Big House">
+                <img src="big house.webp" class="item-img-bg" alt="Big House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Big House</span>
                     <p class="item-desc">Pan de papa, doble carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1099,7 +1141,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="town house.webp" class="item-img-bg" alt="Town House">
+                <img src="town house.webp" class="item-img-bg" alt="Town House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Town House</span>
                     <p class="item-desc">Pan de papa, carne, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1111,7 +1153,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="titan house.webp" class="item-img-bg" alt="Titan House">
+                <img src="titan house.webp" class="item-img-bg" alt="Titan House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Titan House</span>
                     <p class="item-desc">Pan de papa, triple carne, tocineta, queso americano, salsa de la casa, papas fritas.</p>
@@ -1123,7 +1165,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="house especial.webp" class="item-img-bg" alt="House Special">
+                <img src="house especial.webp" class="item-img-bg" alt="House Special" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">House Special</span>
                     <p class="item-desc">Pan de papa, pollo, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1135,7 +1177,7 @@
             </div>
 
             <div class="menu-item">
-                <img src="house tower.webp" class="item-img-bg" alt="House Tower">
+                <img src="house tower.webp" class="item-img-bg" alt="House Tower" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">House Tower</span>
                     <p class="item-desc">Pan de papa, carne, chuleta, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
@@ -1150,7 +1192,7 @@
         <section id="ensaladas">
             <h2 class="seccion-titulo">Ensaladas</h2>
             <div class="menu-item">
-                <img src="ensalada.webp" class="item-img-bg" alt="House Salad">
+                <img src="ensalada.webp" class="item-img-bg" alt="House Salad" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">House Salad</span>
                     <p class="item-desc">Lechuga, crotones, tocineta, queso parmesano, pechuga 200gr, salsa de la casa.</p>
@@ -1165,7 +1207,7 @@
         <section id="kids">
             <h2 class="seccion-titulo">Menú Kids</h2>
             <div class="menu-item">
-                <img src="kids house.webp" class="item-img-bg" alt="Kids House">
+                <img src="kids house.webp" class="item-img-bg" alt="Kids House" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Kids House</span>
                     <p class="item-desc">Pan de papa, carne, queso americano, papas fritas, huevito sorpresa y juguito.</p>
@@ -1180,7 +1222,7 @@
         <section id="servicios">
             <h2 class="seccion-titulo">Servicios</h2>
             <div class="menu-item">
-                <img src="papacontoppings.webp" class="item-img-bg" alt="Papas con Topping">
+                <img src="papacontoppings.webp" class="item-img-bg" alt="Papas con Topping" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Servicio de Papas con Topping</span>
                     <p class="item-desc">Papas fritas, salsa de queso y topping de tocineta.</p>
@@ -1191,7 +1233,7 @@
                 </div>
             </div>
             <div class="menu-item">
-                <img src="tequeños.webp" class="item-img-bg" alt="Tequeños">
+                <img src="tequeños.webp" class="item-img-bg" alt="Tequeños" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Servicio de Tequeños</span>
                     <p class="item-desc">Tequeños (6 unidades).</p>
@@ -1222,7 +1264,7 @@
                 </div>
             </div>
             <div class="menu-item">
-                <img src="nuggetsmenu.webp" class="item-img-bg" alt="Nuggets">
+                <img src="nuggetsmenu.webp" class="item-img-bg" alt="Nuggets" loading="lazy" width="400" height="220">
                 <div class="item-info">
                     <span class="item-name">Servicio de Nuggets</span>
                     <p class="item-desc">Nuggets de pollo súper crujientes.</p>
@@ -1326,7 +1368,7 @@
     <div id="cart-sidebar" class="cart-closed">
         <div class="cart-header">
             <h2>
-                <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto">
+                <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto" width="30" height="30">
                 Mi Pedido</h2>
             <button id="close-cart">&times;</button>
         </div>
@@ -1374,7 +1416,7 @@
         <div class="modal-content">
             <button class="close-modal">&times;</button>
             <div class="modal-image-container">
-                <img src="" alt="Imagen del producto" id="modal-img">
+                <img src="" alt="Imagen del producto" id="modal-img" width="440" height="440">
             </div>
             <div class="modal-details">
                 <h2 class="modal-title">Nombre de la Hamburguesa</h2>
@@ -1382,7 +1424,7 @@
                 
                 <div class="modal-main-qty">
                     <div style="width: 100%;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div id="qty-selector-row" style="display: flex; justify-content: space-between; align-items: center;">
                             <span class="qty-label">Cantidad:</span>
                             <div class="counter-control">
                                 <button class="main-qty-btn" id="main-minus">-</button>
@@ -1390,11 +1432,6 @@
                                 <button class="main-qty-btn" id="main-plus">+</button>
                             </div>
                         </div>
-                        <div id="warning-box" class="warning-box hidden">
-                            <svg class="warning-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                            <p id="warning-text" class="warning-text"></p>
-                        </div>
-                        <button type="button" id="btn-variation-helper" class="btn-variation-helper pulse-animation hidden">Personalizar Mi Hamburguesa</button>
                     </div>
                 </div>
 
@@ -1481,13 +1518,63 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true"> 
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
-                                <span class="extra-name">Servicio de salsa BBQ</span>
+                                <span class="extra-name">Carne</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">NO</span>
+                                <span class="extra-qty-val">SÍ</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Pollo</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">SÍ</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Pollo Crispy</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">SÍ</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Chuleta</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">SÍ</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Tocineta</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">SÍ</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.00"> 
+                            <div class="extra-info-text">
+                                <span class="extra-name">Servicio de salsa BBQ</span> <span class="extra-cost">+$1.00</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -1511,13 +1598,13 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true"> 
+                        <div class="extra-card" data-extra-price="1.00"> 
                             <div class="extra-info-text">
-                                <span class="extra-name">Servicio de Ketchup</span>
+                                <span class="extra-name">Servicio de Ketchup</span> <span class="extra-cost">+$1.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">NO</span>
+                                <span class="extra-qty-val">0</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -1543,7 +1630,7 @@
                         </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
-                                <span class="extra-name">Salsa de la Casa</span>
+                                <span class="extra-name">Huevito Sorpresa</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -1553,11 +1640,21 @@
                         </div>
                         <div class="extra-card" data-extra-price="0.00" data-is-toggle="true">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Salsa de la Casa</span>
+                                <span class="extra-name">Salsa de la Casa</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">NO</span>
+                                <span class="extra-qty-val">SÍ</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Extra Salsa de la Casa</span> <span class="extra-cost">+$1.00</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
@@ -1610,21 +1707,6 @@
         </div>
     </div>
 
-    <div id="modal-upsell" class="modal">
-        <div class="modal-content upsell-content">
-            <div class="modal-details">
-                <img src="gaseosa.webp" alt="Bebida" class="upsell-img">
-                <h2 class="modal-title">¡Excelente elección!</h2>
-                <p class="modal-description">¿Deseas acompañar tu hamburguesa con una Coca-Cola Bombita bien fría por solo $1.00 REF?</p>
-                <div class="upsell-buttons">
-                    <button id="btn-upsell-add" class="btn-add-order">¡Sí, añadir!</button>
-                    <button id="btn-upsell-more" class="btn-back-to-cart">Ver más bebidas</button>
-                    <button id="btn-upsell-cancel" class="btn-back-to-cart btn-large-cancel">No, gracias</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="modal-reminder" class="modal">
         <div class="modal-content upsell-content">
             <div class="modal-details">
@@ -1642,31 +1724,6 @@
                 <div class="upsell-buttons">
                     <button id="btn-new-order" class="btn-add-order">Hacer otro pedido</button>
                     <button id="btn-reminder-ok" class="btn-back-to-cart btn-large-cancel" style="margin-top: 10px; width: 100%;">Entendido</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-build-next" class="modal">
-        <div class="modal-content upsell-content">
-            <div class="modal-details">
-                <h2 class="modal-title">¡Añadida con éxito!</h2>
-                <p class="modal-description">¿Deseas personalizar otra de esta misma hamburguesa o prefieres ver tu pedido?</p>
-                <div class="upsell-buttons">
-                    <button id="btn-continue-building" class="btn-add-order">Personalizar otra</button>
-                    <button id="btn-view-cart-now" class="btn-back-to-cart btn-large-cancel" style="margin-top: 10px; width: 100%;">Ver mi pedido</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-personalize-intro" class="modal">
-        <div class="modal-content upsell-content">
-            <div class="modal-details">
-                <h2 class="modal-title">Personalización Individual</h2>
-                <p class="modal-description">Arma tu primera hamburguesa, ponla en el carrito y luego sigue con la siguiente hasta completar tu pedido.</p>
-                <div class="upsell-buttons">
-                    <button id="btn-intro-start" class="btn-add-order">¡Entendido!</button>
                 </div>
             </div>
         </div>
@@ -1694,34 +1751,48 @@
             const verificarHorario = () => {
                 const now = new Date();
                 const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
-                
                 const dia = caracasDate.getDay();
                 const hora = caracasDate.getHours();
                 const minutos = caracasDate.getMinutes();
                 const tiempoTotalMinutos = (hora * 60) + minutos;
-
                 let estaAbierto = false;
 
                 if (dia >= 1 && dia <= 5) {
                     if (tiempoTotalMinutos >= 1020 && tiempoTotalMinutos <= 1350) {
                         estaAbierto = true;
                     }
-                } 
-                else {
+                } else {
                     if (tiempoTotalMinutos >= 780 && tiempoTotalMinutos <= 1350) {
                         estaAbierto = true;
                     }
                 }
-
                 if (!estaAbierto) {
                     document.getElementById('modal-closed').classList.add('active');
                     document.body.style.overflow = 'hidden';
                     isPreOrder = true;
                 }
             };
-
-            verificarHorario();
-
+            const searchInput = document.getElementById('menu-search');
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                const items = document.querySelectorAll('.menu-item');
+                const sections = document.querySelectorAll('section');
+                items.forEach(item => {
+                    const name = item.querySelector('.item-name').innerText.toLowerCase();
+                    const desc = item.querySelector('.item-desc') ? item.querySelector('.item-desc').innerText.toLowerCase() : "";
+                    
+                    if (name.includes(term) || desc.includes(term)) {
+                        item.classList.remove('hidden-search');
+                    } else {
+                        item.classList.add('hidden-search');
+                    }
+                });
+                sections.forEach(section => {
+                    const hasVisibleItems = Array.from(section.querySelectorAll('.menu-item'))
+                        .some(item => !item.classList.contains('hidden-search'));
+                    section.classList.toggle('hidden-search', !hasVisibleItems);
+                });
+            });
             const logoCarga = document.getElementById('preloader');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
@@ -1740,23 +1811,10 @@
             const cartGrandTotal = document.getElementById('cart-grand-total');
             const cartItemsView = document.getElementById('cart-items-view');
             const checkoutView = document.getElementById('checkout-view');
-            const modalUpsell = document.getElementById('modal-upsell');
-            const btnUpsellAdd = document.getElementById('btn-upsell-add');
-            const modalUpsellImg = modalUpsell.querySelector('.upsell-img');
-            const btnUpsellMore = document.getElementById('btn-upsell-more');
-            const btnUpsellCancel = document.getElementById('btn-upsell-cancel');
             const modalReminder = document.getElementById('modal-reminder');
             const btnReminderOk = document.getElementById('btn-reminder-ok');
             const btnNewOrder = document.getElementById('btn-new-order');
-            const warningBox = document.getElementById('warning-box');
-            const warningText = document.getElementById('warning-text');
-            const btnVariationHelper = document.getElementById('btn-variation-helper');
             const btnAddOrderMain = modal.querySelector('.btn-add-order');
-            const modalBuildNext = document.getElementById('modal-build-next');
-            const modalPersonalizeIntro = document.getElementById('modal-personalize-intro');
-            const btnIntroStart = document.getElementById('btn-intro-start');
-            const btnContinueBuilding = document.getElementById('btn-continue-building');
-            const btnViewCartNow = document.getElementById('btn-view-cart-now');
             const modalClosed = document.getElementById('modal-closed');
             const btnPreOrder = document.getElementById('btn-pre-order');
             const preloaderProgress = document.getElementById('preloader-progress');
@@ -1767,11 +1825,13 @@
             let esComboHouse = false;
             let esKids = false;
             let pedidoConfirmado = false;
-            let upsellMostrado = false;
-            let isArmandoPedido = false;
             let lastItemClicked = null;
-            let drinkSugerida = null;
             
+            // Llamamos a la verificación después de que 'menu' y otros elementos estén definidos
+            if (typeof verificarHorario === 'function') {
+                verificarHorario();
+            }
+
             let carrito = JSON.parse(localStorage.getItem('bh_cart')) || [];
             
             if (carrito.length > 0) {
@@ -1784,40 +1844,14 @@
                     history.back();
                 } else {
                     modal.classList.remove('active');
-                    modalUpsell.classList.remove('active');
                     modalReminder.classList.remove('active');
-                    modalBuildNext.classList.remove('active');
-                    modalPersonalizeIntro.classList.remove('active');
                     document.body.style.overflow = 'auto';
+                    menu.style.overflow = '';
                 }
             };
-
             function guardarCarrito() {
                 localStorage.setItem('bh_cart', JSON.stringify(carrito));
             }
-
-            function mostrarUpsellBebidaAleatoria() {
-                const drinksElements = Array.from(document.querySelectorAll('#bebidas .menu-item'));
-                if (drinksElements.length === 0) {
-                    abrirCarritoConFeedback();
-                    return;
-                }
-
-                const randomElement = drinksElements[Math.floor(Math.random() * drinksElements.length)];
-                const suggestedDrinkImgSrc = randomElement.querySelector('.item-price-wrapper').dataset.imgSrc;
-                
-                drinkSugerida = {
-                    nombre: randomElement.querySelector('.item-name').innerText,
-                    precio: parseFloat(randomElement.querySelector('.item-price').innerText.replace('$', '').replace(',', '.')),
-                    imgSrc: suggestedDrinkImgSrc
-                };
-
-                modalUpsell.querySelector('.modal-description').innerText = `¿Deseas acompañar tu hamburguesa con una ${drinkSugerida.nombre} bien fría por solo $${drinkSugerida.precio.toFixed(2)} REF?`;
-                modalUpsellImg.src = drinkSugerida.imgSrc;
-                modalUpsell.classList.add('active');
-                history.pushState({ ui: 'upsell' }, "");
-            }
-
             function abrirCarritoConFeedback() {
                 setTimeout(() => {
                     cartSidebar.classList.remove('cart-closed');
@@ -1827,21 +1861,17 @@
                     }
                 }, 300);
             }
-
             function actualizarInterfazCarrito() {
                 const totalItems = carrito.length;
                 cartBadge.style.display = totalItems > 0 ? 'flex' : 'none';
                 cartBadge.innerText = totalItems;
                 cartItemsContainer.innerHTML = '';
                 let total = 0;
-
                 if (carrito.length === 0) {
                     checkoutView.classList.add('hidden');
                     cartItemsView.classList.remove('hidden');
                 }
-                
                 guardarCarrito();
-
                 carrito.forEach((item, index) => {
                     total += item.subtotal;
                     const div = document.createElement('div');
@@ -1865,7 +1895,6 @@
                     `;
                     cartItemsContainer.appendChild(div);
                 });
-
                 document.querySelectorAll('.remove-item').forEach(btn => {
                     btn.onclick = () => {
                         const idToRemove = btn.getAttribute('data-id');
@@ -1873,10 +1902,8 @@
                         actualizarInterfazCarrito();
                     };
                 });
-
                 cartGrandTotal.innerHTML = `$${total.toFixed(2)} <span class="cart-ref-total">REF</span>`;
             }
-
             window.addEventListener('load', () => {
                 let width = 0;
                 const interval = setInterval(() => {
@@ -1893,173 +1920,132 @@
                     if (preloaderProgress) preloaderProgress.style.width = width + '%';
                 }, 150);
             });
-
             cartBtn.addEventListener('click', () => {
                 cartSidebar.classList.remove('cart-closed');
                 history.pushState({ ui: 'cart' }, "");
+                document.body.style.overflow = 'hidden';
+                menu.style.overflow = 'hidden';
             });
             closeCart.addEventListener('click', () => {
                 if (!cartSidebar.classList.contains('cart-closed')) {
                     history.back();
                 }
             });
-
             closeModal.addEventListener('click', cerrarFunc);
-
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', () => {
                     lastItemClicked = item;
-                    const name = item.querySelector('.item-name').innerText;
-                    const desc = item.querySelector('.item-desc') ? item.querySelector('.item-desc').innerText : "";
+                    const name = item.querySelector('.item-name').textContent.trim();
+                    const desc = item.querySelector('.item-desc') ? item.querySelector('.item-desc').textContent.trim() : "";
                     const priceStr = item.querySelector('.item-price').innerText;
-                    // Limpiamos el precio base de símbolos y aseguramos que el punto sea el decimal
                     basePrice = parseFloat(priceStr.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
-
                     esKids = !!item.closest('#kids');
                     const esNuggets = name.toLowerCase().includes('nuggets');
                     esComboHouse = name.toLowerCase().includes('combo house');
                     esHamburguesa = !!item.closest('#hamburguesas') || esKids;
-                    isArmandoPedido = false;
-                    
-                    // Aplicar clase de estilo según categoría (excluyendo bebidas)
+
                     const esBebida = !!item.closest('#bebidas');
                     if (!esBebida) {
                         modal.querySelector('.modal-content').classList.add('food-modal');
                     } else {
                         modal.querySelector('.modal-content').classList.remove('food-modal');
                     }
-
-                    if (extrasContainer) {
-                        extrasContainer.style.display = (esHamburguesa || esNuggets) && !esComboHouse ? 'block' : 'none';
-                    }
-
                     const extrasGrid = document.querySelector('.extras-grid');
-                    const extraCards = Array.from(extrasGrid.children);
-                    const costedExtras = [];
-                    const toggleExtras = [];
-
-                    extraCards.forEach(card => {
-                        if (card.dataset.isToggle === "true") {
-                            toggleExtras.push(card);
-                        } else {
-                            costedExtras.push(card);
-                        }
-                    });
-
-                    extrasGrid.innerHTML = '';
-                    toggleExtras.forEach(card => extrasGrid.appendChild(card));
-                    costedExtras.forEach(card => extrasGrid.appendChild(card));
-
+                    const allCards = Array.from(extrasGrid.children);
+                    const descLower = desc.toLowerCase();
+                    const nameLower = name.toLowerCase();
                     modalTitle.innerText = name;
                     modalDesc.innerText = desc;
                     modalPrice.innerText = `$${basePrice.toFixed(2)}`;
-                    
+                    const qtyContainer = modal.querySelector('.modal-main-qty');
+                    if (qtyContainer) {
+                        qtyContainer.style.display = esHamburguesa ? 'none' : 'block';
+                    }
                     currentMainQty = 1;
                     mainQtyVal.innerText = currentMainQty;
-                    document.querySelectorAll('.extra-card').forEach(card => {
-                        const valSpan = card.querySelector('.extra-qty-val');
-                        const nameText = card.querySelector('.extra-name').innerText;
-                        const nameLower = nameText.toLowerCase();
-                        
-                        const descLower = desc.toLowerCase();
-                        const tienePepinillos = descLower.includes('pepinillo');
-                        const tieneSalsa = descLower.includes('salsa');
-                        const tieneLechuga = descLower.includes('lechuga');
-                        const tienePan = descLower.includes('pan');
-
-                        let visible = true;
-                        if (esKids) {
-                            visible = (nameText === 'Extra Huevito Sorpresa');
-                        } else if (esNuggets) {
-                            visible = nameLower.includes('salsa') || nameLower.includes('ketchup') || nameLower.includes('mostaza') || nameLower.includes('mayonesa') || nameLower.includes('queso');
-                        } else {
-                            if (nameLower === 'pepinillos') {
-                                visible = tienePepinillos;
-                            } else if (nameLower === 'salsa de la casa') {
-                                visible = tieneSalsa;
-                            } else if (nameLower === 'lechuga' || nameLower === 'extra lechuga') {
-                                visible = tieneLechuga;
-                            } else if (nameLower === 'pan') {
-                                visible = tienePan;
-                            } else if (nameLower === 'extra pepinillos') {
-                                visible = true;
-                            } else if (nameLower === 'servicio de salsa bbq' || nameLower === 'servicio de ketchup') {
-                                visible = false;
-                            }
+                    const mainProteins = ["carne", "pollo crispy", "pollo", "chuleta"];
+                    let mainProtFound = mainProteins.find(p => nameLower.includes(p) || descLower.includes(p)) || "";
+                    const services = [];
+                    const recipeKeywords = ["tocineta", "queso", "pepinillo", "lechuga", "salsa de la casa", "huevito sorpresa"];
+                    const toggles = allCards.filter(c => c.dataset.isToggle === "true");
+                    const costed = allCards.filter(c => c.dataset.isToggle !== "true");
+                    const sortedToggles = toggles.map(card => {
+                        const cn = card.querySelector('.extra-name').textContent.toLowerCase().trim();
+                        let visible = false;
+                        let rank = 1000;
+                        let defaultValue = "SÍ";
+                        if (cn.includes("pan") && (esHamburguesa || esKids)) {
+                            visible = true;
+                            rank = 0;
+                        } else if (mainProtFound && cn.includes(mainProtFound)) {
+                            visible = true;
+                            rank = 1;
+                        } else if (recipeKeywords.some(kw => cn.includes(kw) && descLower.includes(kw))) {
+                            visible = true;
+                            const kwFound = recipeKeywords.find(kw => cn.includes(kw) && descLower.includes(kw));
+                            rank = 10 + descLower.indexOf(kwFound);
                         }
-
-                        card.style.display = visible ? 'flex' : 'none';
-
-                        if (card.dataset.isToggle === "true") {
-                            const ingredientesBase = ['pepinillos', 'pan', 'lechuga', 'queso'];
-                            if (ingredientesBase.includes(nameLower)) {
-                                const existe = (nameLower === 'pan') || 
-                                              (nameLower === 'pepinillos' && tienePepinillos) || 
-                                              (nameLower === 'lechuga' && tieneLechuga) || 
-                                              (nameLower === 'queso' && descLower.includes('queso'));
-
-                                valSpan.innerText = existe ? 'SÍ' : 'NO';
-                            } else if (nameLower.includes('salsa')) {
-                                // Los servicios de salsa van en defecto en NO
-                                valSpan.innerText = 'NO';
-                            } else {
-                                valSpan.innerText = (nameLower.includes('extra') || nameLower.includes('servicio')) ? 'NO' : 'SÍ';
-                            }
-                        } else {
-                            valSpan.innerText = '0';
+                        if (esKids && !["pan", "carne", "queso", "huevito sorpresa"].includes(cn)) visible = false;
+                        if (nameLower.includes("nuggets")) {
+                            visible = ["salsa", "ketchup", "mostaza", "mayonesa", "queso"].some(kw => cn.includes(kw));
                         }
+                        const finalVisible = (visible && esHamburguesa && !esComboHouse) || (visible && nameLower.includes("nuggets"));
+                        card.style.display = finalVisible ? "flex" : "none";
+                        card.dataset.rank = rank;
+                        card.querySelector('.extra-qty-val').innerText = defaultValue;
+                        return card;
+                    }).sort((a, b) => parseInt(a.dataset.rank) - parseInt(b.dataset.rank));
+                    costed.forEach(card => {
+                        const cn = card.querySelector('.extra-name').textContent.toLowerCase().trim();
+                        let v = true;
+                        if (esKids) v = cn.includes("huevito");
+                        else if (nameLower.includes("nuggets")) v = ["salsa", "ketchup", "mostaza", "mayonesa", "queso"].some(kw => cn.includes(kw));
+                        else if (esComboHouse) v = false;
+                        card.style.display = v ? "flex" : "none";
+                        card.querySelector('.extra-qty-val').innerText = "0";
                     });
-
+                    extrasGrid.innerHTML = '';
+                    sortedToggles.forEach(c => extrasGrid.appendChild(c));
+                    costed.forEach(c => extrasGrid.appendChild(c));
+                    if (extrasContainer) {
+                        extrasContainer.style.display = (esHamburguesa || nameLower.includes("nuggets")) && !esComboHouse ? 'block' : 'none';
+                    }
                     updateTotal(); 
-                    warningBox.classList.add('hidden');
-                    btnVariationHelper.classList.add('hidden');
-
                     const itemImageSrc = item.querySelector('.item-price-wrapper').dataset.imgSrc;
                     if (itemImageSrc) {
                         modalImg.src = itemImageSrc;
                     } else {
                         modalImg.src = "hamburguesa.webp";
                     }
-
-                    // Aplicar clase especial si la imagen necesita ser ajustada para evitar el degradado
-                    // Primero, eliminamos todas las clases de ajuste de posición para evitar conflictos
                     modalImg.classList.remove('modal-img-bottom-aligned');
                     modalImg.classList.remove('modal-img-junior-crispy-lower');
-
                     const needsBottomAlignment = esKids || (name === 'Pork House') || (name === 'Servicio de Papas con Topping') || esNuggets;
-
                     if (needsBottomAlignment) {
                         modalImg.classList.add('modal-img-bottom-aligned');
                     } else if (name === 'Junior Crispy') {
                         modalImg.classList.add('modal-img-junior-crispy-lower');
                     }
-
                     modal.classList.add('active');
                     history.pushState({ ui: 'modal' }, "");
                     document.body.style.overflow = 'hidden';
+                    menu.style.overflow = 'hidden';
                 });
             });
-
             document.querySelectorAll('.extra-qty-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const card = btn.closest('.extra-card');
                     const valSpan = btn.parentElement.querySelector('.extra-qty-val');
                     const isToggle = card.dataset.isToggle === "true";
-                    
                     const text = valSpan.innerText;
                     let currentVal = (text === 'SÍ') ? 1 : (text === 'NO' ? 0 : parseInt(text));
-                    
                     if (btn.classList.contains('plus')) {
                         if (isToggle) currentVal = 1;
                         else currentVal++;
                     } else if (btn.classList.contains('minus') && currentVal > 0) {
                         currentVal--;
                     }
-                    
                     valSpan.innerText = isToggle ? (currentVal === 1 ? 'SÍ' : 'NO') : currentVal;
-                    
                     const nameText = card.querySelector('.extra-name').innerText;
-
                     if (nameText === 'Pepinillos' && valSpan.innerText === 'NO') {
                         const extraCard = Array.from(document.querySelectorAll('.extra-card'))
                             .find(c => c.querySelector('.extra-name').innerText === 'Extra Pepinillos');
@@ -2073,11 +2059,9 @@
                             toggleCard.querySelector('.extra-qty-val').innerText = 'SÍ';
                         }
                     }
-
                     updateTotal();
                 });
             });
-
             document.getElementById('main-plus').addEventListener('click', () => {
                 currentMainQty++;
                 mainQtyVal.innerText = currentMainQty;
@@ -2088,18 +2072,14 @@
                 mainQtyVal.innerText = currentMainQty;
                 updateTotal();
             });
-
             const agregarAlPedido = () => {
                 if (currentMainQty < 1) return;
-
-                const wasArmando = isArmandoPedido;
                 const extrasSeleccionados = [];
                 document.querySelectorAll('.extra-card').forEach(card => {
                     const valText = card.querySelector('.extra-qty-val').innerText;
                     const nombre = card.querySelector('.extra-name').innerText;
                     const isToggle = card.dataset.isToggle === "true";
                     const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : parseInt(valText));
-
                     let incluir = false;
                     if (!isToggle && qty > 0) incluir = true;
                     if (isToggle) {
@@ -2107,7 +2087,6 @@
                         if (esVisible && ['Salsa de la Casa', 'Pepinillos', 'Pan', 'Lechuga'].includes(nombre) && valText === 'NO') incluir = true;
                         if (nombre.toLowerCase().includes('extra') && valText === 'SÍ') incluir = true;
                     }
-
                     if (incluir) {
                         extrasSeleccionados.push({
                             nombre: nombre,
@@ -2118,10 +2097,8 @@
                         });
                     }
                 });
-
                 const totalExtrasUnitarios = extrasSeleccionados.reduce((acc, e) => acc + e.precio, 0);
                 const subtotalCalculado = (basePrice + totalExtrasUnitarios) * currentMainQty;
-
                 const itemPedido = {
                     id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
                     nombre: modalTitle.innerText,
@@ -2130,10 +2107,8 @@
                     extras: extrasSeleccionados,
                     subtotal: Number(subtotalCalculado.toFixed(2))
                 };
-
                 carrito.push(itemPedido);
                 actualizarInterfazCarrito();
-
                 currentMainQty = 1;
                 mainQtyVal.innerText = currentMainQty;
                 document.querySelectorAll('.extra-card').forEach(card => {
@@ -2145,105 +2120,12 @@
                         valSpan.innerText = '0';
                     }
                 });
-                warningBox.classList.add('hidden');
-                btnVariationHelper.classList.add('hidden');
-                isArmandoPedido = false;
-                btnAddOrderMain.classList.remove('btn-highlight');
-
+                
                 cerrarFunc();
-
-                if (wasArmando) {
-                    modalBuildNext.style.display = 'flex';
-                } else if (esHamburguesa && !esComboHouse) {
-                    mostrarUpsellBebidaAleatoria();
-                } else {
-                    abrirCarritoConFeedback();
-                }
+                abrirCarritoConFeedback();
             };
 
             btnAddOrderMain.addEventListener('click', agregarAlPedido);
-            
-            btnVariationHelper.addEventListener('click', () => {
-                modalPersonalizeIntro.classList.add('active');
-                history.pushState({ ui: 'personalize-intro' }, "");
-            });
-
-            btnIntroStart.addEventListener('click', () => {
-                modalPersonalizeIntro.classList.remove('active');
-                startCustomizationFlow();
-            });
-
-            function startCustomizationFlow() {
-                currentMainQty = 1;
-                mainQtyVal.innerText = currentMainQty;
-
-                const descLower = modalDesc.innerText.toLowerCase();
-                document.querySelectorAll('.extra-card').forEach(card => {
-                    const valSpan = card.querySelector('.extra-qty-val');
-                    const nameLower = card.querySelector('.extra-name').innerText.toLowerCase();
-                    const descLower = modalDesc.innerText.toLowerCase();
-
-                    if (card.dataset.isToggle === "true") {
-                        if (['pan', 'lechuga', 'pepinillos', 'queso'].includes(nameLower)) {
-                            const matchIngrediente = (nameLower === 'pan') || descLower.includes(nameLower.slice(0, -1)) || descLower.includes(nameLower);
-                            valSpan.innerText = matchIngrediente ? 'SÍ' : 'NO';
-                        } else if (nameLower.includes('salsa') || nameLower.includes('extra') || nameLower.includes('servicio')) {
-                            valSpan.innerText = 'NO';
-                        } else {
-                            valSpan.innerText = nameLower.includes('extra') ? 'NO' : 'SÍ';
-                        }
-                    } else {
-                        valSpan.innerText = '0';
-                    }
-                });
-
-                isArmandoPedido = true;
-                updateTotal();
-
-                extrasContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-
-            btnContinueBuilding.addEventListener('click', () => {
-                cerrarFunc();
-                if (lastItemClicked) {
-                    lastItemClicked.click();
-                    isArmandoPedido = true;
-                    updateTotal();
-                }
-            });
-
-            btnViewCartNow.addEventListener('click', () => {
-                cerrarFunc();
-                mostrarUpsellBebidaAleatoria();
-            });
-
-            btnUpsellCancel.addEventListener('click', () => {
-                cerrarFunc();
-                abrirCarritoConFeedback();
-            });
-
-            btnUpsellMore.addEventListener('click', () => {
-                cerrarFunc();
-                const bebidasSection = document.getElementById('bebidas');
-                bebidasSection.scrollIntoView({ behavior: 'smooth' });
-            });
-
-            btnUpsellAdd.addEventListener('click', () => {
-                if (!drinkSugerida) return;
-                
-                const itemBebida = {
-                    id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
-                    nombre: drinkSugerida.nombre,
-                    cantidad: 1,
-                    precioUnitario: drinkSugerida.precio,
-                    extras: [],
-                    subtotal: drinkSugerida.precio
-                };
-                carrito.push(itemBebida);
-                actualizarInterfazCarrito();
-                cerrarFunc();
-                abrirCarritoConFeedback();
-            });
 
             document.getElementById('btn-go-checkout').addEventListener('click', () => {
                 if (carrito.length === 0) return alert("Añade algo al carrito primero");
@@ -2326,12 +2208,9 @@
 
                 if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
                     modal.classList.remove('active');
-                    modalUpsell.classList.remove('active');
-                    modalReminder.classList.remove('active');
-                    modalBuildNext.classList.remove('active');
-                    modalPersonalizeIntro.classList.remove('active');
                     cartSidebar.classList.add('cart-closed');
                     document.body.style.overflow = 'auto';
+                    menu.style.overflow = '';
                 }
             });
 
@@ -2358,74 +2237,30 @@
             btnPreOrder.addEventListener('click', () => {
                 modalClosed.classList.remove('active');
                 document.body.style.overflow = 'auto';
+                menu.style.overflow = '';
             });
 
             function updateTotal() {
                 let extraTotal = 0;
-                let extraPepinillosQty = 0;
-                let extraLechugaQty = 0;
 
                 document.querySelectorAll('.extra-card').forEach(card => {
-                    if (card.querySelector('.extra-name').innerText === 'Extra Pepinillos') {
-                        extraPepinillosQty = parseInt(card.querySelector('.extra-qty-val').innerText);
-                    }
-                    if (card.querySelector('.extra-name').innerText === 'Extra Lechuga') {
-                        extraLechugaQty = parseInt(card.querySelector('.extra-qty-val').innerText);
-                    }
-                });
-
-                document.querySelectorAll('.extra-card').forEach(card => {
-                    const nameText = card.querySelector('.extra-name').innerText;
-                    const nameLower = nameText.toLowerCase();
                     const valSpan = card.querySelector('.extra-qty-val');
-                    const descLower = modalDesc.innerText.toLowerCase();
-                    
-                    if (['pepinillos', 'pan', 'lechuga', 'queso', 'salsa de la casa', 'extra lechuga'].includes(nameLower)) {
-                        let tieneIngrediente = false;
-                        if (nameLower === 'pepinillos') tieneIngrediente = descLower.includes('pepinillo');
-                        else if (nameLower === 'pan') tieneIngrediente = descLower.includes('pan');
-                        else if (nameLower === 'lechuga') tieneIngrediente = descLower.includes('lechuga');
-                        else if (nameLower === 'extra lechuga') tieneIngrediente = descLower.includes('lechuga');
-                        else if (nameLower === 'queso') tieneIngrediente = descLower.includes('queso');
-                        else if (nameLower === 'salsa de la casa') tieneIngrediente = descLower.includes('salsa');
-
-                        if (nameLower === 'pepinillos' && extraPepinillosQty > 0) {
-                            card.style.display = 'none';
-                            valSpan.innerText = 'SÍ';
-                        } else {
-                            const esNuggetsLocal = modalTitle.innerText.toLowerCase().includes('nuggets');
-                            const esSalsaParaNuggets = esNuggetsLocal && (nameLower.includes('salsa') || nameLower.includes('ketchup') || nameLower.includes('mostaza') || nameLower.includes('mayonesa') || nameLower.includes('queso'));
-                            card.style.display = (tieneIngrediente && !esKids || esSalsaParaNuggets) ? 'flex' : 'none';
-                        }
-                    }
-
                     const valText = valSpan.innerText;
                     const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : (parseInt(valText) || 0));
                     
-                    // Extraemos el valor del extra de forma segura del dataset
                     const extraPriceRaw = card.dataset.extraPrice || "0";
                     const extraPriceValue = parseFloat(extraPriceRaw.toString().replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
                     extraTotal += qty * extraPriceValue;
                 });
-                // Cálculo final con seguro contra NaN
                 let finalTotal = (basePrice + extraTotal) * (currentMainQty || 1);
                 if (isNaN(finalTotal)) finalTotal = basePrice || 0;
 
                 modalPrice.innerText = `$${finalTotal.toFixed(2)}`;
                 btnAddOrderMain.classList.remove('btn-highlight');
-
-                if (currentMainQty > 1 && esHamburguesa && !esKids && !esComboHouse) {
-                    warningText.innerText = `Nota: Si aumentas la cantidad, todas tendrán los mismos extras.`;
-                    warningBox.classList.remove('hidden');
-                    btnVariationHelper.classList.remove('hidden');
-                } else {
-                    warningBox.classList.add('hidden');
-                    btnVariationHelper.classList.add('hidden');
-                }
             }
             
             window.addEventListener('click', (e) => {
-                if (e.target === modal || e.target === modalUpsell) cerrarFunc();
+                if (e.target === modal) cerrarFunc();
             });
 
             const formDelivery = document.getElementById('form-delivery');
