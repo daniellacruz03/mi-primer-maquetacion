@@ -158,6 +158,10 @@ h1 {
     touch-action: manipulation;
 }
 
+.item-info {
+    flex: 1;
+}
+
 .menu-item-img {
     width: 60px;
     height: 60px;
@@ -165,10 +169,6 @@ h1 {
     margin-right: 15px;
     flex-shrink: 0;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-}
-
-.item-info {
-    flex: 1;
 }
 
 @media (hover: hover) {
@@ -209,6 +209,7 @@ h1 {
 }
 
 .item-name { font-family: var(--font-heading); font-size: 1.6rem; color: var(--text-main); }
+
 .item-desc { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
 
 .item-price-wrapper {
@@ -225,13 +226,6 @@ h1 {
     font-weight: bold; 
     line-height: 1;
     text-shadow: 0.5px 0.5px 0px rgba(255, 255, 255, 0.3);
-}
-
-.item-ref {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    font-weight: bold;
-    margin-top: 2px;
 }
 
 @media (max-width: 480px) {
