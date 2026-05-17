@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
-
+/* Fuentes cargadas desde index.html para mayor rendimiento */
 :root {
     --primary-color: #e60000;
     --bg-color: #080808;

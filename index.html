@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Burger House | Menú</title>
+    <!-- Optimización de fuentes: Preconectar y cargar vía link es más rápido que @import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="logobh.webp?v=2">
-    <!-- Precarga de recursos críticos para evitar saltos visuales y mejorar velocidad -->
-    <link rel="preload" href="brasas.webp" as="image">
     <link rel="preload" href="logobh.webp" as="image">
     <style>
         * {
@@ -1947,8 +1949,13 @@
 
             // Función para finalizar y ocultar preloader
             const finalizarCarga = () => {
+                // Evitamos ejecutarlo dos veces
+                if (preloaderProgress.dataset.finished === 'true') return;
+                preloaderProgress.dataset.finished = 'true';
+
                 clearInterval(interval);
                 if (preloaderProgress) preloaderProgress.style.width = '100%';
+                
                 setTimeout(() => {
                     const logoCarga = document.getElementById('preloader');
                     const menu = document.getElementById('main-menu');
@@ -2141,8 +2148,12 @@
                 cartGrandTotal.innerHTML = `$${total.toFixed(2)} <span class="cart-ref-total">REF</span>`;
             }
 
-            // Cuando todos los recursos (imágenes, fuentes) están listos
+            // CRÍTICO: No esperamos a que todas las imágenes del menú carguen.
+            // Si el evento 'load' tarda más de 1.8s, forzamos la entrada al menú.
+            const loadTimeout = setTimeout(finalizarCarga, 1800);
+
             window.addEventListener('load', () => {
+                clearTimeout(loadTimeout);
                 finalizarCarga();
             });
 
@@ -2503,23 +2514,9 @@
                 if (e.target === modal) cerrarFunc();
             });
 
+            // Limpiar formulario al inicio
             const formDelivery = document.getElementById('form-delivery');
-            if (formDelivery) {
-                formDelivery.reset();
-            }
-
-            // --- Optimización de Precarga de Imágenes ---
-            const precargarImagenes = () => {
-                // Solo precargamos lo esencial para la interfaz, NO todo el menú de golpe
-                // Las imágenes del menú se cargarán por demanda o via lazy-load nativo
-                const activosCriticos = ["bolsadelivery.webp", "hamburguesa.webp"];
-                activosCriticos.forEach(src => {
-                    const img = new Image();
-                    img.src = src;
-                });
-            };
-
-            precargarImagenes();
+            if (formDelivery) formDelivery.reset();
         });
 
         // Lógica de Geolocalización
