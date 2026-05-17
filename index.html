@@ -6,6 +6,9 @@
     <title>Burger House | Menú</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="logobh.webp?v=2">
+    <!-- Precarga de recursos críticos para evitar saltos visuales y mejorar velocidad -->
+    <link rel="preload" href="brasas.webp" as="image">
+    <link rel="preload" href="logobh.webp" as="image">
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
@@ -1932,6 +1935,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Iniciamos la animación del preloader inmediatamente
+            const preloaderProgress = document.getElementById('preloader-progress');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width < 90) {
+                    width += Math.random() * 15; // Progreso más rápido
+                    if (preloaderProgress) preloaderProgress.style.width = width + '%';
+                }
+            }, 100);
+
+            // Función para finalizar y ocultar preloader
+            const finalizarCarga = () => {
+                clearInterval(interval);
+                if (preloaderProgress) preloaderProgress.style.width = '100%';
+                setTimeout(() => {
+                    const logoCarga = document.getElementById('preloader');
+                    const menu = document.getElementById('main-menu');
+                    const cartBtn = document.getElementById('cart-floating-btn');
+                    
+                    if (logoCarga) logoCarga.classList.add('ocultar');
+                    if (menu) menu.classList.add('mostrar-menu');
+                    if (cartBtn) cartBtn.classList.remove('cart-btn-hidden');
+                }, 200);
+            };
+
             let isPreOrder = false;
             const verificarHorario = () => {
                 const now = new Date();
@@ -2003,7 +2031,6 @@
                 });
             });
 
-            const logoCarga = document.getElementById('preloader');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
             const closeModal = document.querySelector('.close-modal');
@@ -2027,7 +2054,6 @@
             const btnAddOrderMain = modal.querySelector('.btn-add-order');
             const modalClosed = document.getElementById('modal-closed');
             const btnPreOrder = document.getElementById('btn-pre-order');
-            const preloaderProgress = document.getElementById('preloader-progress');
 
             let basePrice = 0;
             let currentMainQty = 1;
@@ -2114,22 +2140,12 @@
                 });
                 cartGrandTotal.innerHTML = `$${total.toFixed(2)} <span class="cart-ref-total">REF</span>`;
             }
+
+            // Cuando todos los recursos (imágenes, fuentes) están listos
             window.addEventListener('load', () => {
-                let width = 0;
-                const interval = setInterval(() => {
-                    width += Math.random() * 8;
-                    if (width >= 100) {
-                        width = 100;
-                        clearInterval(interval);
-                        setTimeout(() => {
-                            logoCarga.classList.add('ocultar');
-                            menu.classList.add('mostrar-menu');
-                            if (cartBtn) cartBtn.classList.remove('cart-btn-hidden');
-                        }, 500);
-                    }
-                    if (preloaderProgress) preloaderProgress.style.width = width + '%';
-                }, 150);
+                finalizarCarga();
             });
+
             cartBtn.addEventListener('click', () => {
                 cartSidebar.classList.remove('cart-closed');
                 history.pushState({ ui: 'cart' }, "");
@@ -2494,19 +2510,12 @@
 
             // --- Optimización de Precarga de Imágenes ---
             const precargarImagenes = () => {
-                // Selecciona automáticamente todos los nombres de imágenes del menú
-                const imagenesDelMenu = Array.from(document.querySelectorAll('[data-img-src]'))
-                    .map(el => el.dataset.imgSrc);
-                
-                // Agregamos elementos clave como el logo, fondo y placeholders
-                const activosEstaticos = ["logobh.webp", "brasas.webp", "bolsadelivery.webp", "hamburguesa.webp"];
-                const listaUnica = [...new Set([...imagenesDelMenu, ...activosEstaticos])];
-
-                listaUnica.forEach(src => {
-                    if (src) {
-                        const img = new Image();
-                        img.src = src;
-                    }
+                // Solo precargamos lo esencial para la interfaz, NO todo el menú de golpe
+                // Las imágenes del menú se cargarán por demanda o via lazy-load nativo
+                const activosCriticos = ["bolsadelivery.webp", "hamburguesa.webp"];
+                activosCriticos.forEach(src => {
+                    const img = new Image();
+                    img.src = src;
                 });
             };
 
