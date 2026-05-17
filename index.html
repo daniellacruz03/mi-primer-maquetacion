@@ -581,15 +581,17 @@
         }
 
         #checkout-view {
-            padding: 10px 20px 20px !important;
+            padding: 24px 20px 40px !important;
             display: flex;
             flex-direction: column;
+            max-height: 90vh !important;
+            overflow-y: auto !important;
         }
 
         .checkout-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
 
@@ -773,30 +775,39 @@
         }
 
         .input-with-location input {
-            padding-right: 145px !important;
+            padding-right: 18px !important;
         }
 
         #btn-get-location {
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            bottom: 5px;
-            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
-            border: none !important;
-            border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
-            border-radius: 6px;
-            color: #fff;
-            padding: 0 10px;
-            display: flex;
-            align-items: center;
+            position: relative;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 12px !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            height: 52px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
             cursor: pointer;
-            font-size: 0.62rem;
-            font-weight: 800;
+            font-size: 0.88rem !important;
+            font-weight: 500 !important;
             letter-spacing: 0.3px;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
         }
 
-        #btn-get-location:active { transform: scale(0.9); }
+        #btn-get-location .icon-location-pin {
+            stroke: #ff0000;
+            width: 20px;
+            height: 20px;
+        }
+
+        #btn-get-location:active { transform: scale(0.96); }
+        #btn-get-location:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 0, 0, 0.3) !important;
+        }
         #btn-get-location.loading { opacity: 0.6; pointer-events: none; }
 
         /* Animación de éxito para el input de ubicación */
@@ -815,13 +826,35 @@
             font-weight: 700 !important;
             padding: 14px !important;
             border-radius: 12px !important;
-            margin-top: 40px !important;
+            margin-top: 24px !important;
+            position: relative !important;
+            bottom: auto !important;
             width: 100%;
             margin-bottom: 20px !important;
         }
 
+        .delivery-notice-premium {
+            background: rgba(255, 193, 7, 0.08) !important;
+            border: 1px solid rgba(255, 193, 7, 0.2) !important;
+            padding: 12px 16px !important;
+            border-radius: 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            margin-top: -5px !important;
+            margin-bottom: 10px !important;
+        }
+        .delivery-notice-premium span {
+            color: #ffc107 !important;
+            font-size: 0.8rem !important;
+            font-weight: 500 !important;
+            line-height: 1.4 !important;
+        }
+
         .checkout-form input::placeholder {
-            color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(255, 255, 255, 0.45) !important;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
         }
 
         .modal-image-container {
@@ -1588,17 +1621,25 @@
                 </button>
                 <form id="form-delivery" class="checkout-form">
                     <h3 class="checkout-title">Datos de Entrega</h3>
+                    <div class="delivery-notice-premium">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                        <span>El costo del delivery varía según la zona de entrega</span>
+                    </div>
                     <input type="text" id="full-name" name="full-name" placeholder="Tu Nombre" required autocomplete="name" enterkeyhint="next">
                     <div class="checkout-grid">
-                        <input type="text" id="avenida-calle" name="avenida-calle" placeholder="Av / Calle" required autocomplete="address-line1" enterkeyhint="next">
-                        <input type="text" id="edificio-casa" name="edificio-casa" placeholder="Casa / Apto" required autocomplete="address-line2" enterkeyhint="next">
+                        <input type="text" id="avenida-calle" name="avenida-calle" placeholder="Av / Calle" autocomplete="address-line1" enterkeyhint="next">
+                        <input type="text" id="edificio-casa" name="edificio-casa" placeholder="Casa / Apto" autocomplete="address-line2" enterkeyhint="next">
                     </div>
                     <input type="text" id="reference" name="reference" placeholder="Punto de referencia (Ej: Frente a...)" autocomplete="address-line3" enterkeyhint="next">
+                    <input type="text" id="maps" name="maps" placeholder="Enlace de Maps (Opcional)" autocomplete="url" enterkeyhint="done">
                     <div class="checkout-grid">
-                        <div class="input-with-location">
-                            <input type="text" id="maps" name="maps" placeholder="Enlace Maps" autocomplete="url" enterkeyhint="done">
-                            <button type="button" id="btn-get-location" title="Obtener ubicación">ENVIAR UBICACIÓN EXACTA</button>
-                        </div>
+                        <button type="button" id="btn-get-location" title="Obtener ubicación">
+                            <svg class="icon-location-pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span>Ubicación actual</span>
+                        </button>
                         <input type="text" id="additional-comments" name="additional-comments" placeholder="Comentarios" enterkeyhint="done">
                     </div>
 
@@ -2398,8 +2439,15 @@
                 const mapsLink = document.getElementById('maps').value.trim();
                 const comentarios = document.getElementById('additional-comments').value.trim();
 
-                if (!nombre || !avenida || !edificio) {
-                    return alert("Por favor, ingresa tu nombre, avenida/calle y edificio para poder procesar tu pedido.");
+                if (!nombre) {
+                    return alert("Por favor, ingresa tu nombre.");
+                }
+
+                // Lógica de validación condicional solicitada
+                if (mapsLink) {
+                    if (!referencia) return alert("Al usar ubicación por enlace, por favor indica también un punto de referencia.");
+                } else {
+                    if (!avenida || !edificio) return alert("Por favor, ingresa tu dirección (Avenida/Calle y Casa/Apto) o proporciona tu ubicación de Maps.");
                 }
 
                 let mensaje = `Hola, soy ${nombre}. Mi pedido es:\n\n`;
@@ -2418,9 +2466,14 @@
                     totalPedido += item.subtotal;
                 });
 
-                const direccionCompleta = `${avenida}, ${edificio}${referencia ? ` (Ref: ${referencia})` : ''}`;
+                let direccionCompleta = "";
+                if (avenida && edificio) direccionCompleta = `${avenida}, ${edificio}`;
+                if (referencia) {
+                    direccionCompleta += direccionCompleta ? ` (Ref: ${referencia})` : `Referencia: ${referencia}`;
+                }
+
                 mensaje += `\n*Total del pedido: $${totalPedido.toFixed(2)} REF*\n`;
-                mensaje += `Mi dirección es: ${direccionCompleta}`;
+                if (direccionCompleta) mensaje += `Mi dirección es: ${direccionCompleta}`;
 
                 if (mapsLink) {
                     mensaje += `\n📍 Ubicación exacta: ${mapsLink}`;
@@ -2523,8 +2576,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const btnLocation = document.getElementById('btn-get-location');
             const inputMaps = document.getElementById('maps');
+            const textSpan = btnLocation ? btnLocation.querySelector('span') : null;
 
-            if (btnLocation && inputMaps) {
+            if (btnLocation && inputMaps && textSpan) {
                 btnLocation.addEventListener('click', () => {
                     if (!navigator.geolocation) {
                         alert("Lo sentimos, tu navegador no soporta geolocalización.");
@@ -2532,8 +2586,8 @@
                     }
 
                     // Estado: Buscando
-                    const originalText = btnLocation.innerText;
-                    btnLocation.innerText = "BUSCANDO...";
+                    const originalText = textSpan.innerText;
+                    textSpan.innerText = "Buscando...";
                     btnLocation.classList.add('loading');
 
                     navigator.geolocation.getCurrentPosition(
@@ -2548,13 +2602,13 @@
                                 inputMaps.classList.remove('location-success');
                             }, 2000);
 
-                            btnLocation.innerText = "¡UBICADO!";
+                            textSpan.innerText = "¡Ubicado!";
                             btnLocation.classList.remove('loading');
                             
-                            setTimeout(() => { btnLocation.innerText = originalText; }, 2000);
+                            setTimeout(() => { textSpan.innerText = originalText; }, 2000);
                         },
                         (error) => {
-                            btnLocation.innerText = originalText;
+                            textSpan.innerText = originalText;
                             btnLocation.classList.remove('loading');
                             let mensajeError = "No pudimos obtener tu ubicación.";
                             if (error.code === 1) mensajeError = "Por favor, permite el acceso a tu ubicación para facilitarnos la entrega.";
