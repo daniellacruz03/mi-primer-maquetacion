@@ -28,9 +28,10 @@
         }
 
         section {
-            scroll-margin-top: 20px;
-            content-visibility: auto;
-            contain-intrinsic-size: 1px 500px;
+            scroll-margin-top: 30px;
+            margin-top: 15px !important;
+            position: relative;
+            clear: both;
         }
 
         .contenedor-logo {
@@ -330,10 +331,10 @@
 
         .menu-container {
             background: rgba(10, 10, 10, 0.85);
-            padding: 30px 30px 400px;
+            padding: 10px 30px 400px;
             border-radius: 50px;
             backdrop-filter: blur(8px);
-            margin: 20px auto;
+            margin: 0 auto;
             max-width: 900px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             opacity: 0;
@@ -343,6 +344,18 @@
             z-index: 10;
             overflow: hidden;
             filter: blur(8px);
+        }
+
+        .menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .titulo-principal {
+            font-size: 2.2rem;
         }
 
         .menu-container::before {
@@ -395,6 +408,10 @@
             transition: transform 0.28s ease;
         }
 
+        .item-desc {
+            display: none !important;
+        }
+
         .item-img-bg {
             display: none;
             position: absolute;
@@ -415,11 +432,13 @@
         }
 
         .item-name, .seccion-titulo, .titulo-principal {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
         }
 
         .seccion-titulo {
             color: #ffffff !important;
+            margin-top: 10px;
+            margin-bottom: 12px;
         }
 
         .menu-item .item-name {
@@ -501,15 +520,28 @@
         }
 
         #cart-sidebar {
-            background: rgba(10, 10, 10, 0.85) !important;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-top-left-radius: 26px;
-            overflow: hidden;
+            background: #0a0a0a !important;
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            border-radius: 0 !important;
+            z-index: 7000 !important;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            overflow-y: auto !important;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        #cart-sidebar.cart-closed {
+            transform: translateX(100vw) !important;
         }
 
         .cart-header {
             position: relative;
+            padding: 12px 20px !important;
             border-bottom: none !important;
         }
 
@@ -543,12 +575,33 @@
             text-shadow: 0 2px 12px rgba(255, 255, 255, 0.18);
         }
 
+        #checkout-view {
+            padding: 10px 20px 20px !important;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .back-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
         .cart-item-row {
+            padding: 12px 16px !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
         }
 
         .cart-item-info h4 {
             color: #f3f3f3 !important;
+            margin: 0 0 4px 0 !important;
         }
 
         .cart-item-extras {
@@ -587,6 +640,7 @@
             font-weight: 800 !important;
             letter-spacing: 0.3px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+            margin-bottom: 12px !important;
         }
 
         .modal-description {
@@ -596,7 +650,7 @@
         }
 
         .search-container {
-            margin-bottom: 25px;
+            margin-bottom: 5px;
             position: relative;
             padding: 0 5px;
         }
@@ -669,7 +723,28 @@
             color: #ffffff !important;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1rem !important;
+        }
+
+        #btn-back-to-cart {
+            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
+            border: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+            color: #fff !important;
+            padding: 12px 20px !important;
+            border-radius: 12px !important;
+            font-size: 1rem !important;
+            font-weight: 700 !important;
+            margin-bottom: 20px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            width: 100% !important;
+            font-family: inherit;
         }
 
         .checkout-form input {
@@ -677,13 +752,67 @@
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             color: #ffffff !important;
             border-radius: 8px !important;
-            padding: 12px 15px !important;
-            margin-bottom: 12px !important;
+            padding: 10px 14px !important;
+            margin-bottom: 8px !important;
             width: 100%;
             outline: none;
             font-size: 16px !important; /* Evita zoom automático en iOS */
             font-family: inherit;
             -webkit-appearance: none;
+        }
+
+        /* Estilos para el botón de geolocalización */
+        .input-with-location {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-with-location input {
+            padding-right: 145px !important;
+        }
+
+        #btn-get-location {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            bottom: 5px;
+            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
+            border: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 6px;
+            color: #fff;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+        }
+
+        #btn-get-location:active { transform: scale(0.9); }
+        #btn-get-location.loading { opacity: 0.6; pointer-events: none; }
+
+        /* Animación de éxito para el input de ubicación */
+        .location-success {
+            border-color: #28a745 !important;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.4) !important;
+            background: rgba(40, 167, 69, 0.1) !important;
+            transition: all 0.5s ease;
+        }
+
+        .btn-checkout-final {
+            background: linear-gradient(180deg, #1b5e20 0%, #28a745 100%) !important;
+            border: none !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+            padding: 14px !important;
+            border-radius: 12px !important;
+            margin-top: 40px !important;
+            width: 100%;
+            margin-bottom: 20px !important;
         }
 
         .checkout-form input::placeholder {
@@ -696,6 +825,54 @@
             overflow: hidden;
             position: relative;
             background: #000;
+        }
+
+        /* Barra de Categorías Horizontal */
+        .category-bar {
+            display: flex;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden; 
+            height: auto;
+            background: rgba(10, 10, 10, 0.98) !important;
+            touch-action: pan-x; /* Bloquea el scroll vertical solo en esta barra */
+            gap: 12px;
+            padding: 15px 5px 25px 5px; /* Aumentado el padding inferior para evitar cortes */
+            margin-bottom: 10px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+            position: relative;
+            z-index: 30;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-bar::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .category-btn {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centrado horizontal del contenido del botón */
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: rgba(255, 255, 255, 0.75) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            cursor: pointer;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .category-btn.active {
+            background: #b91c1c !important;
+            color: #ffffff !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4);
         }
 
         #modal-img {
@@ -760,7 +937,7 @@
                 height: 100vh !important;
                 min-height: 100vh !important;
                 margin: 0 !important;
-                padding: 20px 15px 60vh !important;
+                padding: 10px 15px 60vh !important;
                 border-radius: 0 !important;
                 backdrop-filter: none !important;
                 background: rgba(10, 10, 10, 0.98) !important;
@@ -769,23 +946,13 @@
                 flex-direction: column;
             }
 
-            #cart-sidebar {
-                width: 100% !important;
-                height: 100vh !important;
-                min-height: 100vh !important;
-                border-radius: 0 !important;
-                top: 0 !important;
-                right: 0 !important;
-                overflow-y: auto !important;
-            }
-
             .menu-header {
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
-                justify-content: center !important;
+                justify-content: flex-start !important;
                 gap: 12px !important;
-                padding: 0 0 15px 0 !important;
+                padding: 5px 0 15px 0 !important;
             }
 
             .menu-header-logo {
@@ -794,7 +961,7 @@
             }
 
             .titulo-principal {
-                font-size: 1.1rem !important;
+                font-size: 1.4rem !important;
                 letter-spacing: 2px !important;
                 margin: 0 !important;
             }
@@ -845,17 +1012,14 @@
                 font-size: 1.15rem !important; 
                 font-weight: 800 !important;
                 color: #ffffff !important;
-            }
-
-            section:not(#bebidas) .item-desc { 
-                font-size: 0.75rem !important; 
-                line-height: 1.3 !important;
-                margin-top: 2px !important;
-                color: rgba(255, 255, 255, 0.9) !important;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
+                background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
+                padding: 6px 20px !important;
+                border-radius: 999px !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.45) !important;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+                display: inline-block !important;
+                text-shadow: none !important;
+                margin-top: 5px !important;
             }
 
             section:not(#bebidas) .item-price-wrapper {
@@ -876,7 +1040,7 @@
                 justify-content: space-between !important;
                 padding: 12px 18px !important;
                 height: auto !important;
-                margin-bottom: 8px !important;
+                margin-bottom: 5px !important;
                 border-radius: 20px !important;
                 background: rgba(25, 25, 25, 0.6) !important;
                 backdrop-filter: none !important;
@@ -1014,6 +1178,30 @@
             <input type="text" id="menu-search" class="search-input" placeholder="¿Qué se te antoja hoy? Buscar..." aria-label="Buscar productos">
         </div>
         
+        <div class="category-bar">
+            <button class="category-btn active" data-category="all">Todos</button>
+            <button class="category-btn" data-category="hamburguesas">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                Hamburguesas
+            </button>
+            <button class="category-btn" data-category="ensaladas">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 7a7 7 0 0 1-10 11Z"/><path d="M7 12.1a3 3 0 0 1 5-2.4"/></svg>
+                Ensaladas
+            </button>
+            <button class="category-btn" data-category="kids">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                Menú Kids
+            </button>
+            <button class="category-btn" data-category="servicios">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12.5" cy="8.5" r="2.5"/><path d="M12.5 2a6.5 6.5 0 0 0-6.22 4.6c-1.1 3.13-.7 6.29.7 10.2a2.1 2.1 0 0 0 1.72 1.4L11 19l5.14-.9c.9-.2 1.9-.4 2.8-.7.3-.1.6-.2.9-.3 1.6-.3 2.8-1.5 3.1-3 .2-.3.4-.6.5-1 .5-2.1.5-4.3 0-6.5-.5-4.5-3.9-7.6-10.9-4.6Z"/><path d="m19 10-1.5 1.5"/><path d="m20.2 13-1.7 1.7"/><path d="m17.5 7.1 1.7 1.7"/></svg>
+                Servicios
+            </button>
+            <button class="category-btn" data-category="bebidas">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2Z"/><path d="M5 5h14"/><path d="M12 5V2"/><path d="m9 2 3 3"/></svg>
+                Bebidas
+            </button>
+        </div>
+
         <section id="hamburguesas">
             <h2 class="seccion-titulo">Hamburguesas</h2>
             
@@ -1396,11 +1584,18 @@
                 <form id="form-delivery" class="checkout-form">
                     <h3 class="checkout-title">Datos de Entrega</h3>
                     <input type="text" id="full-name" name="full-name" placeholder="Tu Nombre" required autocomplete="name" enterkeyhint="next">
-                    <input type="text" id="avenida-calle" name="avenida-calle" placeholder="Avenida / Calle" required autocomplete="address-line1" enterkeyhint="next">
-                    <input type="text" id="edificio-casa" name="edificio-casa" placeholder="Edificio / Casa / Apto" required autocomplete="address-line2" enterkeyhint="next">
+                    <div class="checkout-grid">
+                        <input type="text" id="avenida-calle" name="avenida-calle" placeholder="Av / Calle" required autocomplete="address-line1" enterkeyhint="next">
+                        <input type="text" id="edificio-casa" name="edificio-casa" placeholder="Casa / Apto" required autocomplete="address-line2" enterkeyhint="next">
+                    </div>
                     <input type="text" id="reference" name="reference" placeholder="Punto de referencia (Ej: Frente a...)" autocomplete="address-line3" enterkeyhint="next">
-                    <input type="text" id="maps" name="maps" placeholder="Enlace de Google Maps (Opcional)" autocomplete="url" enterkeyhint="done">
-                    <input type="text" id="additional-comments" name="additional-comments" placeholder="Comentarios adicionales (Opcional)" enterkeyhint="done">
+                    <div class="checkout-grid">
+                        <div class="input-with-location">
+                            <input type="text" id="maps" name="maps" placeholder="Enlace Maps" autocomplete="url" enterkeyhint="done">
+                            <button type="button" id="btn-get-location" title="Obtener ubicación">ENVIAR UBICACIÓN EXACTA</button>
+                        </div>
+                        <input type="text" id="additional-comments" name="additional-comments" placeholder="Comentarios" enterkeyhint="done">
+                    </div>
 
                     <button type="submit" id="btn-whatsapp-final" class="btn-checkout-final">
                         <svg viewBox="0 0 448 512" class="whatsapp-icon">
@@ -1438,9 +1633,9 @@
                 <div class="modal-extras-container">
                     <h3 class="extras-title">Personaliza tu orden</h3>
                     <div class="extras-grid">
-                        <div class="extra-card" data-extra-price="1.20">
+                        <div class="extra-card" data-extra-price="2.50">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Pepinillos</span> <span class="extra-cost">+$1.20</span>
+                                <span class="extra-name">Extra Pollo</span> <span class="extra-cost">+$2.50</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -1448,19 +1643,9 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="3.00">
+                        <div class="extra-card" data-extra-price="2.00">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Pollo</span> <span class="extra-cost">+$3.00</span>
-                            </div>
-                            <div class="extra-counter">
-                                <button class="extra-qty-btn minus">-</button>
-                                <span class="extra-qty-val">0</span>
-                                <button class="extra-qty-btn plus">+</button>
-                            </div>
-                        </div>
-                        <div class="extra-card" data-extra-price="1.20">
-                            <div class="extra-info-text">
-                                <span class="extra-name">Extra Carne</span> <span class="extra-cost">+$1.20</span>
+                                <span class="extra-name">Extra Carne</span> <span class="extra-cost">+$2.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -1648,9 +1833,9 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="1.00">
+                        <div class="extra-card" data-extra-price="1.20">
                             <div class="extra-info-text">
-                                <span class="extra-name">Extra Salsa de la Casa</span> <span class="extra-cost">+$1.00</span>
+                                <span class="extra-name">Extra Salsa de la Casa</span> <span class="extra-cost">+$1.20</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -1793,6 +1978,31 @@
                     section.classList.toggle('hidden-search', !hasVisibleItems);
                 });
             });
+
+            // Lógica de Filtro por Categorías
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Actualizar estado visual de los botones
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const category = btn.dataset.category;
+                    const sections = document.querySelectorAll('section');
+                    
+                    searchInput.value = ''; // Limpiar barra de búsqueda al filtrar por categoría
+                    
+                    sections.forEach(section => {
+                        if (category === 'all' || section.id === category) {
+                            section.classList.remove('hidden-search');
+                            section.querySelectorAll('.menu-item').forEach(item => item.classList.remove('hidden-search'));
+                        } else {
+                            section.classList.add('hidden-search');
+                        }
+                    });
+                });
+            });
+
             const logoCarga = document.getElementById('preloader');
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
@@ -2122,7 +2332,21 @@
                 });
                 
                 cerrarFunc();
-                abrirCarritoConFeedback();
+
+                if (esHamburguesa) {
+                    // Si es hamburguesa, lo llevamos a bebidas para incentivar la venta adicional
+                    setTimeout(() => {
+                        const seccionBebidas = document.getElementById('bebidas');
+                        if (seccionBebidas) {
+                            seccionBebidas.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                        // Pulsamos el botón del carrito para dar feedback visual
+                        cartBtn.classList.add('pulse-animation');
+                        setTimeout(() => cartBtn.classList.remove('pulse-animation'), 1000);
+                    }, 400); // Esperamos a que cierre el modal
+                } else {
+                    abrirCarritoConFeedback();
+                }
             };
 
             btnAddOrderMain.addEventListener('click', agregarAlPedido);
@@ -2287,6 +2511,53 @@
             };
 
             precargarImagenes();
+        });
+
+        // Lógica de Geolocalización
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnLocation = document.getElementById('btn-get-location');
+            const inputMaps = document.getElementById('maps');
+
+            if (btnLocation && inputMaps) {
+                btnLocation.addEventListener('click', () => {
+                    if (!navigator.geolocation) {
+                        alert("Lo sentimos, tu navegador no soporta geolocalización.");
+                        return;
+                    }
+
+                    // Estado: Buscando
+                    const originalText = btnLocation.innerText;
+                    btnLocation.innerText = "BUSCANDO...";
+                    btnLocation.classList.add('loading');
+
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            const googleMapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                            
+                            inputMaps.value = googleMapsUrl;
+                            inputMaps.classList.add('location-success');
+                            setTimeout(() => {
+                                inputMaps.classList.remove('location-success');
+                            }, 2000);
+
+                            btnLocation.innerText = "¡UBICADO!";
+                            btnLocation.classList.remove('loading');
+                            
+                            setTimeout(() => { btnLocation.innerText = originalText; }, 2000);
+                        },
+                        (error) => {
+                            btnLocation.innerText = originalText;
+                            btnLocation.classList.remove('loading');
+                            let mensajeError = "No pudimos obtener tu ubicación.";
+                            if (error.code === 1) mensajeError = "Por favor, permite el acceso a tu ubicación para facilitarnos la entrega.";
+                            alert(mensajeError);
+                        },
+                        { enableHighAccuracy: true, timeout: 10000 }
+                    );
+                });
+            }
         });
     </script>
 </body>
