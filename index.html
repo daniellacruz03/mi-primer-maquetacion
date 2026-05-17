@@ -1996,10 +1996,8 @@
             const preloaderProgress = document.getElementById('preloader-progress');
             let width = 0;
             const interval = setInterval(() => {
-                if (width < 90) {
                 if (width < 95) {
                     width += Math.random() * 15; // Progreso más rápido
-                    if (preloaderProgress) preloaderProgress.style.width = width + '%';
                     if (preloaderProgress) preloaderProgress.style.width = Math.min(width, 95) + '%';
                 }
             }, 100);
