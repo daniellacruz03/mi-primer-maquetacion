@@ -34,7 +34,7 @@
 
         section {
             scroll-margin-top: 30px;
-            margin-top: 15px !important;
+            margin-top: 5px !important;
             position: relative;
             clear: both;
         }
@@ -335,8 +335,13 @@
         }
 
         .menu-container {
-            background: rgba(10, 10, 10, 0.85);
-            padding: 10px 30px 400px;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 100% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 0% 100%, rgba(255, 0, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(255, 0, 0, 0.1) 0%, transparent 40%),
+                rgba(10, 10, 10, 0.98);
+            padding: 0 30px 400px;
             border-radius: 50px;
             backdrop-filter: blur(8px);
             margin: 0 auto;
@@ -347,8 +352,22 @@
             transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
             position: relative;
             z-index: 10;
-            overflow: hidden;
             filter: blur(8px);
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 100% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
+                rgba(10, 10, 10, 0.98);
+            padding-top: 45px; /* Aumentamos el padding superior para dar espacio al contenido */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 50px 50px 0 0;
+            margin-top: -1px;
         }
 
         .menu-header {
@@ -356,11 +375,7 @@
             align-items: center;
             justify-content: flex-start;
             gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .titulo-principal {
-            font-size: 2.2rem;
+            margin-bottom: 4px;
         }
 
         .menu-container::before {
@@ -370,7 +385,7 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, rgba(255, 140, 0, 0) 0%, rgba(255, 140, 0, 0.55) 50%, rgba(255, 140, 0, 0) 100%);
+            background: linear-gradient(90deg, rgba(255, 0, 0, 0) 0%, rgba(255, 0, 0, 0.6) 50%, rgba(255, 0, 0, 0) 100%);
             pointer-events: none;
         }
 
@@ -380,8 +395,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 24px;
-            background: linear-gradient(180deg, rgba(255, 140, 0, 0.08) 0%, rgba(255, 140, 0, 0) 100%);
+            height: 12px;
+            background: linear-gradient(180deg, rgba(255, 0, 0, 0.12) 0%, rgba(255, 0, 0, 0) 100%);
             pointer-events: none;
         }
 
@@ -401,24 +416,24 @@
             50% { transform: scale(1.05); }
         }
 
-        .menu-item {
-            border-radius: 36px !important;
-            background: rgba(18, 18, 18, 0.55) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            margin-bottom: 15px !important;
-            padding: 18px 20px !important;
-            position: relative;
-            transition: transform 0.28s ease;
+        /* Estilo de Tarjeta Global (PC y Móvil) */
+        section:not(#bebidas) .menu-item {
+            height: 300px; /* Aumentamos la altura para que la hamburguesa no se vea plana */
+            padding: 0 !important;
+            margin-bottom: 20px !important;
+            border-radius: 30px !important;
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-end !important;
+            position: relative !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
+            transition: transform 0.3s ease;
         }
 
-        .item-desc {
-            display: none !important;
-        }
-
-        .item-img-bg {
-            display: none;
+        section:not(#bebidas) .item-img-bg {
+            display: block !important;
             position: absolute;
             inset: 0;
             width: 100%;
@@ -428,6 +443,27 @@
             z-index: 1;
         }
 
+        /* Ajustes de encuadre para que las fotos se vean más arriba */
+        .ajuste-subir, 
+        .ajuste-baby, 
+        .ajuste-crispy {
+            object-position: center 40% !important; /* Bajamos un poco para no aplastar el pan superior */
+        }
+
+        .ajuste-alejar {
+            object-fit: cover !important;
+        }
+
+        section:not(#bebidas) .menu-item::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.85) 90%) !important;
+            z-index: 2;
+        }
+
+        .item-desc { display: none !important; }
+
         .menu-item::after {
             display: none;
         }
@@ -436,7 +472,14 @@
             transform: translateX(5px);
         }
 
-        .item-name, .seccion-titulo, .titulo-principal {
+        .item-name {
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.9) !important;
+            font-size: 1.2rem !important;
+            font-weight: 900 !important;
+            text-transform: uppercase;
+        }
+
+        .seccion-titulo {
             text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
         }
 
@@ -475,21 +518,47 @@
             background: #ff0000 !important;
         }
 
-        .item-price-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 104px;
-            padding: 8px 16px 7px;
-            margin-right: 10px;
+        /* Posicionamiento de Info y Precio en Tarjeta */
+        section:not(#bebidas) .item-info {
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            z-index: 3;
+            padding: 20px !important;
+            width: 100% !important;
+            display: flex !important;
+            flex-direction: column-reverse !important;
+            align-items: flex-start !important;
+        }
+
+        section:not(#bebidas) .item-price-wrapper {
+            position: absolute !important;
+            bottom: 15px !important;
+            right: 15px !important;
+            z-index: 4;
+            min-width: 90px;
+            padding: 6px 14px;
             border-radius: 999px;
             background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%);
             border-top: 1px solid rgba(255,255,255,0.3);
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transform: scale(1);
-            transition: transform 0.25s ease, filter 0.25s ease;
-            transform-origin: center right;
+        }
+
+        /* Grid para PC */
+        @media (min-width: 769px) {
+            .menu-container {
+                height: 90vh; /* El contenedor ocupa casi toda la pantalla */
+                overflow-y: auto; /* Permite el scroll solo dentro del menú */
+                position: sticky; /* Se queda pegado a la pantalla */
+                top: 5vh; /* Se separa un poco del borde superior */
+                padding-bottom: 80px !important; /* Reducimos el espacio final exagerado */
+            }
+            section:not(#bebidas) {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            .seccion-titulo { grid-column: span 2; }
         }
 
         .item-price {
@@ -664,19 +733,31 @@
         }
 
         .search-container {
-            margin-bottom: 5px;
+            flex: 1;
+            max-width: 200px;
             position: relative;
-            padding: 0 5px;
+            margin-bottom: 0;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
         }
 
         .search-input {
             width: 100%;
             background: rgba(255, 255, 255, 0.05) !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-radius: 20px !important;
-            padding: 14px 20px !important;
+            border-radius: 12px !important;
+            padding: 8px 12px 8px 35px !important;
             color: #fff !important;
-            font-size: 0.95rem !important;
+            font-size: 0.85rem !important;
             outline: none !important;
             transition: all 0.3s ease !important;
         }
@@ -907,16 +988,15 @@
             overflow-x: auto;
             overflow-y: hidden; 
             height: auto;
-            background: rgba(10, 10, 10, 0.98) !important;
             touch-action: pan-x; /* Bloquea el scroll vertical solo en esta barra */
             gap: 12px;
-            padding: 15px 5px 25px 5px; /* Aumentado el padding inferior para evitar cortes */
-            margin-bottom: 10px;
+            padding: 8px 5px 15px 5px;
+            margin-bottom: 0px;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* IE/Edge */
-            position: relative;
-            z-index: 30;
             -webkit-overflow-scrolling: touch;
+            background: transparent !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .category-bar::-webkit-scrollbar {
@@ -954,7 +1034,7 @@
             display: block !important;
             object-fit: cover !important;
             object-position: center 85%;
-            transform: scale(1.3);
+            transform: scale(1.15); /* Reducimos el zoom para que se vea más aire alrededor */
             filter: none;
             transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
@@ -966,7 +1046,7 @@
 
         #modal-img.modal-img-bottom-aligned {
             object-position: center 92% !important;
-            transform: scale(1.3) translateY(-5%) !important;
+            transform: scale(1.15) translateY(-2%) !important;
         }
 
         #modal-img.modal-img-junior-crispy-lower {
@@ -1016,7 +1096,7 @@
                 height: 100vh !important;
                 min-height: 100vh !important;
                 margin: 0 !important;
-                padding: 10px 15px 60vh !important;
+                padding: 0 15px 60vh !important;
                 border-radius: 0 !important;
                 backdrop-filter: none !important;
                 background: rgba(10, 10, 10, 0.98) !important;
@@ -1025,13 +1105,23 @@
                 flex-direction: column;
             }
 
+            .sticky-nav {
+                padding-top: 30px; /* Aumentamos el padding superior para móviles */
+                margin: 0 -15px;
+                padding-left: 15px;
+                padding-right: 15px;
+                border-radius: 0;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(10px);
+            }
+
             .menu-header {
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
                 justify-content: flex-start !important;
                 gap: 12px !important;
-                padding: 5px 0 15px 0 !important;
+                padding: 0 0 4px 0 !important;
             }
 
             .menu-header-logo {
@@ -1039,104 +1129,8 @@
                 height: auto !important;
             }
 
-            .titulo-principal {
-                font-size: 1.4rem !important;
-                letter-spacing: 2px !important;
-                margin: 0 !important;
-            }
-
-            section:not(#bebidas) .menu-item {
-                height: 220px !important;
-                padding: 0 !important;
-                margin-bottom: 15px !important;
-                border-radius: 25px !important;
-                overflow: hidden !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: flex-end !important;
-                position: relative !important;
-                border: 1px solid rgba(255, 255, 255, 0.1) !important;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-            }
-
             section:not(#bebidas) .item-img-bg {
-                display: block !important;
                 object-position: center 50% !important;
-            }
-
-            section:not(#bebidas) .ajuste-crispy {
-                object-position: center 70% !important;
-            }
-
-            section:not(#bebidas) .ajuste-baby {
-                object-position: center 90% !important;
-            }
-
-            section:not(#bebidas) .ajuste-alejar {
-                object-fit: cover !important;
-            }
-
-            section:not(#bebidas) .ajuste-baby {
-                object-position: center 90% !important;
-            }
-
-            section:not(#bebidas) .ajuste-alejar {
-                object-fit: cover !important;
-            }
-
-            section:not(#bebidas) .ajuste-subir {
-                object-position: center 80% !important;
-            }
-
-            section:not(#bebidas) .menu-item::after {
-                display: block !important;
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.85) 90%) !important;
-                z-index: 2;
-            }
-
-            section:not(#bebidas) .item-info {
-                position: absolute !important;
-                bottom: 0 !important;
-                left: 0 !important;
-                text-align: left !important;
-                z-index: 3;
-                padding: 15px !important;
-                width: 100% !important;
-                margin: 0 !important;
-                display: flex !important;
-                flex-direction: column-reverse !important;
-                align-items: flex-start !important;
-            }
-
-            section:not(#bebidas) .item-name { 
-                font-size: 1.05rem !important; 
-                font-weight: 900 !important;
-                color: #ffffff !important;
-                background: transparent !important;
-                padding: 0 !important;
-                border: none !important;
-                box-shadow: none !important;
-                display: block !important;
-                text-shadow: 2px 2px 10px rgba(0,0,0,0.9) !important;
-                margin-top: 0 !important;
-                text-transform: uppercase;
-            }
-
-            section:not(#bebidas) .item-price-wrapper {
-                position: absolute !important;
-                bottom: 12px !important;
-                right: 12px !important;
-                z-index: 4;
-                min-width: 82px !important;
-                padding: 4px 10px !important;
-                margin-right: 0 !important;
-                transform: scale(0.85);
-                transform-origin: right center;
             }
 
             #bebidas .menu-item {
@@ -1274,19 +1268,21 @@
     </div>
 
     <main id="main-menu" class="menu-container">
-        <div class="menu-header">
-            <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo" width="45" height="45">
-            <h1 class="titulo-principal">NUESTRO MENÚ</h1>
-        </div>
-        
-        <div class="search-container">
-            <input type="text" id="menu-search" class="search-input" placeholder="¿Qué se te antoja hoy? Buscar..." aria-label="Buscar productos">
-        </div>
-        
-        <div class="category-bar">
-            <button class="category-btn active" data-category="all">Todos</button>
+        <div class="sticky-nav">
+            <div class="menu-header">
+                <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo" width="45" height="45">
+                <div class="search-container">
+                    <div class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </div>
+                    <input type="text" id="menu-search" class="search-input" placeholder="Buscar..." aria-label="Buscar productos">
+                </div>
+            </div>
+            
+            <div class="category-bar">
+                <button class="category-btn active" data-category="all">Todos</button>
             <button class="category-btn" data-category="hamburguesas">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11a6 6 0 0 1 12 0H6Z"/><path d="M3 11h18"/><path d="M3 15h18"/><path d="M6 15a3 3 0 0 0 12 0H6Z"/><path d="M9 8h.01"/><path d="M12 7h.01"/><path d="M15 8h.01"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18"/><path d="M3 15h18"/><path d="M12 7c-4.97 0-9 2.5-9 6"/><path d="M12 7c4.97 0 9 2.5 9 6"/><path d="M20 15c0 2.2-3.58 4-8 4s-8-1.8-8-4"/></svg>
                 Hamburguesas
             </button>
             <button class="category-btn" data-category="ensaladas">
@@ -1298,13 +1294,14 @@
                 Menú Kids
             </button>
             <button class="category-btn" data-category="servicios">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12.5" cy="8.5" r="2.5"/><path d="M12.5 2a6.5 6.5 0 0 0-6.22 4.6c-1.1 3.13-.7 6.29.7 10.2a2.1 2.1 0 0 0 1.72 1.4L11 19l5.14-.9c.9-.2 1.9-.4 2.8-.7.3-.1.6-.2.9-.3 1.6-.3 2.8-1.5 3.1-3 .2-.3.4-.6.5-1 .5-2.1.5-4.3 0-6.5-.5-4.5-3.9-7.6-10.9-4.6Z"/><path d="m19 10-1.5 1.5"/><path d="m20.2 13-1.7 1.7"/><path d="m17.5 7.1 1.7 1.7"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10V2"/><path d="M9 10V5"/><path d="M13 10V3"/><path d="M17 10V6"/><path d="M2 10h20l-2 12H4L2 10Z"/></svg>
                 Servicios
             </button>
             <button class="category-btn" data-category="bebidas">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2Z"/><path d="M5 5h14"/><path d="M12 5V2"/><path d="m9 2 3 3"/></svg>
                 Bebidas
             </button>
+        </div>
         </div>
 
         <section id="hamburguesas">
@@ -1337,14 +1334,13 @@
             </div>
 
             <div class="menu-item">
-                <img src="baby crispy.webp" class="item-img-bg ajuste-baby" alt="Baby Crispy" loading="lazy" width="400" height="220">
+                <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy" loading="lazy" width="400" height="220">
                 <div class="item-info">
-                    <span class="badge-new">NUEVA</span>
-                    <span class="item-name">Baby Crispy</span>
-                    <p class="item-desc">Pan de papa, pollo crispy, salsa de la casa, servicio de papas fritas.</p>
+                    <span class="item-name">Junior Crispy</span>
+                    <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper" data-img-src="baby crispy.webp">
-                    <span class="item-price">$8,99</span>
+                <div class="item-price-wrapper" data-img-src="junior crispy.webp">
+                    <span class="item-price">$10,99</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
@@ -1362,13 +1358,14 @@
             </div>
 
             <div class="menu-item">
-                <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy" loading="lazy" width="400" height="220">
+                <img src="baby crispy.webp" class="item-img-bg ajuste-baby" alt="Baby Crispy" loading="lazy" width="400" height="220">
                 <div class="item-info">
-                    <span class="item-name">Junior Crispy</span>
-                    <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    <span class="badge-new">NUEVA</span>
+                    <span class="item-name">Baby Crispy</span>
+                    <p class="item-desc">Pan de papa, pollo crispy, salsa de la casa, servicio de papas fritas.</p>
                 </div>
-                <div class="item-price-wrapper" data-img-src="junior crispy.webp">
-                    <span class="item-price">$10,99</span>
+                <div class="item-price-wrapper" data-img-src="baby crispy.webp">
+                    <span class="item-price">$8,99</span>
                     <span class="item-ref">REF</span>
                 </div>
             </div>
@@ -2027,6 +2024,19 @@
         </div>
     </div>
 
+    <div id="modal-upsell-drinks" class="modal">
+        <div class="modal-content upsell-content">
+            <div class="modal-details" style="text-align: center;">
+                <h2 class="modal-title">¿Deseas añadir una bebida?</h2>
+                <p class="modal-description">¡Acompaña tu hamburguesa con una bebida bien fría!</p>
+                <div class="upsell-buttons">
+                    <button id="btn-upsell-show-drinks" class="btn-add-order" style="width: 100%;">Muéstrame</button>
+                    <button id="btn-upsell-continue" class="btn-back-to-cart btn-large-cancel" style="margin-top: 10px; width: 100%;">Seguir con la compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-closed" class="modal" style="z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
             <div class="modal-details">
@@ -2185,6 +2195,9 @@
             const modalReminder = document.getElementById('modal-reminder');
             const btnReminderOk = document.getElementById('btn-reminder-ok');
             const btnNewOrder = document.getElementById('btn-new-order');
+            const modalUpsellDrinks = document.getElementById('modal-upsell-drinks');
+            const btnUpsellShowDrinks = document.getElementById('btn-upsell-show-drinks');
+            const btnUpsellContinue = document.getElementById('btn-upsell-continue');
             const btnAddOrderMain = modal.querySelector('.btn-add-order');
             const modalClosed = document.getElementById('modal-closed');
             const btnPreOrder = document.getElementById('btn-pre-order');
@@ -2285,7 +2298,12 @@
                 menu.style.overflow = 'hidden';
             });
             closeCart.addEventListener('click', () => {
-                if (!cartSidebar.classList.contains('cart-closed')) {
+                // Cerramos directamente la interfaz para asegurar respuesta inmediata
+                cartSidebar.classList.add('cart-closed');
+                document.body.style.overflow = 'auto';
+                menu.style.overflow = '';
+                // Si hay un estado en el historial, volvemos atrás para sincronizar
+                if (window.history.state && window.history.state.ui === 'cart') {
                     history.back();
                 }
             });
@@ -2489,16 +2507,12 @@
                 cerrarFunc();
 
                 if (esHamburguesa) {
-                    // Si es hamburguesa, lo llevamos a bebidas para incentivar la venta adicional
                     setTimeout(() => {
-                        const seccionBebidas = document.getElementById('bebidas');
-                        if (seccionBebidas) {
-                            seccionBebidas.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                        // Pulsamos el botón del carrito para dar feedback visual
-                        cartBtn.classList.add('pulse-animation');
-                        setTimeout(() => cartBtn.classList.remove('pulse-animation'), 1000);
-                    }, 400); // Esperamos a que cierre el modal
+                        modalUpsellDrinks.classList.add('active');
+                        history.pushState({ ui: 'modal-upsell' }, "");
+                        document.body.style.overflow = 'hidden';
+                        menu.style.overflow = 'hidden';
+                    }, 400);
                 } else {
                     abrirCarritoConFeedback();
                 }
@@ -2598,7 +2612,7 @@
                 const cartOpen = !cartSidebar.classList.contains('cart-closed');
 
                 if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
-                    modal.classList.remove('active');
+                    if (activeModal) activeModal.classList.remove('active');
                     cartSidebar.classList.add('cart-closed');
                     document.body.style.overflow = 'auto';
                     menu.style.overflow = '';
@@ -2651,7 +2665,24 @@
             }
             
             window.addEventListener('click', (e) => {
-                if (e.target === modal) cerrarFunc();
+                if (e.target === modal || e.target === modalUpsellDrinks) cerrarFunc();
+            });
+
+            btnUpsellShowDrinks.addEventListener('click', () => {
+                history.back(); // Cierra el modal de upsell
+                setTimeout(() => {
+                    const seccionBebidas = document.getElementById('bebidas');
+                    if (seccionBebidas) {
+                        seccionBebidas.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 400);
+            });
+
+            btnUpsellContinue.addEventListener('click', () => {
+                history.back(); // Cierra el modal de upsell
+                setTimeout(() => {
+                    abrirCarritoConFeedback();
+                }, 400);
             });
 
             // Limpiar formulario al inicio
