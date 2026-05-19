@@ -1,19 +1,29 @@
-const CACHE_NAME = 'burger-house-v1';
+const CACHE_NAME = 'burger-house-v2';
+const ASSETS = [
+    './',
+    './index.html',
+    './style.css',
+    './logobh.webp',
+    './logobhapp.webp'
+];
 
 self.addEventListener('install', (event) => {
-    // Fuerza al SW a activarse inmediatamente
-    self.skipWaiting();
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(ASSETS);
+        })
+    );
+    self.skipWaiting(); 
 });
 
 self.addEventListener('activate', (event) => {
-    // Toma el control de las pestañas abiertas inmediatamente
     event.waitUntil(clients.claim());
 });
 
 self.addEventListener('fetch', (event) => {
-    // Es vital que este evento responda algo (passthrough)
-    // para que Chrome valide la PWA para instalación nativa.
     event.respondWith(
-        fetch(event.request).catch(() => caches.match(event.request))
+        fetch(event.request).catch(() => {
+            return caches.match(event.request) || caches.match('./index.html');
+        })
     );
 });
