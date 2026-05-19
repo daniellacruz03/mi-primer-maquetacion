@@ -2949,76 +2949,79 @@
             const formDelivery = document.getElementById('form-delivery');
             if (formDelivery) formDelivery.reset();
         });
+    </script>
 
-        // Lógica de Instalación PWA
-        let deferredPrompt;
+    <script>
+        // LÓGICA DE INSTALACIÓN PWA UNIFICADA
+        let deferredPrompt = null;
         const pwaBanner = document.getElementById('pwa-install-banner');
+        const persistentBanner = document.getElementById('persistent-install-banner');
         const btnInstalarPWA = document.getElementById('btn-pwa-instalar');
         const btnNavegadorPWA = document.getElementById('btn-pwa-navegador');
-        const pwaText = pwaBanner.querySelector('.pwa-text');
 
-        // Detectar iOS para dar soporte a Safari (que no usa beforeinstallprompt)
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-        // Si es iOS y no está instalada, mostramos instrucciones manuales
-        if (isIOS && !isStandalone && !localStorage.getItem('pwa_rejected')) {
-            pwaBanner.style.display = 'flex';
-            pwaText.innerHTML = '¡Pide más rápido! Pulsa el icono de <strong>Compartir</strong> y luego <strong>"Añadir a pantalla de inicio"</strong>.';
-            btnInstalarPWA.style.display = 'none';
-        }
-
+        // 1. Capturar el evento oficial de Chrome/Android
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Evitar que Chrome muestre el prompt automático
             e.preventDefault();
             deferredPrompt = e;
-
-            // Mostrar el banner solo si no ha sido rechazado previamente
-            if (!localStorage.getItem('pwa_rejected')) {
+            
+            // Mostrar banners si no han sido rechazados
+            if (!localStorage.getItem('pwa_rejected') && !isStandalone) {
                 pwaBanner.style.display = 'flex';
             }
-        });
-
-        btnInstalarPWA.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                pwaBanner.style.display = 'none';
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to install: ${outcome}`);
-                deferredPrompt = null;
+            if (persistentBanner && !isStandalone) {
+                persistentBanner.style.display = 'flex';
             }
         });
+
+        // 2. Función de ejecución del prompt oficial
+        async function ejecutarInstalacion() {
+            if (!deferredPrompt) {
+                if (isIOS) {
+                    alert('En iOS: Pulsa el icono de "Compartir" y luego "Añadir a pantalla de inicio".');
+                } else {
+                    alert('Para instalar, abre el menú del navegador y selecciona "Instalar aplicación".');
+                }
+                return;
+            }
+
+            // Ejecutar el prompt nativo
+            deferredPrompt.prompt();
+            
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('El usuario aceptó la instalación');
+                pwaBanner.style.display = 'none';
+                if (persistentBanner) persistentBanner.style.display = 'none';
+            }
+            deferredPrompt = null;
+        }
+
+        // 3. Vincular eventos a los botones
+        btnInstalarPWA.addEventListener('click', ejecutarInstalacion);
+        
+        if (persistentBanner) {
+            persistentBanner.addEventListener('click', (e) => {
+                // Si hacen clic en el botón específico o en el banner
+                ejecutarInstalacion();
+            });
+        }
 
         btnNavegadorPWA.addEventListener('click', () => {
             pwaBanner.style.display = 'none';
-            // Guardar rechazo para no molestar más en esta sesión
             localStorage.setItem('pwa_rejected', 'true');
         });
 
-        // Lógica para el banner persistente encima del menú
-        const persistentBanner = document.getElementById('persistent-install-banner');
-        
-        if (persistentBanner) {
-            persistentBanner.addEventListener('click', () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') persistentBanner.style.display = 'none';
-                        deferredPrompt = null;
-                    });
-                } else if (isIOS) {
-                    alert('Para instalar: Pulsa el icono de "Compartir" en Safari y selecciona "Añadir a la pantalla de inicio".');
-                } else {
-                    alert('Para instalar la app, busca la opción "Instalar aplicación" o "Instalar en la pantalla de inicio" en el menú de tu navegador.');
-                }
-            });
-
-            // Ocultar banner si ya está instalada la app
-            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-                persistentBanner.style.display = 'none';
-            }
+        // Ocultar si ya es PWA
+        if (isStandalone) {
+            if (pwaBanner) pwaBanner.style.display = 'none';
+            if (persistentBanner) persistentBanner.style.display = 'none';
         }
+    </script>
 
+    <script>
         // Lógica de Geolocalización
         document.addEventListener('DOMContentLoaded', () => {
             const btnLocation = document.getElementById('btn-get-location');
