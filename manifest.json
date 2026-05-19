@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "Burger House",
-  "short_name": "Burguer House",
+  "short_name": "Burger House",
   "description": "El mejor menú de hamburguesas en tu bolsillo",
   "start_url": "./index.html",
   "scope": "./",
