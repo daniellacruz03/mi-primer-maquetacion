@@ -1313,6 +1313,52 @@
             
             .extra-qty-val { font-size: 0.8rem !important; }
         }
+
+        /* --- PWA INSTALL BANNER --- */
+        #pwa-install-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 400px;
+            background: rgba(15, 15, 15, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 20px;
+            z-index: 10000;
+            display: none; /* Se activa por JS */
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0,0,0,0.8);
+            animation: pwaSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes pwaSlideUp {
+            from { opacity: 0; transform: translate(-50%, 50px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .pwa-icon { font-size: 2.2rem; margin-bottom: 8px; }
+        .pwa-text { color: #fff; font-size: 0.95rem; margin-bottom: 18px; font-weight: 500; line-height: 1.4; }
+        
+        .pwa-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+        #btn-pwa-instalar {
+            background: linear-gradient(180deg, #1b5e20 0%, #28a745 100%);
+            color: white; border: none; padding: 14px; border-radius: 12px;
+            font-family: 'Oswald', sans-serif; font-size: 1.1rem;
+            text-transform: uppercase; cursor: pointer; font-weight: 700;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        #btn-pwa-navegador {
+            background: transparent; color: rgba(255,255,255,0.5);
+            border: none; padding: 5px; font-size: 0.8rem; cursor: pointer;
+            text-decoration: underline; text-underline-offset: 3px;
+        }
     </style>
 </head>
 <body>
@@ -2132,6 +2178,16 @@
         </div>
     </div>
 
+    <!-- Banner de Instalación PWA -->
+    <div id="pwa-install-banner">
+        <div class="pwa-icon">🍔📱</div>
+        <p class="pwa-text">¡Pide más rápido! ¿Deseas instalar nuestra aplicación en tu pantalla de inicio?</p>
+        <div class="pwa-actions">
+            <button id="btn-pwa-instalar">Instalar ahora</button>
+            <button id="btn-pwa-navegador">Seguir en el navegador</button>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const preloaderProgress = document.getElementById('preloader-progress');
@@ -2776,6 +2832,39 @@
             // Limpiar formulario al inicio
             const formDelivery = document.getElementById('form-delivery');
             if (formDelivery) formDelivery.reset();
+        });
+
+        // Lógica de Instalación PWA
+        let deferredPrompt;
+        const pwaBanner = document.getElementById('pwa-install-banner');
+        const btnInstalarPWA = document.getElementById('btn-pwa-instalar');
+        const btnNavegadorPWA = document.getElementById('btn-pwa-navegador');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Evitar que Chrome muestre el prompt automático
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Mostrar el banner solo si no ha sido rechazado previamente
+            if (!localStorage.getItem('pwa_rejected')) {
+                pwaBanner.style.display = 'flex';
+            }
+        });
+
+        btnInstalarPWA.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                pwaBanner.style.display = 'none';
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to install: ${outcome}`);
+                deferredPrompt = null;
+            }
+        });
+
+        btnNavegadorPWA.addEventListener('click', () => {
+            pwaBanner.style.display = 'none';
+            // Guardar rechazo para no molestar más en esta sesión
+            localStorage.setItem('pwa_rejected', 'true');
         });
 
         // Lógica de Geolocalización
