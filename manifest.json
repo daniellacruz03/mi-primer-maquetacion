@@ -9,15 +9,15 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "logobhapp.png",
+      "src": "logobhapp.webp",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "maskable any"
     },
     {
-      "src": "logobhapp.png",
+      "src": "logobhapp.webp",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "maskable any"
     }
   ]
