@@ -12,6 +12,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#e60000">
     <link rel="icon" type="image/webp" href="logobh.webp?v=2">
+    <link rel="apple-touch-icon" href="logobhapp.png">
     <link rel="preload" href="logobh.webp" as="image">
     <style>
         * {
@@ -449,7 +450,7 @@
         .ajuste-subir, 
         .ajuste-baby, 
         .ajuste-crispy {
-            object-position: center 40% !important; /* Bajamos un poco para no aplastar el pan superior */
+            object-position: center 10% !important; /* Subimos el encuadre aún más para que no se corte el pan superior */
         }
 
         .ajuste-alejar {
@@ -1214,7 +1215,7 @@
             }
 
             section:not(#bebidas) .item-img-bg {
-                object-position: center 50% !important;
+                object-position: center 30% !important;
             }
 
             #bebidas .menu-item {
@@ -1431,6 +1432,48 @@
             border: none; padding: 5px; font-size: 0.8rem; cursor: pointer;
             text-decoration: underline; text-underline-offset: 3px;
         }
+
+        /* Nuevo Aviso de Instalación Persistente Encima del Menú */
+        .persistent-banner {
+            background: rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .persistent-banner img {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .persistent-banner p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.75rem;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .btn-banner-install {
+            background: #e60000;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -1463,7 +1506,13 @@
                     <input type="text" id="menu-search" class="search-input" placeholder="Buscar..." aria-label="Buscar productos">
                 </div>
             </div>
-        </div>
+
+            <!-- Aviso de instalación debajo del buscador -->
+            <div id="persistent-install-banner" class="persistent-banner">
+                <img src="logobhapp.png" alt="Burger House App">
+                <p>Instala nuestra App para una mejor experiencia</p>
+                <button class="btn-banner-install">INSTALAR</button>
+            </div>
         </div>
 
         <section id="hamburguesas">
@@ -2263,13 +2312,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Registro del Service Worker para habilitar PWA
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker registrado', reg))
-                    .catch(err => console.warn('Error al registrar SW', err));
-            }
-
             const preloaderProgress = document.getElementById('preloader-progress');
 
             // Función para finalizar y ocultar preloader
@@ -2951,6 +2993,30 @@
             localStorage.setItem('pwa_rejected', 'true');
         });
 
+        // Lógica para el banner persistente encima del menú
+        const persistentBanner = document.getElementById('persistent-install-banner');
+        
+        if (persistentBanner) {
+            persistentBanner.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') persistentBanner.style.display = 'none';
+                        deferredPrompt = null;
+                    });
+                } else if (isIOS) {
+                    alert('Para instalar: Pulsa el icono de "Compartir" en Safari y selecciona "Añadir a la pantalla de inicio".');
+                } else {
+                    alert('Para instalar la app, busca la opción "Instalar aplicación" o "Instalar en la pantalla de inicio" en el menú de tu navegador.');
+                }
+            });
+
+            // Ocultar banner si ya está instalada la app
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                persistentBanner.style.display = 'none';
+            }
+        }
+
         // Lógica de Geolocalización
         document.addEventListener('DOMContentLoaded', () => {
             const btnLocation = document.getElementById('btn-get-location');
@@ -3047,6 +3113,16 @@
                 });
             }
         });
+    </script>
+
+    <script>
+        // Registro del Service Worker (PWA Real)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
     </script>
 </body>
 </html>
