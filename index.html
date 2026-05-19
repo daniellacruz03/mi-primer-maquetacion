@@ -2952,66 +2952,77 @@
     </script>
 
     <script>
-        // LÓGICA DE INSTALACIÓN PWA UNIFICADA
-        let deferredPrompt = null;
+        // LÓGICA DE INSTALACIÓN PWA UNIFICADA (CORREGIDA)
+        let deferredPrompt;
         const pwaBanner = document.getElementById('pwa-install-banner');
         const persistentBanner = document.getElementById('persistent-install-banner');
         const btnInstalarPWA = document.getElementById('btn-pwa-instalar');
         const btnNavegadorPWA = document.getElementById('btn-pwa-navegador');
+        const btnBannerInstall = document.querySelector('.btn-banner-install');
 
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-        // 1. Capturar el evento oficial de Chrome/Android
+        // 1. Capturar el evento oficial de instalación
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Evitar que Chrome muestre el mini-infobar automático para usar nuestros botones
             e.preventDefault();
+            // Guardamos el evento para dispararlo luego
             deferredPrompt = e;
             
-            // Mostrar banners si no han sido rechazados
+            console.log('✅ PWA lista para instalar: Evento capturado.');
+
+            // Mostrar banners si no han sido rechazados y no es modo app
             if (!localStorage.getItem('pwa_rejected') && !isStandalone) {
-                pwaBanner.style.display = 'flex';
-            }
-            if (persistentBanner && !isStandalone) {
-                persistentBanner.style.display = 'flex';
+                if (pwaBanner) pwaBanner.style.display = 'flex';
+                if (persistentBanner) persistentBanner.style.display = 'flex';
             }
         });
 
-        // 2. Función de ejecución del prompt oficial
+        // 2. Función para disparar el prompt nativo de Android/Edge
         async function ejecutarInstalacion() {
             if (!deferredPrompt) {
+                console.log('❌ Instalación no disponible: deferredPrompt es nulo.');
                 if (isIOS) {
-                    alert('En iOS: Pulsa el icono de "Compartir" y luego "Añadir a pantalla de inicio".');
+                    alert('En iPhone: Pulsa "Compartir" y luego "Añadir a la pantalla de inicio".');
                 } else {
-                    alert('Para instalar, abre el menú del navegador y selecciona "Instalar aplicación".');
+                    alert('La instalación aún no está lista. Intenta recargar o espera unos segundos.');
                 }
                 return;
             }
 
-            // Ejecutar el prompt nativo
+            // Mostrar la ventana nativa de instalación
             deferredPrompt.prompt();
             
+            // Esperar la respuesta del usuario
             const { outcome } = await deferredPrompt.userChoice;
+            console.log(`Usuario respondió a la instalación: ${outcome}`);
+
             if (outcome === 'accepted') {
-                console.log('El usuario aceptó la instalación');
-                pwaBanner.style.display = 'none';
+                if (pwaBanner) pwaBanner.style.display = 'none';
                 if (persistentBanner) persistentBanner.style.display = 'none';
             }
+            
+            // Limpiar la variable (el evento solo sirve una vez)
             deferredPrompt = null;
         }
 
         // 3. Vincular eventos a los botones
-        btnInstalarPWA.addEventListener('click', ejecutarInstalacion);
-        
-        if (persistentBanner) {
-            persistentBanner.addEventListener('click', (e) => {
-                // Si hacen clic en el botón específico o en el banner
-                ejecutarInstalacion();
+        if (btnInstalarPWA) btnInstalarPWA.addEventListener('click', ejecutarInstalacion);
+        if (btnBannerInstall) btnBannerInstall.addEventListener('click', ejecutarInstalacion);
+
+        if (btnNavegadorPWA) {
+            btnNavegadorPWA.addEventListener('click', () => {
+                if (pwaBanner) pwaBanner.style.display = 'none';
+                localStorage.setItem('pwa_rejected', 'true');
             });
         }
 
-        btnNavegadorPWA.addEventListener('click', () => {
-            pwaBanner.style.display = 'none';
-            localStorage.setItem('pwa_rejected', 'true');
+        // Ocultar banners automáticamente si se instala con éxito
+        window.addEventListener('appinstalled', () => {
+            console.log('⭐ App instalada correctamente.');
+            if (pwaBanner) pwaBanner.style.display = 'none';
+            if (persistentBanner) persistentBanner.style.display = 'none';
         });
 
         // Ocultar si ya es PWA
