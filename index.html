@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2862,30 +2862,6 @@
                 modalReminder.classList.add('active');
             });
 
-            window.addEventListener('popstate', (e) => {
-                if (pedidoConfirmado) {
-                    modalReminder.classList.add('active');
-                    history.pushState({ orderSent: true }, "");
-                    return;
-                }
-
-                const activeModal = document.querySelector('.modal.active');
-                const cartOpen = !cartSidebar.classList.contains('cart-closed');
-
-                if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
-                    if (activeModal) activeModal.classList.remove('active');
-                    cartSidebar.classList.add('cart-closed');
-                    document.body.style.overflow = 'auto';
-                    menu.style.overflow = '';
-                }
-            });
-
-            window.addEventListener('beforeunload', (e) => {
-                if (pedidoConfirmado) {
-                    e.preventDefault();
-                }
-            });
-
             btnReminderOk.addEventListener('click', () => {
                 pedidoConfirmado = false; 
                 currentMainQty = 1;
@@ -2949,6 +2925,32 @@
             // Limpiar formulario al inicio
             const formDelivery = document.getElementById('form-delivery');
             if (formDelivery) formDelivery.reset();
+
+            // Manejo del botón atrás del navegador y cierre de modales
+            window.addEventListener('popstate', (e) => {
+                if (pedidoConfirmado) {
+                    modalReminder.classList.add('active');
+                    history.pushState({ orderSent: true }, "");
+                    return;
+                }
+
+                const activeModal = document.querySelector('.modal.active');
+                const cartOpen = !cartSidebar.classList.contains('cart-closed');
+
+                if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
+                    if (activeModal) activeModal.classList.remove('active');
+                    cartSidebar.classList.add('cart-closed');
+                    document.body.style.overflow = 'auto';
+                    menu.style.overflow = '';
+                }
+            });
+
+            // Evitar pérdida de datos si el pedido está confirmado
+            window.addEventListener('beforeunload', (e) => {
+                if (pedidoConfirmado) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
 
@@ -3136,7 +3138,7 @@
         // Registro del Service Worker (PWA Real)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                navigator.serviceWorker.register('sw.js', { scope: './' })
                     .catch(err => console.log('SW registration failed:', err));
             });
         }
