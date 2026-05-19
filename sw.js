@@ -1,3 +1,5 @@
+const CACHE_NAME = 'bh-v1';
+
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });

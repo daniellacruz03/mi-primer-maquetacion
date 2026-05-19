@@ -1,4 +1,5 @@
 {
+  "id": "/burger-house-pwa",
   "name": "Burguer House",
   "short_name": "Burguer House",
   "description": "El mejor menú de hamburguesas en tu bolsillo",
@@ -7,6 +8,7 @@
   "background_color": "#080808",
   "theme_color": "#e60000",
   "orientation": "portrait",
+  "categories": ["food", "shopping"],
   "icons": [
     {
       "src": "logobhapp.webp",
