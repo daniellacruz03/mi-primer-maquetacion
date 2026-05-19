@@ -4,6 +4,7 @@
   "short_name": "Burguer House",
   "description": "El mejor menú de hamburguesas en tu bolsillo",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#080808",
   "theme_color": "#e60000",
