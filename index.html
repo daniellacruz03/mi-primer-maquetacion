@@ -932,6 +932,73 @@
             background: rgba(40, 167, 69, 0.1) !important;
             transition: all 0.5s ease;
         }
+        
+        /* Taxímetro Delivery Dinámico */
+        .taximetro-container {
+            background: rgba(0, 0, 0, 0.4) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 12px !important;
+            padding: 10px 14px !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            min-height: 52px;
+            width: 100%;
+        }
+
+        .taximetro-info {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .taximetro-info span { font-size: 0.85rem; letter-spacing: 0.3px; }
+
+        .taximetro-bar-bg {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .taximetro-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff9800 0%, #ff0000 100%);
+            border-radius: 10px;
+            position: relative;
+            transition: width 0.8s ease-in-out;
+        }
+
+        .taximetro-pin {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff0000, 0 0 5px #fff;
+            z-index: 2;
+        }
+
+        .tax-status {
+            font-size: 0.6rem !important;
+            text-align: center;
+            margin: 2px 0 0 0 !important;
+            color: rgba(255, 255, 255, 0.35) !important;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
 
         .btn-checkout-final {
             background: linear-gradient(180deg, #1b5e20 0%, #28a745 100%) !important;
@@ -1697,14 +1764,26 @@
                     <input type="text" id="reference" name="reference" placeholder="Punto de referencia (Ej: Frente a...)" autocomplete="address-line3" enterkeyhint="next">
                     <input type="text" id="maps" name="maps" placeholder="Enlace de Maps (Opcional)" autocomplete="url" enterkeyhint="done">
                     <div class="checkout-grid">
-                        <button type="button" id="btn-get-location" title="Obtener ubicación">
-                            <svg class="icon-location-pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            <span>Ubicación actual</span>
-                        </button>
-                        <input type="text" id="additional-comments" name="additional-comments" placeholder="Comentarios" enterkeyhint="done">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+                            <button type="button" id="btn-get-location" title="Obtener ubicación" style="width: 100%; margin: 0;">
+                                <svg class="icon-location-pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Ubicación actual</span>
+                            </button>
+                        </div>
+                        <div id="taximetro-delivery" class="taximetro-container">
+                            <div class="taximetro-info">
+                                <span id="tax-cost">DELIVERY: -- $</span>
+                            </div>
+                            <div class="taximetro-bar-bg">
+                                <div id="tax-bar-fill" class="taximetro-bar-fill">
+                                    <div class="taximetro-pin"></div>
+                                </div>
+                            </div>
+                            <p class="tax-status">Calculando al obtener ubicación...</p>
+                        </div>
                     </div>
 
                     <button type="submit" id="btn-whatsapp-final" class="btn-checkout-final">
@@ -2462,14 +2541,16 @@
                     const valText = card.querySelector('.extra-qty-val').innerText;
                     const nombre = card.querySelector('.extra-name').innerText;
                     const isToggle = card.dataset.isToggle === "true";
-                    const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : parseInt(valText));
+                    const esVisible = card.style.display !== 'none';
+
+                    if (!esVisible) return;
+
+                    const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : (parseInt(valText) || 0));
                     let incluir = false;
-                    if (!isToggle && qty > 0) incluir = true;
-                    if (isToggle) {
-                        const esVisible = card.style.display !== 'none';
-                        if (esVisible && ['Salsa de la Casa', 'Pepinillos', 'Pan', 'Lechuga'].includes(nombre) && valText === 'NO') incluir = true;
-                        if (nombre.toLowerCase().includes('extra') && valText === 'SÍ') incluir = true;
-                    }
+
+                    if (!isToggle && qty > 0) incluir = true; // Extras con costo (ej: Extra Carne)
+                    if (isToggle && valText === 'NO') incluir = true; // Ingredientes base quitados (ej: SIN Cebolla)
+
                     if (incluir) {
                         extrasSeleccionados.push({
                             nombre: nombre,
@@ -2538,7 +2619,6 @@
                 const edificio = document.getElementById('edificio-casa').value.trim();
                 const referencia = document.getElementById('reference').value.trim();
                 const mapsLink = document.getElementById('maps').value.trim();
-                const comentarios = document.getElementById('additional-comments').value.trim();
 
                 if (!nombre) {
                     return alert("Por favor, ingresa tu nombre.");
@@ -2551,7 +2631,9 @@
                     if (!avenida || !edificio) return alert("Por favor, ingresa tu dirección (Avenida/Calle y Casa/Apto) o proporciona tu ubicación de Maps.");
                 }
 
-                let mensaje = `Hola, soy ${nombre}. Mi pedido es:\n\n`;
+                let mensaje = `🍔 *NUEVO PEDIDO - BURGER HOUSE* 🍔\n\n`;
+                mensaje += `👤 *Cliente:* ${nombre}\n\n`;
+                mensaje += `📝 *DETALLE DEL PEDIDO:*\n`;
 
                 let totalPedido = 0;
                 carrito.forEach(item => {
@@ -2573,15 +2655,21 @@
                     direccionCompleta += direccionCompleta ? ` (Ref: ${referencia})` : `Referencia: ${referencia}`;
                 }
 
-                mensaje += `\n*Total del pedido: $${totalPedido.toFixed(2)} REF*\n`;
-                if (direccionCompleta) mensaje += `Mi dirección es: ${direccionCompleta}`;
+                const costoDelivery = parseFloat(window.deliveryCost) || 0;
+                const totalFinal = totalPedido + costoDelivery;
+
+                mensaje += `\n------------------------------\n`;
+                mensaje += `💰 *RESUMEN DE PAGO:*\n`;
+                mensaje += `Subtotal Productos: $${totalPedido.toFixed(2)} REF\n`;
+                mensaje += `Envío (Delivery): $${costoDelivery.toFixed(2)} REF\n`;
+                mensaje += `*TOTAL A PAGAR: $${totalFinal.toFixed(2)} REF*\n`;
+                mensaje += `------------------------------\n\n`;
+
+                mensaje += `🏠 *DATOS DE ENTREGA:*\n`;
+                if (direccionCompleta) mensaje += `*Dirección:* ${direccionCompleta}\n`;
 
                 if (mapsLink) {
-                    mensaje += `\n📍 Ubicación exacta: ${mapsLink}`;
-                }
-
-                if (comentarios) {
-                    mensaje += `\n💬 Notas adicionales: ${comentarios}`;
+                    mensaje += `📍 *Ubicación Maps:* ${mapsLink}\n`;
                 }
 
                 if (isPreOrder) {
@@ -2696,6 +2784,32 @@
             const inputMaps = document.getElementById('maps');
             const textSpan = btnLocation ? btnLocation.querySelector('span') : null;
 
+            // Coordenadas fijas de Burger House
+            const STORE_LAT = 8.553525;
+            const STORE_LON = -71.205120;
+
+            // Función para calcular distancia (Haversine)
+            function calcularDistanciaHaversine(lat1, lon1, lat2, lon2) {
+                const R = 6371; // Radio de la Tierra en km
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c;
+            }
+
+            function obtenerCostoDelivery(distancia) {
+                if (distancia <= 1.2) return 1.0;
+                if (distancia <= 2.8) return 1.5;
+                if (distancia <= 4.5) return 2.0;
+                if (distancia <= 6.5) return 2.5;
+                if (distancia <= 9.0) return 3.0;
+                if (distancia <= 11.5) return 3.5;
+                return 5.0;
+            }
+
             if (btnLocation && inputMaps && textSpan) {
                 btnLocation.addEventListener('click', () => {
                     if (!navigator.geolocation) {
@@ -2712,6 +2826,29 @@
                         (position) => {
                             const lat = position.coords.latitude;
                             const lng = position.coords.longitude;
+
+                            // Cálculo de distancia y costo
+                            const distancia = calcularDistanciaHaversine(lat, lng, STORE_LAT, STORE_LON);
+                            const costo = obtenerCostoDelivery(distancia);
+
+                            // Guardar en variables globales para uso posterior (ej: WhatsApp)
+                            window.deliveryDistance = distancia.toFixed(2);
+                            window.deliveryCost = costo.toFixed(2);
+
+                            // --- ACTUALIZACIÓN DEL TAXÍMETRO ---
+                            const taxBar = document.getElementById('tax-bar-fill');
+                            const taxCost = document.getElementById('tax-cost');
+                            const taxStatus = document.querySelector('.tax-status');
+                            
+                            if (taxBar && taxCost) {
+                                // Visualización basada en un rango máximo de 12km
+                                const progress = Math.min((distancia / 12) * 100, 100);
+                                taxBar.style.width = `${progress}%`;
+                                taxCost.innerText = `DELIVERY: $${costo.toFixed(2)}`;
+                                if (taxStatus) taxStatus.innerText = "UBICACIÓN DETECTADA";
+                            }
+                            // ------------------------------------------
+
                             const googleMapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
                             
                             inputMaps.value = googleMapsUrl;
