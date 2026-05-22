@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Burger House | Menú</title>
+    <link rel="icon" type="image/webp" href="logobh.webp">
+    <!-- Precarga del logo para evitar que desaparezca durante la carga -->
+    <link rel="preload" href="logobh.webp" as="image">
     <!-- Optimización de fuentes: Preconectar y cargar vía link es más rápido que @import -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#e60000">
-    <link rel="icon" type="image/webp" href="logobh.webp?v=2">
-    <link rel="apple-touch-icon" href="logobhapp.webp">
-    <link rel="preload" href="logobh.webp" as="image">
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
@@ -369,7 +364,7 @@
                 radial-gradient(circle at 0% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
                 radial-gradient(circle at 100% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
                 rgba(10, 10, 10, 0.98);
-            padding-top: 45px; /* Aumentamos el padding superior para dar espacio al contenido */
+            padding-top: 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
             border-radius: 50px 50px 0 0;
@@ -381,7 +376,7 @@
             align-items: center;
             justify-content: flex-start;
             gap: 15px;
-            margin-bottom: 4px;
+            margin-bottom: 15px; /* Más espacio entre la barra de búsqueda y las categorías */
         }
 
         .menu-container::before {
@@ -424,51 +419,40 @@
 
         /* Estilo de Tarjeta Global (PC y Móvil) */
         section:not(#bebidas) .menu-item {
-            height: 300px; /* Aumentamos la altura para que la hamburguesa no se vea plana */
+            height: auto; /* Altura automática para acomodar imagen + texto */
             padding: 0 !important;
             margin-bottom: 20px !important;
             border-radius: 30px !important;
             overflow: hidden !important;
             display: flex !important;
             flex-direction: column !important;
-            justify-content: flex-end !important;
             position: relative !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
             transition: transform 0.3s ease;
+            background: rgba(15, 15, 15, 0.6);
         }
 
         section:not(#bebidas) .item-img-bg {
             display: block !important;
-            position: absolute;
-            inset: 0;
+            position: relative; /* Ya no es absoluto, ocupa su propio espacio */
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            z-index: 1;
+            height: auto; /* Altura automática para no recortar la foto */
+            object-fit: contain; /* Muestra la imagen completa sin recortes */
+            object-position: center; 
+            z-index: 1; /* Mantener z-index si hay otros elementos */
         }
 
         /* Ajustes de encuadre para que las fotos se vean más arriba */
-        .ajuste-subir, 
-        .ajuste-baby, 
+        .ajuste-subir,
+        .ajuste-baby,
         .ajuste-crispy {
-            object-position: center 10% !important; /* Subimos el encuadre aún más para que no se corte el pan superior */
+            object-position: center !important; /* Reset de posición para evitar cortes forzados */
         }
 
         .ajuste-alejar {
             object-fit: cover !important;
         }
-
-        section:not(#bebidas) .menu-item::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.85) 90%) !important;
-            z-index: 2;
-        }
-
-        .item-desc { display: none !important; }
 
         .menu-item::after {
             display: none;
@@ -479,9 +463,10 @@
         }
 
         .item-name {
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.9) !important;
-            font-size: 1.2rem !important;
-            font-weight: 900 !important;
+            color: #ffffff !important; /* Explicitly white as requested */
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5) !important;
+            font-size: 1.1rem !important; /* Ligeramente más pequeño para ahorrar espacio */
+            font-weight: bold !important; /* Cambiado a bold para consistencia con la petición */
             text-transform: uppercase;
         }
 
@@ -525,29 +510,43 @@
         }
 
         /* Posicionamiento de Info y Precio en Tarjeta */
+        /* Eliminamos los display: none !important para que se muestren */
         section:not(#bebidas) .item-info {
-            position: absolute !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            z-index: 3;
-            padding: 20px !important;
-            width: 100% !important;
-            display: flex !important;
-            flex-direction: column-reverse !important;
-            align-items: flex-start !important;
+            display: flex !important; /* Habilitar display */
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1; /* Ocupa el espacio disponible */
+            padding-right: 10px; /* Espacio entre info y precio */
+            /* Eliminamos estilos de posicionamiento absoluto antiguos */
+            position: static !important;
+            z-index: auto !important;
+            padding: 0 !important; /* Resetear padding si venía de otro lado */
+            width: auto !important; /* Resetear width */
         }
 
         section:not(#bebidas) .item-price-wrapper {
-            position: absolute !important;
-            bottom: 15px !important;
-            right: 15px !important;
-            z-index: 4;
-            min-width: 90px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%);
-            border-top: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: flex !important; /* Habilitar display */
+            flex-direction: column;
+            align-items: flex-end; /* Alinear precio a la derecha */
+            flex-shrink: 0; /* Evitar que se encoja */
+            /* Eliminamos estilos de posicionamiento absoluto antiguos */
+            position: static !important;
+            z-index: auto !important;
+            margin: 0 !important; /* Resetear margen */
+            min-width: auto !important; /* Resetear min-width */
+            padding: 0 !important; /* Resetear padding */
+            background: transparent !important; /* Asegurar fondo transparente */
+            border: none !important; /* Asegurar sin borde */
+            box-shadow: none !important; /* Asegurar sin sombra */
+        }
+
+        /* Nuevo contenedor para la información dividida */
+        .item-info-split {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 15px 15px 18px; /* Espaciado más generoso para que el texto tenga su propio aire */
+            width: 100%;
         }
 
         /* Grid para PC */
@@ -568,18 +567,28 @@
         }
 
         .item-price {
-            color: #ffffff !important;
+            color: #ffffff !important; /* Precio en blanco como solicitaste */
+            font-size: 1.4rem !important; 
+            font-weight: bold !important; /* Más grueso */
+            line-height: 1; /* Ajustar línea */
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8); /* Sombra para que resalte en blanco */
+            /* Resetear otros estilos si vienen de otro lado */
             background: transparent !important;
-            font-size: 1.45rem;
-            font-weight: 900 !important;
-            line-height: 1;
-            padding: 0;
-            border: none;
-            border-radius: 0;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
         }
 
         .item-ref {
-            color: #ffffff !important;
+            color: #aaa !important; /* Gris claro para la referencia */
+            font-size: 0.7rem !important; /* Más pequeño */
+            font-weight: 600 !important; /* Menos negrita que el precio */
+            letter-spacing: 0.3px;
+            opacity: 1; /* Asegurar visibilidad */
+            margin-top: 2px; /* Pequeño margen superior */
+            line-height: 1;
+            text-align: right; /* Alinear a la derecha */
+            align-self: flex-end; /* Asegurar alineación con el precio */
             background: transparent !important;
             font-size: 0.64rem !important;
             font-weight: 700 !important;
@@ -595,8 +604,16 @@
         }
 
         .menu-item:hover .item-price-wrapper {
-            transform: scale(1.05);
-            filter: brightness(1.08) saturate(1.06);
+            transform: none; /* Desactivar transform en hover para el wrapper */
+            filter: none; /* Desactivar filtro en hover para el wrapper */
+        }
+
+        .item-desc {
+            display: block !important; /* Mostrar la descripción */
+            color: #aaa; /* Color gris claro */
+            font-size: 0.8rem; /* Reducido para compactar el bloque de texto */
+            margin-top: 2px; 
+            line-height: 1.4;
         }
 
         #cart-sidebar {
@@ -875,6 +892,33 @@
             font-family: inherit;
         }
 
+        /* Selector de Método de Entrega Estilo Farmatodo */
+        .selector-metodo {
+            display: flex;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 15px;
+        }
+        .metodo-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 12px;
+            border-radius: 11px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .metodo-btn.active {
+            background: #B20000;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(178, 0, 0, 0.3);
+        }
+
         .checkout-form input,
         .checkout-form textarea {
             background-color: rgba(0, 0, 0, 0.3) !important;
@@ -908,6 +952,41 @@
         .input-with-location {
             position: relative;
             width: 100%;
+        }
+        
+        #pickup-location-info {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+        
+        .btn-maps-pickup {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-maps-pickup:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .input-with-location input {
@@ -1145,7 +1224,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(15, 15, 15, 0.8) 0%, rgba(15, 15, 15, 0) 40%);
+            background: linear-gradient(to top, rgba(15, 15, 15, 0.8) 0%, rgba(15, 15, 15, 0) 20%);
             pointer-events: none;
         }
 
@@ -1194,7 +1273,7 @@
             }
 
             .sticky-nav {
-                padding-top: 30px; /* Aumentamos el padding superior para móviles */
+                padding-top: 15px;
                 margin: 0 -15px;
                 padding-left: 15px;
                 padding-right: 15px;
@@ -1223,15 +1302,24 @@
 
             #bebidas .menu-item {
                 display: flex !important;
+                flex-direction: row !important;
                 align-items: center !important;
                 justify-content: space-between !important;
-                padding: 12px 18px !important;
+                background: transparent !important;
+                border: none !important;
+                border-left: none !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+                border-radius: 0 !important;
+                padding: 14px 10px !important;
+                margin-bottom: 0 !important;
+                box-shadow: none !important;
                 height: auto !important;
-                margin-bottom: 5px !important;
-                border-radius: 20px !important;
-                background: rgba(25, 25, 25, 0.6) !important;
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
+            }
+
+            #bebidas .menu-item:last-child {
+                border-bottom: none !important;
             }
 
             #bebidas .item-info {
@@ -1244,9 +1332,12 @@
 
             #bebidas .item-price-wrapper {
                 position: static !important;
-                min-width: 70px !important;
-                transform: scale(0.85) !important;
+                min-width: auto !important;
+                transform: none !important;
                 margin: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-end !important;
             }
 
             .badge-best, .badge-new {
@@ -1258,8 +1349,22 @@
                 margin: 4px 0 0 0 !important;
             }
 
-            .item-price { font-size: 1.1rem !important; }
-            .item-ref { font-size: 0.55rem !important; }
+            #bebidas .item-name {
+                color: #ffffff !important;
+                font-size: 0.95rem !important;
+                font-weight: 500 !important;
+                text-transform: uppercase;
+                text-shadow: none !important;
+            }
+
+            #bebidas .item-price {
+                font-size: 1.15rem !important;
+                color: #ffffff !important;
+                font-weight: 700 !important;
+                text-shadow: none !important;
+            }
+
+            #bebidas .item-ref { font-size: 0.5rem !important; opacity: 0.4; margin-top: 0 !important; }
 
             .modal-image-container {
                 height: 35vh !important;
@@ -1270,7 +1375,7 @@
             }
 
             .modal-image-container::after {
-                background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.9) 100%) !important;
+                background: linear-gradient(to bottom, transparent 80%, rgba(0, 0, 0, 0.9) 100%) !important;
                 z-index: 6 !important;
             }
             
@@ -1335,33 +1440,6 @@
             .extra-qty-val { font-size: 0.8rem !important; }
         }
 
-        /* --- PWA INSTALL BANNER --- */
-        #pwa-install-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 92%;
-            max-width: 400px;
-            background: rgba(15, 15, 15, 0.98);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: 20px;
-            z-index: 10000;
-            display: none; /* Se activa por JS */
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0,0,0,0.8);
-            animation: pwaSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            backdrop-filter: blur(10px);
-        }
-
-        @keyframes pwaSlideUp {
-            from { opacity: 0; transform: translate(-50%, 50px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
-
         /* --- BARRA DE CATEGORÍAS FIJA (ESTILO FARMATODO) --- */
         .category-bar-bottom-wrapper {
             position: fixed;
@@ -1417,66 +1495,6 @@
             box-shadow: 0 4px 12px rgba(230, 0, 0, 0.4);
         }
 
-        .pwa-icon { width: 70px; height: 70px; margin-bottom: 12px; border-radius: 50%; border: 2px solid #e60000; object-fit: cover; box-shadow: 0 0 15px rgba(230, 0, 0, 0.4); }
-        .pwa-text { color: #fff; font-size: 0.95rem; margin-bottom: 18px; font-weight: 500; line-height: 1.4; }
-        
-        .pwa-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-
-        #btn-pwa-instalar {
-            background: linear-gradient(180deg, #1b5e20 0%, #28a745 100%);
-            color: white; border: none; padding: 14px; border-radius: 12px;
-            font-family: 'Oswald', sans-serif; font-size: 1.1rem;
-            text-transform: uppercase; cursor: pointer; font-weight: 700;
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-        }
-
-        #btn-pwa-navegador {
-            background: transparent; color: rgba(255,255,255,0.5);
-            border: none; padding: 5px; font-size: 0.8rem; cursor: pointer;
-            text-decoration: underline; text-underline-offset: 3px;
-        }
-
-        /* Nuevo Aviso de Instalación Persistente Encima del Menú */
-        .persistent-banner {
-            background: rgba(255, 255, 255, 0.03);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 8px 15px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .persistent-banner img {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
-            object-fit: cover;
-        }
-
-        .persistent-banner p {
-            margin: 0;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.75rem;
-            font-weight: 500;
-            flex: 1;
-        }
-
-        .btn-banner-install {
-            background: #e60000;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(230, 0, 0, 0.3);
-        }
     </style>
 </head>
 <body>
@@ -1484,7 +1502,7 @@
     <div class="contenedor-logo" id="preloader">
         <div class="preloader-inner">
             <div class="logo-glow-wrap">
-                <img src="logobh.webp" alt="Logo" class="logo-animado" width="165" height="165">
+                <img src="logobh.webp" alt="Logo Burger House" class="logo-animado" width="165" height="165">
             </div>
             <div class="preloader-bar" aria-hidden="true">
                 <div id="preloader-progress" class="preloader-progress"></div>
@@ -1509,242 +1527,291 @@
                     <input type="text" id="menu-search" class="search-input" placeholder="Buscar..." aria-label="Buscar productos">
                 </div>
             </div>
-
-            <!-- Aviso de instalación debajo del buscador -->
-            <div id="persistent-install-banner" class="persistent-banner">
-                <img src="logobhapp.webp" alt="Burger House App">
-                <p>Instala nuestra App para una mejor experiencia</p>
-                <button class="btn-banner-install">INSTALAR</button>
+            <!-- Barra de Categorías ahora en el Top -->
+            <div class="category-bar">
+                <button class="category-btn active" data-category="all">Todos</button>
+                <button class="category-btn" data-category="hamburguesas">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                    Hamburguesas
+                </button>
+                <button class="category-btn" data-category="ensaladas">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 7a7 7 0 0 1-10 11Z"/><path d="M7 12.1a3 3 0 0 1 5-2.4"/></svg>
+                    Ensaladas
+                </button>
+                <button class="category-btn" data-category="kids">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    Menú Kids
+                </button>
+                <button class="category-btn" data-category="servicios">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10V2"/><path d="M9 10V5"/><path d="M13 10V3"/><path d="M17 10V6"/><path d="M2 10h20l-2 12H4L2 10Z"/></svg>
+                    Servicios
+                </button>
+                <button class="category-btn" data-category="bebidas">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2Z"/><path d="M5 5h14"/><path d="M12 5V2"/><path d="m9 2 3 3"/></svg>
+                    Bebidas
+                </button>
             </div>
         </div>
 
         <section id="hamburguesas">
-            <h2 class="seccion-titulo">Hamburguesas</h2>
             
             <div class="menu-item">
                 <img src="cheese house.webp" class="item-img-bg ajuste-subir" alt="Cheese House" loading="lazy" width="900" height="500">
-                <div class="item-info">
-                    <span class="badge-best">LAS MÁS VENDIDAS</span>
-                    <span class="item-name">Cheese House</span>
-                    <p class="item-desc">Pan de papa, carne, tocineta, triple queso americano, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="cheese house.webp">
-                    <span class="item-price">$9,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="badge-best">LAS MÁS VENDIDAS</span>
+                        <span class="item-name">Cheese House</span>
+                        <p class="item-desc">Pan de papa, carne, tocineta, triple queso americano, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="cheese house.webp">
+                        <span class="item-price">$9,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="houseclasic.webp" class="item-img-bg ajuste-subir" alt="House Classics" loading="lazy" width="900" height="500">
-                <div class="item-info">
-                    <span class="badge-best">LAS MÁS VENDIDAS</span>
-                    <span class="item-name">House Classics</span>
-                    <p class="item-desc">Pan de papa, carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="houseclasic.webp">
-                    <span class="item-price">$9,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="badge-best">LAS MÁS VENDIDAS</span>
+                        <span class="item-name">House Classics</span>
+                        <p class="item-desc">Pan de papa, carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="houseclasic.webp">
+                        <span class="item-price">$9,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Junior Crispy</span>
-                    <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="junior crispy.webp">
-                    <span class="item-price">$10,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Junior Crispy</span>
+                        <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="junior crispy.webp">
+                        <span class="item-price">$10,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="crispy house.webp" class="item-img-bg ajuste-alejar" alt="Crispy House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Crispy House</span>
-                    <p class="item-desc">Pan de papa, pollo crispy, tocineta, doble queso americano, pepinillos, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="crispy house.webp">
-                    <span class="item-price">$12,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Crispy House</span>
+                        <p class="item-desc">Pan de papa, pollo crispy, tocineta, doble queso americano, pepinillos, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="crispy house.webp">
+                        <span class="item-price">$12,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="baby crispy.webp" class="item-img-bg ajuste-baby" alt="Baby Crispy" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="badge-new">NUEVA</span>
-                    <span class="item-name">Baby Crispy</span>
-                    <p class="item-desc">Pan de papa, pollo crispy, salsa de la casa, servicio de papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="baby crispy.webp">
-                    <span class="item-price">$8,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="badge-new">NUEVA</span>
+                        <span class="item-name">Baby Crispy</span>
+                        <p class="item-desc">Pan de papa, pollo crispy, salsa de la casa, servicio de papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="baby crispy.webp">
+                        <span class="item-price">$8,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="combo house.webp" class="item-img-bg" alt="Combo House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Combo House</span>
-                    <p class="item-desc">4 Burgers (carne 100gr), papas fritas y Pepsi de litro.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="combo house.webp">
-                    <span class="item-price">$24,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Combo House</span>
+                        <p class="item-desc">4 Burgers (carne 100gr), papas fritas y Pepsi de litro.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="combo house.webp">
+                        <span class="item-price">$24,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="grand house.webp" class="item-img-bg" alt="Grand House Burger" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Grand House Burger</span>
-                    <p class="item-desc">Pan de papa, triple carne, tocineta, pepinillo, triple queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="grand house.webp">
-                    <span class="item-price">$14,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Grand House Burger</span>
+                        <p class="item-desc">Pan de papa, triple carne, tocineta, pepinillo, triple queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="grand house.webp">
+                        <span class="item-price">$14,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="pork house.webp" class="item-img-bg" alt="Pork House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Pork House</span>
-                    <p class="item-desc">Pan de papa, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="pork house.webp">
-                    <span class="item-price">$11,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Pork House</span>
+                        <p class="item-desc">Pan de papa, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="pork house.webp">
+                        <span class="item-price">$11,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="chiken house.webp" class="item-img-bg" alt="Chicken House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Chicken House</span>
-                    <p class="item-desc">Pan de papa, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="chiken house.webp">
-                    <span class="item-price">$9,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Chicken House</span>
+                        <p class="item-desc">Pan de papa, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="chiken house.webp">
+                        <span class="item-price">$9,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="big house.webp" class="item-img-bg" alt="Big House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Big House</span>
-                    <p class="item-desc">Pan de papa, doble carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="big house.webp">
-                    <span class="item-price">$12,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Big House</span>
+                        <p class="item-desc">Pan de papa, doble carne, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="big house.webp">
+                        <span class="item-price">$12,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="town house.webp" class="item-img-bg" alt="Town House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Town House</span>
-                    <p class="item-desc">Pan de papa, carne, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="town house.webp">
-                    <span class="item-price">$12,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Town House</span>
+                        <p class="item-desc">Pan de papa, carne, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="town house.webp">
+                        <span class="item-price">$12,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="titan house.webp" class="item-img-bg" alt="Titan House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Titan House</span>
-                    <p class="item-desc">Pan de papa, triple carne, tocineta, queso americano, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="titan house.webp">
-                    <span class="item-price">$12,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Titan House</span>
+                        <p class="item-desc">Pan de papa, triple carne, tocineta, queso americano, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="titan house.webp">
+                        <span class="item-price">$12,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="house especial.webp" class="item-img-bg" alt="House Special" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">House Special</span>
-                    <p class="item-desc">Pan de papa, pollo, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="house especial.webp">
-                    <span class="item-price">$14,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">House Special</span>
+                        <p class="item-desc">Pan de papa, pollo, chuleta, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="house especial.webp">
+                        <span class="item-price">$14,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
 
             <div class="menu-item">
                 <img src="house tower.webp" class="item-img-bg ajuste-alejar" alt="House Tower" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">House Tower</span>
-                    <p class="item-desc">Pan de papa, carne, chuleta, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="house tower.webp">
-                    <span class="item-price">$17,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">House Tower</span>
+                        <p class="item-desc">Pan de papa, carne, chuleta, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="house tower.webp">
+                        <span class="item-price">$17,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="ensaladas">
-            <h2 class="seccion-titulo">Ensaladas</h2>
             <div class="menu-item">
                 <img src="ensalada.webp" class="item-img-bg" alt="House Salad" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">House Salad</span>
-                    <p class="item-desc">Lechuga, crotones, tocineta, queso parmesano, pechuga 200gr, salsa de la casa.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="ensalada.webp">
-                    <span class="item-price">$9,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">House Salad</span>
+                        <p class="item-desc">Lechuga, crotones, tocineta, queso parmesano, pechuga 200gr, salsa de la casa.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="ensalada.webp">
+                        <span class="item-price">$9,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="kids">
-            <h2 class="seccion-titulo">Menú Kids</h2>
             <div class="menu-item">
                 <img src="kids house.webp" class="item-img-bg ajuste-subir" alt="Kids House" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Kids House</span>
-                    <p class="item-desc">Pan de papa, carne, queso americano, papas fritas, huevito sorpresa y juguito.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="kids house.webp">
-                    <span class="item-price">$9,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Kids House</span>
+                        <p class="item-desc">Pan de papa, carne, queso americano, papas fritas, huevito sorpresa y juguito.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="kids house.webp">
+                        <span class="item-price">$9,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="servicios">
-            <h2 class="seccion-titulo">Servicios</h2>
             <div class="menu-item">
                 <img src="papacontoppings.webp" class="item-img-bg" alt="Papas con Topping" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Servicio de Papas con Topping</span>
-                    <p class="item-desc">Papas fritas, salsa de queso y topping de tocineta.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="papacontoppings.webp">
-                    <span class="item-price">$7,49</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Servicio de Papas con Topping</span>
+                        <p class="item-desc">Papas fritas, salsa de queso y topping de tocineta.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="papacontoppings.webp">
+                        <span class="item-price">$7,49</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item">
                 <img src="tequeños.webp" class="item-img-bg" alt="Tequeños" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Servicio de Tequeños</span>
-                    <p class="item-desc">Tequeños (6 unidades).</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="tequeños.webp">
-                    <span class="item-price">$5,99</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Servicio de Tequeños</span>
+                        <p class="item-desc">Tequeños (6 unidades).</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="tequeños.webp">
+                        <span class="item-price">$5,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item">
@@ -1769,19 +1836,20 @@
             </div>
             <div class="menu-item">
                 <img src="nuggetsmenu.webp" class="item-img-bg" alt="Nuggets" loading="lazy" width="400" height="220">
-                <div class="item-info">
-                    <span class="item-name">Servicio de Nuggets</span>
-                    <p class="item-desc">Nuggets de pollo súper crujientes.</p>
-                </div>
-                <div class="item-price-wrapper" data-img-src="nuggetsmenu.webp">
-                    <span class="item-price">$8</span>
-                    <span class="item-ref">REF</span>
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Servicio de Nuggets</span>
+                        <p class="item-desc">Nuggets de pollo súper crujientes.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="nuggetsmenu.webp">
+                        <span class="item-price">$8</span>
+                        <span class="item-ref">REF</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="bebidas">
-            <h2 class="seccion-titulo">Bebidas</h2>
             <div class="menu-item">
                 <div class="item-info"><span class="item-name">Coca-Cola Bombita 355 ML</span></div>
                 <div class="item-price-wrapper" data-img-src="cocacolabombita.webp">
@@ -1869,33 +1937,6 @@
         </section>
     </main>
 
-    <!-- Barra de Categorías en la parte inferior -->
-    <div class="category-bar-bottom-wrapper">
-        <div class="category-bar">
-            <button class="category-btn active" data-category="all">Todos</button>
-            <button class="category-btn" data-category="hamburguesas">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18"/><path d="M3 15h18"/><path d="M12 7c-4.97 0-9 2.5-9 6"/><path d="M12 7c4.97 0 9 2.5 9 6"/><path d="M20 15c0 2.2-3.58 4-8 4s-8-1.8-8-4"/></svg>
-                Hamburguesas
-            </button>
-            <button class="category-btn" data-category="ensaladas">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 7a7 7 0 0 1-10 11Z"/><path d="M7 12.1a3 3 0 0 1 5-2.4"/></svg>
-                Ensaladas
-            </button>
-            <button class="category-btn" data-category="kids">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                Menú Kids
-            </button>
-            <button class="category-btn" data-category="servicios">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10V2"/><path d="M9 10V5"/><path d="M13 10V3"/><path d="M17 10V6"/><path d="M2 10h20l-2 12H4L2 10Z"/></svg>
-                Servicios
-            </button>
-            <button class="category-btn" data-category="bebidas">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2Z"/><path d="M5 5h14"/><path d="M12 5V2"/><path d="m9 2 3 3"/></svg>
-                Bebidas
-            </button>
-        </div>
-    </div>
-
     <div id="cart-sidebar" class="cart-closed">
         <div class="cart-header">
             <h2>
@@ -1926,6 +1967,11 @@
                 </button>
                 <form id="form-delivery" class="checkout-form">
                     <h3 class="checkout-title">Datos de Entrega</h3>
+                    <div class="selector-metodo">
+                        <button type="button" class="metodo-btn active" id="btn-mode-delivery">Delivery</button>
+                        <button type="button" class="metodo-btn" id="btn-mode-pickup">Pick Up</button>
+                    </div>
+                    
                     <div class="delivery-notice-premium">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                         <span>El costo del delivery varía según la zona de entrega</span>
@@ -1933,7 +1979,18 @@
                     <input type="text" id="full-name" name="full-name" placeholder="Tu nombre completo" required autocomplete="name" enterkeyhint="next">
                     <textarea id="additional-notes" name="additional-notes" placeholder="Notas adicionales / Punto de referencia (Ej: Portón blanco, llamar al llegar...)" enterkeyhint="done"></textarea>
                     <input type="hidden" id="maps" name="maps">
-                    <div class="checkout-grid">
+                    
+                    <div id="pickup-location-info" class="hidden">
+                        <p><b>Dirección de retiro:</b><br>Calle principal de la mara 3ra calle mano izquierda al final hay un kiosco azul en la entrada al fondo tonwhouse beige con marrón el 3 está a mano izquierda</p>
+                        <a href="https://maps.google.com/?q=8.553563,-71.205238" target="_blank" class="btn-maps-pickup">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            Ver ubicación en Maps
+                        </a>
+                    </div>
+
+                    <div class="checkout-grid" id="delivery-tools">
                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
                             <button type="button" id="btn-get-location" title="Obtener ubicación" style="width: 100%; margin: 0;">
                                 <svg class="icon-location-pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2251,6 +2308,19 @@
         </div>
     </div>
 
+    <!-- Modal Publicitario Lunes a Miércoles -->
+    <div id="modal-promo-lunes-miercoles" class="modal">
+        <div class="modal-content promo-modal-content">
+            <button class="close-promo" id="btn-close-promo">&times;</button>
+            <div class="promo-img-container">
+                <img src="promolunesmiercoles.webp" alt="Promoción Especial">
+            </div>
+            <button id="btn-promo-ordenar" class="btn-promo-premium">
+                ¡ORDENAR AHORA!
+            </button>
+        </div>
+    </div>
+
     <div id="modal-reminder" class="modal">
         <div class="modal-content upsell-content">
             <div class="modal-details">
@@ -2302,16 +2372,7 @@
         </div>
     </div>
 
-    <!-- Banner de Instalación PWA -->
-    <div id="pwa-install-banner">
-        <img src="logobh.webp" alt="Logo Burguer House" class="pwa-icon" width="70" height="70">
-        <p class="pwa-text">¡Pide más rápido! ¿Deseas instalar nuestra aplicación en tu pantalla de inicio?</p>
-        <div class="pwa-actions">
-            <button id="btn-pwa-instalar">Instalar ahora</button>
-            <button id="btn-pwa-navegador">Seguir en el navegador</button>
-        </div>
-
-    </div>
+    <!-- El banner flotante inferior ha sido eliminado -->
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -2328,12 +2389,15 @@
                     const logoCarga = document.getElementById('preloader');
                     const menu = document.getElementById('main-menu');
                     const cartBtn = document.getElementById('cart-floating-btn');
-                    const categoryBar = document.querySelector('.category-bar-bottom-wrapper');
                     
                     if (logoCarga) logoCarga.classList.add('ocultar');
                     if (menu) menu.classList.add('mostrar-menu');
                     if (cartBtn) cartBtn.classList.remove('cart-btn-hidden');
-                    if (categoryBar) categoryBar.classList.add('mostrar-barra');
+
+                    // Mostrar el anuncio después de 1 segundo
+                    setTimeout(() => {
+                        verificarYMostrarPromo();
+                    }, 1000);
                 }, 200);
             };
 
@@ -2343,6 +2407,7 @@
             const total = imgs.length;
 
             function incrementarProgreso() {
+                if (preloaderProgress.dataset.finished === 'true') return;
                 cargadas++;
                 const porcentaje = (cargadas / total) * 100;
                 if (preloaderProgress) {
@@ -2365,6 +2430,12 @@
                     }
                 });
             }
+
+            // Fallback de seguridad: si después de 3 segundos no ha cargado todo, mostramos el menú de igual forma
+            // Esto soluciona el problema de que en local se quede "pegado" el preloader.
+            setTimeout(() => {
+                if (preloaderProgress.dataset.finished !== 'true') finalizarCarga();
+            }, 3000);
 
             let isPreOrder = false;
             const verificarHorario = () => {
@@ -2442,6 +2513,37 @@
                 });
             });
 
+            // Función para mostrar el Pop-up
+            function verificarYMostrarPromo() {
+                const promoModal = document.getElementById('modal-promo-lunes-miercoles');
+                const now = new Date();
+                const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
+                const dayOfWeek = caracasDate.getDay(); 
+
+                // Muestra todos los días para pruebas (Para producción: if (dayOfWeek >= 1 && dayOfWeek <= 3))
+                if (dayOfWeek >= 0 && dayOfWeek <= 6) {
+                    promoModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            // Cerrar el anuncio
+            document.getElementById('btn-close-promo').onclick = () => {
+                document.getElementById('modal-promo-lunes-miercoles').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            };
+
+            // Acción del botón Ordenar: Cierra el modal y abre la hamburguesa correspondiente
+            document.getElementById('btn-promo-ordenar').onclick = () => {
+                document.getElementById('modal-promo-lunes-miercoles').classList.remove('active');
+                document.body.style.overflow = 'auto';
+                const items = document.querySelectorAll('.menu-item');
+                const promoItem = Array.from(items).find(item => 
+                    item.querySelector('.item-name').innerText.includes('House Classics')
+                );
+                if (promoItem) promoItem.click();
+            };
+
             const menu = document.getElementById('main-menu');
             const modal = document.getElementById('modal-hamburguesa');
             const closeModal = document.querySelector('.close-modal');
@@ -2476,11 +2578,69 @@
             let esKids = false;
             let pedidoConfirmado = false;
             let lastItemClicked = null;
+            let currentDeliveryMethod = 'delivery'; // 'delivery' o 'pickup'
             
             // Llamamos a la verificación después de que 'menu' y otros elementos estén definidos
             if (typeof verificarHorario === 'function') {
                 verificarHorario();
             }
+
+            // Lógica Selector Delivery vs Pick Up
+            const btnModeDelivery = document.getElementById('btn-mode-delivery');
+            const btnModePickup = document.getElementById('btn-mode-pickup');
+            const deliveryTools = document.getElementById('delivery-tools');
+            const pickupInfo = document.getElementById('pickup-location-info');
+            const deliveryNotice = document.querySelector('.delivery-notice-premium span');
+            const additionalNotes = document.getElementById('additional-notes');
+
+            const setDeliveryMethod = (method) => {
+                currentDeliveryMethod = method;
+                const taxCost = document.getElementById('tax-cost');
+                const taxBar = document.getElementById('tax-bar-fill');
+                const taxStatus = document.querySelector('.tax-status');
+
+                if (method === 'delivery') {
+                    btnModeDelivery.classList.add('active');
+                    btnModePickup.classList.remove('active');
+                    deliveryTools.classList.remove('hidden');
+                    pickupInfo.classList.add('hidden');
+                    additionalNotes.classList.remove('hidden');
+                    deliveryNotice.innerText = "El costo del delivery varía según la zona de entrega";
+                    
+                    // Restaurar estado del taxímetro
+                    if (window.deliveryDistance) {
+                        window.deliveryCost = window.lastCalculatedCost;
+                        const progress = Math.min((window.deliveryDistance / 12) * 100, 100);
+                        if (taxBar) taxBar.style.width = `${progress}%`;
+                        if (taxCost) taxCost.innerText = `DELIVERY: $${window.deliveryCost}`;
+                        if (taxStatus) taxStatus.innerText = "UBICACIÓN DETECTADA";
+                    } else {
+                        window.deliveryCost = 0;
+                        if (taxBar) taxBar.style.width = `0%`;
+                        if (taxCost) taxCost.innerText = `DELIVERY: -- $`;
+                        if (taxStatus) taxStatus.innerText = "Calculando al obtener ubicación...";
+                    }
+                } else {
+                    btnModePickup.classList.add('active');
+                    btnModeDelivery.classList.remove('active');
+                    deliveryTools.classList.add('hidden');
+                    pickupInfo.classList.remove('hidden');
+                    additionalNotes.classList.add('hidden');
+                    deliveryNotice.innerText = "Retira tu pedido directamente en nuestra sede";
+                    
+                    // Guardar costo actual antes de poner a 0 para el total
+                    if (window.deliveryCost > 0) {
+                        window.lastCalculatedCost = window.deliveryCost;
+                    }
+                    window.deliveryCost = 0;
+                    
+                    if (taxCost) taxCost.innerText = `DELIVERY: GRATIS`;
+                }
+                actualizarInterfazCarrito(); // Para refrescar totales
+            };
+
+            btnModeDelivery.onclick = () => setDeliveryMethod('delivery');
+            btnModePickup.onclick = () => setDeliveryMethod('pickup');
 
             let carrito = JSON.parse(localStorage.getItem('bh_cart')) || [];
             
@@ -2529,11 +2689,11 @@
                     div.innerHTML = `
                         <div class="cart-item-info">
                             <h4>${item.cantidad}x ${item.nombre}</h4>
-                            <p class="cart-item-extras">${item.extras.length > 0 ? item.extras.map(e => {
+                            <p class="cart-item-extras">${(item.extras && item.extras.length > 0) ? item.extras.map(e => {
                                 const cleanName = e.nombre.replace(/^Extra\s+/i, '');
                                 if (e.isToggle && e.val === 'NO') return `SIN ${cleanName}`;
                                 return `+ Extra ${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
-                            }).join(', ') : ''}</p>
+                            }).join(', ') : 'Sin adicionales'}</p>
                         </div>
                         <div class="cart-item-right">
                             <div class="cart-price-column">
@@ -2554,9 +2714,6 @@
                 });
                 cartGrandTotal.innerHTML = `$${total.toFixed(2)} <span class="cart-ref-total">REF</span>`;
             }
-            
-            // Fallback de seguridad: si después de 8 segundos no ha cargado todo, mostramos el menú
-            setTimeout(finalizarCarga, 8000);
 
             cartBtn.addEventListener('click', () => {
                 cartSidebar.classList.remove('cart-closed');
@@ -2816,9 +2973,11 @@
 
                 let totalPedido = 0;
                 carrito.forEach(item => {
-                    const sin = item.extras.filter(e => e.isToggle && e.val === 'NO')
+                    const extras = item.extras || [];
+                    
+                    const sin = extras.filter(e => e.isToggle && e.val === 'NO')
                         .map(e => e.nombre.replace(/^Extra\s+/i, ''));
-                    const con = item.extras.filter(e => !(e.isToggle && e.val === 'NO'))
+                    const con = extras.filter(e => !(e.isToggle && e.val === 'NO'))
                         .map(e => `${e.qty > 1 ? e.qty + ' ' : ''}${e.nombre.replace(/^Extra\s+/i, '')}`);
 
                     mensaje += `*${item.cantidad}x ${item.nombre}*\n`;
@@ -2832,17 +2991,17 @@
                 const totalFinal = totalPedido + costoDelivery;
 
                 mensaje += `\n------------------------------\n`;
-                mensaje += `💰 *RESUMEN DE PAGO:*\n`;
+                mensaje += `*RESUMEN DE PAGO:*\n`;
                 mensaje += `Subtotal Productos: $${totalPedido.toFixed(2)} REF\n`;
                 mensaje += `Envío (Delivery): $${costoDelivery.toFixed(2)} REF\n`;
                 mensaje += `*TOTAL A PAGAR: $${totalFinal.toFixed(2)} REF*\n`;
                 mensaje += `------------------------------\n\n`;
 
-                mensaje += `🏠 *DATOS DE ENTREGA:*\n`;
+                mensaje += `*DATOS DE ENTREGA:*\n`;
                 if (notas) mensaje += `*Notas/Referencia:* ${notas}\n`;
 
                 if (mapsLink) {
-                    mensaje += `📍 *Ubicación Maps:* ${mapsLink}\n`;
+                    mensaje += `*Ubicación Maps:* ${mapsLink}\n`;
                 }
 
                 if (isPreOrder) {
@@ -2908,10 +3067,12 @@
             btnUpsellShowDrinks.addEventListener('click', () => {
                 history.back(); // Cierra el modal de upsell
                 setTimeout(() => {
-                    const seccionBebidas = document.getElementById('bebidas');
-                    if (seccionBebidas) {
-                        seccionBebidas.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Simular un clic en el botón de categoría "Bebidas"
+                    const bebidasCategoryBtn = document.querySelector('.category-btn[data-category="bebidas"]');
+                    if (bebidasCategoryBtn) {
+                        bebidasCategoryBtn.click(); // Esto activará el filtro y hará scroll
                     }
+                    // Si por alguna razón el botón no existe, el scroll directo ya no es necesario aquí
                 }, 400);
             });
 
@@ -2954,86 +3115,6 @@
         });
     </script>
 
-    <script>
-        // LÓGICA DE INSTALACIÓN PWA UNIFICADA (CORREGIDA)
-        let deferredPrompt;
-        const pwaBanner = document.getElementById('pwa-install-banner');
-        const persistentBanner = document.getElementById('persistent-install-banner');
-        const btnInstalarPWA = document.getElementById('btn-pwa-instalar');
-        const btnNavegadorPWA = document.getElementById('btn-pwa-navegador');
-        const btnBannerInstall = document.querySelector('.btn-banner-install');
-
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-        // 1. Capturar el evento oficial de instalación
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Evitar que Chrome muestre el mini-infobar automático para usar nuestros botones
-            e.preventDefault();
-            // Guardamos el evento para dispararlo luego
-            deferredPrompt = e;
-            
-            console.log('✅ PWA lista para instalar: Evento capturado.');
-
-            // Mostrar banners si no han sido rechazados y no es modo app
-            if (!localStorage.getItem('pwa_rejected') && !isStandalone) {
-                if (pwaBanner) pwaBanner.style.display = 'flex';
-                if (persistentBanner) persistentBanner.style.display = 'flex';
-            }
-        });
-
-        // 2. Función para disparar el prompt nativo de Android/Edge
-        async function ejecutarInstalacion() {
-            if (!deferredPrompt) {
-                console.log('❌ Instalación no disponible: deferredPrompt es nulo.');
-                if (isIOS) {
-                    alert('En iPhone: Pulsa "Compartir" y luego "Añadir a la pantalla de inicio".');
-                } else {
-                    alert('La instalación aún no está lista. Intenta recargar o espera unos segundos.');
-                }
-                return;
-            }
-
-            // Mostrar la ventana nativa de instalación
-            deferredPrompt.prompt();
-            
-            // Esperar la respuesta del usuario
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`Usuario respondió a la instalación: ${outcome}`);
-
-            if (outcome === 'accepted') {
-                if (pwaBanner) pwaBanner.style.display = 'none';
-                if (persistentBanner) persistentBanner.style.display = 'none';
-            }
-            
-            // Limpiar la variable (el evento solo sirve una vez)
-            deferredPrompt = null;
-        }
-
-        // 3. Vincular eventos a los botones
-        if (btnInstalarPWA) btnInstalarPWA.addEventListener('click', ejecutarInstalacion);
-        if (btnBannerInstall) btnBannerInstall.addEventListener('click', ejecutarInstalacion);
-
-        if (btnNavegadorPWA) {
-            btnNavegadorPWA.addEventListener('click', () => {
-                if (pwaBanner) pwaBanner.style.display = 'none';
-                localStorage.setItem('pwa_rejected', 'true');
-            });
-        }
-
-        // Ocultar banners automáticamente si se instala con éxito
-        window.addEventListener('appinstalled', () => {
-            console.log('⭐ App instalada correctamente.');
-            if (pwaBanner) pwaBanner.style.display = 'none';
-            if (persistentBanner) persistentBanner.style.display = 'none';
-        });
-
-        // Ocultar si ya es PWA
-        if (isStandalone) {
-            if (pwaBanner) pwaBanner.style.display = 'none';
-            if (persistentBanner) persistentBanner.style.display = 'none';
-        }
-    </script>
 
     <script>
         // Lógica de Geolocalización
@@ -3043,8 +3124,8 @@
             const textSpan = btnLocation ? btnLocation.querySelector('span') : null;
 
             // Coordenadas fijas de Burger House
-            const STORE_LAT = 8.553525;
-            const STORE_LON = -71.205120;
+            const STORE_LAT = 8.553563;
+            const STORE_LON = -71.205238;
 
             // Función para calcular distancia (Haversine)
             function calcularDistanciaHaversine(lat1, lon1, lat2, lon2) {
@@ -3134,14 +3215,5 @@
         });
     </script>
 
-    <script>
-        // Registro del Service Worker (PWA Real)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js', { scope: './' })
-                    .catch(err => console.log('SW registration failed:', err));
-            });
-        }
-    </script>
 </body>
 </html>
