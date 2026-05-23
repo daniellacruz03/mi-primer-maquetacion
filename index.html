@@ -105,24 +105,10 @@
             place-items: center;
         }
 
-        .logo-glow-wrap::before {
-            content: "";
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 133, 26, 0.66) 0%, rgba(255, 133, 26, 0.14) 45%, rgba(255, 133, 26, 0) 75%);
-            filter: blur(5px);
-            animation: grill-glow 2.1s ease-in-out infinite;
-            will-change: transform, opacity;
-        }
-
         .logo-animado {
             width: 165px !important;
             max-width: 165px !important;
             border-radius: 50%;
-            border: 3px solid rgba(255, 70, 40, 0.95);
-            box-shadow: 0 0 28px rgba(255, 88, 24, 0.45);
             animation: logo-pulse-fire 1.8s ease-in-out infinite;
             position: relative;
             z-index: 1;
@@ -253,9 +239,9 @@
         }
 
         #cart-floating-btn {
-            background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
-            border-top: 1px solid rgba(255,255,255,0.3) !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -276,7 +262,7 @@
             background-color: transparent !important;
             border-radius: 0 !important;
             padding: 0 !important;
-            filter: brightness(0) invert(1);
+            filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(0,0,0,0.4));
         }
 
         #cart-floating-btn .icono-moto {
@@ -368,16 +354,14 @@
         .sticky-nav {
             position: sticky;
             top: 0;
-            z-index: 100;
-            background: 
-                radial-gradient(circle at 0% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 100% 0%, rgba(255, 0, 0, 0.15) 0%, transparent 40%),
-                rgba(10, 10, 10, 0.98);
-            padding-top: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border-radius: 50px 50px 0 0;
-            margin-top: -1px;
+            z-index: 2000;
+            background: rgba(8, 8, 8, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            padding: 15px 30px 5px !important;
+            margin: 0 -30px 10px -30px !important;
+            border-radius: 0 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
         }
 
         .menu-header {
@@ -385,7 +369,7 @@
             align-items: center;
             justify-content: flex-start;
             gap: 15px;
-            margin-bottom: 15px; /* Más espacio entre la barra de búsqueda y las categorías */
+            margin-bottom: 5px; /* Reducido para acercar las categorías */
         }
 
         .menu-container::before {
@@ -565,7 +549,7 @@
                 overflow-y: auto; /* Permite el scroll solo dentro del menú */
                 position: sticky; /* Se queda pegado a la pantalla */
                 top: 5vh; /* Se separa un poco del borde superior */
-                padding-bottom: 80px !important; /* Reducimos el espacio final exagerado */
+                padding-bottom: 0 !important; 
             }
             section:not(#bebidas) {
                 display: grid;
@@ -782,16 +766,21 @@
             align-items: center;
         }
 
+        .menu-header-logo {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
         .search-input {
-            width: 100%;
             background: rgba(255, 255, 255, 0.05) !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-radius: 12px !important;
-            padding: 8px 12px 8px 35px !important;
-            color: #fff !important;
-            font-size: 0.85rem !important;
-            outline: none !important;
-            transition: all 0.3s ease !important;
+            border-radius: 50px !important;
+            padding: 10px 15px 10px 38px !important;
+            width: 100%;
+            backdrop-filter: none !important;
+            box-shadow: none !important;
         }
 
         .search-input:focus {
@@ -1004,33 +993,37 @@
 
         #btn-get-location {
             position: relative;
-            background: rgba(255, 255, 255, 0.05) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
-            border-radius: 12px !important;
-            color: rgba(255, 255, 255, 0.9) !important;
-            height: 52px !important;
+            background: var(--primary-color) !important;
+            border: none !important;
+            border-radius: 50px !important;
+            color: #ffffff !important;
+            height: auto !important;
+            padding: 10px 30px !important;
+            grid-column: span 2 !important;
             display: flex !important;
+            flex-direction: row !important;
             align-items: center !important;
             justify-content: center !important;
-            gap: 10px !important;
+            gap: 12px !important;
             cursor: pointer;
-            font-size: 0.88rem !important;
-            font-weight: 500 !important;
-            letter-spacing: 0.3px;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
+            box-shadow: 0 4px 15px rgba(230, 0, 0, 0.3) !important;
         }
 
-        #btn-get-location .icon-location-pin {
-            stroke: #ff0000;
-            width: 20px;
-            height: 20px;
+        #btn-get-location svg {
+            stroke: #ffffff;
+            width: 24px;
+            height: 24px;
         }
 
         #btn-get-location:active { transform: scale(0.96); }
         #btn-get-location:hover {
-            background: rgba(255, 255, 255, 0.08) !important;
-            border-color: rgba(255, 0, 0, 0.3) !important;
+            filter: brightness(1.1);
         }
         #btn-get-location.loading { opacity: 0.6; pointer-events: none; }
 
@@ -1159,20 +1152,14 @@
 
         /* Barra de Categorías Horizontal */
         .category-bar {
-            display: flex;
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden; 
-            height: auto;
-            touch-action: pan-x; /* Bloquea el scroll vertical solo en esta barra */
-            gap: 12px;
-            padding: 8px 5px 15px 5px;
-            margin-bottom: 0px;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
-            -webkit-overflow-scrolling: touch;
             background: transparent !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-radius: 0;
+            padding: 10px 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            margin-top: 5px;
         }
 
         .category-bar::-webkit-scrollbar {
@@ -1272,7 +1259,7 @@
                 height: 100vh !important;
                 min-height: 100vh !important;
                 margin: 0 !important;
-                padding: 0 15px 120px !important;
+                padding: 0 15px 0 !important;
                 border-radius: 0 !important;
                 backdrop-filter: none !important;
                 background: rgba(10, 10, 10, 0.98) !important;
@@ -1282,13 +1269,9 @@
             }
 
             .sticky-nav {
-                padding-top: 15px;
-                margin: 0 -15px;
-                padding-left: 15px;
-                padding-right: 15px;
+                margin: 0 -15px 10px -15px !important;
+                padding: 15px 15px 5px !important;
                 border-radius: 0;
-                background: rgba(10, 10, 10, 0.98);
-                backdrop-filter: blur(10px);
             }
 
             .menu-header {
@@ -1503,6 +1486,79 @@
             border-color: var(--primary-color) !important;
             box-shadow: 0 4px 12px rgba(230, 0, 0, 0.4);
         }
+
+        /* --- ESTILOS DE INTERRUPTORES PREMIUM PARA PROMOS --- */
+        #modal-promo-selection .extras-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .promo-burger-card {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 18px !important;
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 14px 20px !important;
+            cursor: pointer;
+            transition: all 0.3s ease !important;
+            height: auto !important;
+        }
+
+        .promo-burger-card.selected {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .promo-toggle-switch {
+            width: 42px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .promo-switch-indicator {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .promo-burger-card.selected .promo-toggle-switch {
+            background: var(--primary-color);
+        }
+
+        .promo-burger-card.selected .promo-switch-indicator {
+            transform: translateX(20px);
+        }
+
+    /* Eliminar padding para que el anuncio cubra todo */
+    #modal-promo-lunes-miercoles {
+        padding: 0 !important;
+    }
+
+    /* Ajuste para dar más protagonismo a la imagen y bajar el texto en la promo */
+    #modal-promo-selection .modal-image-container {
+        height: 620px !important;
+    }
+
+    @media (max-width: 768px) {
+        #modal-promo-selection .modal-image-container {
+            height: 65vh !important;
+            max-height: 550px !important;
+        }
+    }
+
+        .hidden { display: none !important; }
 
     </style>
 </head>
@@ -1750,13 +1806,13 @@
             </div>
 
             <div class="menu-item">
-                <img src="house tower.webp" class="item-img-bg ajuste-alejar" alt="House Tower" loading="lazy" width="400" height="220">
+                <img src="housetower.webp" class="item-img-bg ajuste-alejar" alt="House Tower" loading="lazy" width="400" height="220">
                 <div class="item-info-split">
                     <div class="item-info">
                         <span class="item-name">House Tower</span>
                         <p class="item-desc">Pan de papa, carne, chuleta, pollo, pepinillo, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
                     </div>
-                    <div class="item-price-wrapper" data-img-src="house tower.webp">
+                    <div class="item-price-wrapper" data-img-src="housetower.webp">
                         <span class="item-price">$17,99</span>
                         <span class="item-ref">REF</span>
                     </div>
@@ -1811,13 +1867,13 @@
                 </div>
             </div>
             <div class="menu-item">
-                <img src="tequeños.webp" class="item-img-bg" alt="Tequeños" loading="lazy" width="400" height="220">
+            <img src="tequeños.webp" class="item-img-bg" alt="Tequeños" loading="lazy" width="400" height="220">
                 <div class="item-info-split">
                     <div class="item-info">
                         <span class="item-name">Servicio de Tequeños</span>
                         <p class="item-desc">Tequeños (6 unidades).</p>
                     </div>
-                    <div class="item-price-wrapper" data-img-src="tequeños.webp">
+                <div class="item-price-wrapper" data-img-src="tequeños.webp">
                         <span class="item-price">$5,99</span>
                         <span class="item-ref">REF</span>
                     </div>
@@ -1944,6 +2000,44 @@
                 </div>
             </div>
         </section>
+
+        <!-- --- FOOTER (REDES Y PAGOS) --- -->
+        <footer class="bh-footer">
+            <div class="footer-section">
+                <p class="footer-label">SÍGUENOS EN REDES</p>
+                <div class="footer-social-links">
+                    <a href="https://www.instagram.com/burgerhouse.merida?igsh=M2lwZXk3djJtbTdh" target="_blank" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/share/1LbFWBEYvY/" target="_blank" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://wa.me/584127510090" target="_blank" aria-label="WhatsApp">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <p class="footer-label">MÉTODOS DE PAGO</p>
+                <div class="payment-grid">
+                    <div class="payment-item">Efectivo</div>
+                    <div class="payment-item">Pago Móvil</div>
+                    <div class="payment-item">Zelle</div>
+                    <div class="payment-item">Binance</div>
+                </div>
+            </div>
+
+            <div class="footer-credits">
+                <p>&copy; 2026<b>Burger House</b>. Todos los derechos reservados.</p>
+                <p>Las mejores hamburguesas de la ciudad.</p>
+                <div style="margin-top: 20px; opacity: 0.4; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase;">
+                    <p>Digital Experience by <b>lacrush</b></p>
+                </div>
+            </div>
+        </footer>
     </main>
 
     <div id="cart-sidebar" class="cart-closed">
@@ -1990,7 +2084,7 @@
                     <input type="hidden" id="maps" name="maps">
                     
                     <div id="pickup-location-info" class="hidden">
-                        <p><b>Dirección de retiro:</b><br>Calle principal de la mara 3ra calle mano izquierda al final hay un kiosco azul en la entrada al fondo tonwhouse beige con marrón el 3 está a mano izquierda</p>
+                        <p><b>Dirección de retiro:</b><br>Urb. La Mara, Calle Principal, 3ra. calle a la izquierda. Al final de la calle, ingresar junto al quiosco azul. Townhouse beige con marrón, Nro. 3 (a mano izquierda).</p>
                         <a href="https://maps.google.com/?q=8.553563,-71.205238" target="_blank" class="btn-maps-pickup">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>
@@ -2000,26 +2094,14 @@
                     </div>
 
                     <div class="checkout-grid" id="delivery-tools">
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
-                            <button type="button" id="btn-get-location" title="Obtener ubicación" style="width: 100%; margin: 0;">
-                                <svg class="icon-location-pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                <span>Ubicación actual</span>
-                            </button>
-                        </div>
-                        <div id="taximetro-delivery" class="taximetro-container">
-                            <div class="taximetro-info">
-                                <span id="tax-cost">DELIVERY: -- $</span>
-                            </div>
-                            <div class="taximetro-bar-bg">
-                                <div id="tax-bar-fill" class="taximetro-bar-fill">
-                                    <div class="taximetro-pin"></div>
-                                </div>
-                            </div>
-                            <p class="tax-status">Calculando al obtener ubicación...</p>
-                        </div>
+                        <button type="button" id="btn-get-location" title="Obtener ubicación" style="width: 100%; margin: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.6-1.8A2 2 0 0 1 22 5.541V17.5a2 2 0 0 1-1.106 1.789l-3.6 1.8a2 2 0 0 1-1.788 0l-7.2-3.6a2 2 0 0 0-1.788 0l-3.6 1.8A2 2 0 0 1 2 17.5V5.5a2 2 0 0 1 1.106-1.789l3.6-1.8a2 2 0 0 1 1.788 0z"></path>
+                                <path d="M15 18.677V5.823"></path>
+                                <path d="M9 18.177V5.323"></path>
+                            </svg>
+                            <span>Enviar dirección</span>
+                        </button>
                     </div>
 
                     <button type="submit" id="btn-whatsapp-final" class="btn-checkout-final">
@@ -2323,10 +2405,67 @@
             <button class="close-promo" id="btn-close-promo">&times;</button>
             <div class="promo-img-container">
                 <img src="promolunesmiercoles.webp" alt="Promoción Especial">
+                <button id="btn-promo-ordenar" class="btn-promo-premium">
+                    ¡ORDENAR AHORA!
+                </button>
             </div>
-            <button id="btn-promo-ordenar" class="btn-promo-premium">
-                ¡ORDENAR AHORA!
-            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Selección de Promo -->
+    <div id="modal-promo-selection" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-promo-selection">&times;</button>
+            <div class="modal-image-container">
+                <img src="houseclasic.webp" alt="Promoción" id="modal-promo-img" style="object-fit: cover; width: 100%; height: 100%;">
+            </div>
+            <div class="modal-details">
+                <h2 class="modal-title">Elige tu Promo</h2>
+                <p class="modal-description">Selecciona una de nuestras burgers en promoción por solo $6.50 REF.</p>
+                
+                <div class="modal-extras-container">
+                    <h3 class="extras-title">Selecciona tu Burger</h3>
+                    <div class="extras-grid" id="promo-burger-options">
+                        <div class="extra-card promo-burger-card selected" data-burger="House Classic" data-img-src="houseclasic.webp">
+                            <div class="extra-info-text"><span class="extra-name">House Classic</span></div>
+                            <div class="promo-toggle-switch">
+                                <span class="promo-switch-indicator"></span>
+                                <span class="extra-qty-val hidden">SÍ</span>
+                            </div>
+                        </div>
+                        <div class="extra-card promo-burger-card" data-burger="Cheese House" data-img-src="cheese house.webp">
+                            <div class="extra-info-text"><span class="extra-name">Cheese House</span></div>
+                            <div class="promo-toggle-switch">
+                                <span class="promo-switch-indicator"></span>
+                                <span class="extra-qty-val hidden">NO</span>
+                            </div>
+                        </div>
+                        <div class="extra-card promo-burger-card" data-burger="Baby Crispy" data-img-src="baby crispy.webp">
+                            <div class="extra-info-text"><span class="extra-name">Baby Crispy</span></div>
+                            <div class="promo-toggle-switch">
+                                <span class="promo-switch-indicator"></span>
+                                <span class="extra-qty-val hidden">NO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="extras-title" style="margin-top: 20px;">Potencia tu Promo</h3>
+                    <div class="extras-grid">
+                        <div class="extra-card promo-burger-card" id="promo-combo-option">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Papitas + Bombita</span> <span class="extra-cost">+$2.00</span>
+                            </div>
+                            <div class="promo-toggle-switch">
+                                <span class="promo-switch-indicator"></span>
+                                <span class="extra-qty-val hidden">NO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="modal-price" id="promo-selection-price">$6.50 <span class="modal-ref">REF</span></span>
+                <button class="btn-add-order" id="btn-add-promo-to-cart">Añadir al pedido</button>
+            </div>
         </div>
     </div>
 
@@ -2368,7 +2507,7 @@
     <div id="modal-closed" class="modal" style="z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
             <div class="modal-details">
-                <img src="logobh.webp" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #ff0000;">
+                <img src="logobh.webp" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px;">
                 <h2 class="modal-title">¡Hola! Estamos cerrados</h2>
                 <p class="modal-description">Nuestro horario de atención es:<br><br>
                 <b>Lunes a Viernes:</b> 5:00 PM - 10:30 PM<br>
@@ -2528,9 +2667,13 @@
                 const now = new Date();
                 const caracasDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Caracas"}));
                 const dayOfWeek = caracasDate.getDay(); 
+                const tiempoTotalMinutos = (caracasDate.getHours() * 60) + caracasDate.getMinutes();
 
-                // Muestra todos los días para pruebas (Para producción: if (dayOfWeek >= 1 && dayOfWeek <= 3))
-                if (dayOfWeek >= 0 && dayOfWeek <= 6) {
+                // Lunes (1) a Miércoles (3) y dentro del horario de trabajo (17:00 - 22:30)
+                const esDiaPromo = dayOfWeek >= 1 && dayOfWeek <= 3;
+                const esHoraTrabajo = tiempoTotalMinutos >= 1020 && tiempoTotalMinutos <= 1350;
+
+                if (esDiaPromo && esHoraTrabajo) {
                     promoModal.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 }
@@ -2540,17 +2683,6 @@
             document.getElementById('btn-close-promo').onclick = () => {
                 document.getElementById('modal-promo-lunes-miercoles').classList.remove('active');
                 document.body.style.overflow = 'auto';
-            };
-
-            // Acción del botón Ordenar: Cierra el modal y abre la hamburguesa correspondiente
-            document.getElementById('btn-promo-ordenar').onclick = () => {
-                document.getElementById('modal-promo-lunes-miercoles').classList.remove('active');
-                document.body.style.overflow = 'auto';
-                const items = document.querySelectorAll('.menu-item');
-                const promoItem = Array.from(items).find(item => 
-                    item.querySelector('.item-name').innerText.includes('House Classics')
-                );
-                if (promoItem) promoItem.click();
             };
 
             const menu = document.getElementById('main-menu');
@@ -2579,6 +2711,104 @@
             const btnAddOrderMain = modal.querySelector('.btn-add-order');
             const modalClosed = document.getElementById('modal-closed');
             const btnPreOrder = document.getElementById('btn-pre-order');
+
+            // Lógica para el Modal de Selección de Promo
+            const modalPromoSelection = document.getElementById('modal-promo-selection');
+            const closePromoSelection = document.getElementById('close-promo-selection');
+            const promoBurgerCards = document.querySelectorAll('#promo-burger-options .promo-burger-card');
+            const promoComboCard = document.getElementById('promo-combo-option');
+            const promoPriceDisplay = document.getElementById('promo-selection-price');
+            const btnAddPromoToCart = document.getElementById('btn-add-promo-to-cart');
+
+            const updatePromoUI = () => {
+                let total = 6.50;
+                const valSpan = promoComboCard.querySelector('.extra-qty-val');
+                if (valSpan.innerText === 'SÍ') total += 2.00;
+                promoPriceDisplay.innerHTML = `$${total.toFixed(2)} <span class="modal-ref">REF</span>`;
+            };
+
+            // Acción del botón Ordenar (Popup Promo) - Versión Corregida
+            const btnPromoOrdenar = document.getElementById('btn-promo-ordenar');
+            if (btnPromoOrdenar) {
+                btnPromoOrdenar.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation(); // Evita interferencias
+                    document.getElementById('modal-promo-lunes-miercoles').classList.remove('active');
+                    const pModal = document.getElementById('modal-promo-selection');
+                    if (pModal) {
+                        pModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                        document.getElementById('modal-promo-img').src = 'houseclasic.webp';
+                        updatePromoUI(); // Ahora sí está definida
+                    }
+                });
+            }
+
+            promoBurgerCards.forEach(card => {
+                card.onclick = () => {
+                    // Deseleccionar todas
+                    promoBurgerCards.forEach(c => {
+                        c.classList.remove('selected');
+                        c.querySelector('.extra-qty-val').innerText = 'NO';
+                    });
+                    // Seleccionar la actual
+                    card.classList.add('selected');
+                    card.querySelector('.extra-qty-val').innerText = 'SÍ';
+
+                    // Cambiar imagen dinámicamente
+                    const mainImg = document.getElementById('modal-promo-img');
+                    if (card.dataset.imgSrc) mainImg.src = card.dataset.imgSrc;
+                    updatePromoUI();
+                };
+            });
+
+            promoComboCard.onclick = () => {
+                const valSpan = promoComboCard.querySelector('.extra-qty-val');
+                const isSelected = valSpan.innerText === 'SÍ';
+                valSpan.innerText = isSelected ? 'NO' : 'SÍ';
+                promoComboCard.classList.toggle('selected', !isSelected);
+                updatePromoUI();
+            };
+
+            if(closePromoSelection) closePromoSelection.onclick = () => {
+                modalPromoSelection.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                menu.style.overflow = '';
+            };
+
+            btnAddPromoToCart.onclick = () => {
+                const selectedBurgerCard = Array.from(promoBurgerCards).find(c => c.classList.contains('selected'));
+                if (!selectedBurgerCard) return alert("Por favor selecciona una hamburguesa.");
+                const burgerName = selectedBurgerCard.dataset.burger;
+                const hasCombo = promoComboCard.querySelector('.extra-qty-val').innerText === 'SÍ';
+                const basePromoPrice = 6.50;
+                const finalPrice = hasCombo ? 8.50 : 6.50;
+
+                const extrasPromo = [];
+                if (hasCombo) {
+                    extrasPromo.push({
+                        nombre: 'Extra Papitas + Bombita',
+                        qty: 1,
+                        val: '1',
+                        isToggle: false,
+                        precio: 2.00
+                    });
+                }
+
+                carrito.push({
+                    id: 'promo-' + Date.now(),
+                    nombre: `PROMO ${burgerName}`,
+                    cantidad: 1,
+                    precioUnitario: basePromoPrice,
+                    extras: extrasPromo,
+                    subtotal: finalPrice
+                });
+                actualizarInterfazCarrito();
+                modalPromoSelection.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                menu.style.overflow = '';
+                abrirCarritoConFeedback();
+            };
 
             let basePrice = 0;
             let currentMainQty = 1;
@@ -2672,6 +2902,10 @@
                 localStorage.setItem('bh_cart', JSON.stringify(carrito));
             }
             function abrirCarritoConFeedback() {
+                // FIX: Asegurar que siempre inicie en la vista de pedido y no en la de entrega
+                checkoutView.classList.add('hidden');
+                cartItemsView.classList.remove('hidden');
+                
                 setTimeout(() => {
                     cartSidebar.classList.remove('cart-closed');
                     if(cartBtn) {
@@ -2695,14 +2929,17 @@
                     total += item.subtotal;
                     const div = document.createElement('div');
                     div.className = 'cart-item-row';
+                    // Generamos el texto de extras, ocultando "Sin adicionales" para promos para mayor claridad
+                    const extrasHtml = (item.extras && item.extras.length > 0) ? item.extras.map(e => {
+                        const cleanName = e.nombre.replace(/^Extra\s+/i, '');
+                        if (e.isToggle && e.val === 'NO') return `SIN ${cleanName}`;
+                        return `+ Extra ${cleanName}${e.qty > 1 ? ' (' + e.qty + ')' : ''}`;
+                    }).join(', ') : (item.nombre.startsWith('PROMO') ? '' : 'Sin adicionales');
+
                     div.innerHTML = `
                         <div class="cart-item-info">
                             <h4>${item.cantidad}x ${item.nombre}</h4>
-                            <p class="cart-item-extras">${(item.extras && item.extras.length > 0) ? item.extras.map(e => {
-                                const cleanName = e.nombre.replace(/^Extra\s+/i, '');
-                                if (e.isToggle && e.val === 'NO') return `SIN ${cleanName}`;
-                                return `+ Extra ${e.qty > 1 ? e.qty + ' ' : ''}${cleanName}`;
-                            }).join(', ') : 'Sin adicionales'}</p>
+                            <p class="cart-item-extras">${extrasHtml}</p>
                         </div>
                         <div class="cart-item-right">
                             <div class="cart-price-column">
@@ -2847,7 +3084,8 @@
                     menu.style.overflow = 'hidden';
                 });
             });
-            document.querySelectorAll('.extra-qty-btn').forEach(btn => {
+
+            document.querySelectorAll('#modal-hamburguesa .extra-qty-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const card = btn.closest('.extra-card');
                     const valSpan = btn.parentElement.querySelector('.extra-qty-val');
@@ -2891,7 +3129,8 @@
             const agregarAlPedido = () => {
                 if (currentMainQty < 1) return;
                 const extrasSeleccionados = [];
-                document.querySelectorAll('.extra-card').forEach(card => {
+                // Usamos el selector del modal para mayor precisión
+                modal.querySelectorAll('.extra-card').forEach(card => {
                     const valText = card.querySelector('.extra-qty-val').innerText;
                     const nombre = card.querySelector('.extra-name').innerText;
                     const isToggle = card.dataset.isToggle === "true";
@@ -2911,7 +3150,7 @@
                             qty: qty,
                             val: valText,
                             isToggle: isToggle,
-                            precio: parseFloat(card.dataset.extraPrice) * qty
+                            precio: (parseFloat(card.dataset.extraPrice.toString().replace(',', '.')) || 0) * qty
                         });
                     }
                 });
@@ -2987,7 +3226,7 @@
                     const sin = extras.filter(e => e.isToggle && e.val === 'NO')
                         .map(e => e.nombre.replace(/^Extra\s+/i, ''));
                     const con = extras.filter(e => !(e.isToggle && e.val === 'NO'))
-                        .map(e => `${e.qty > 1 ? e.qty + ' ' : ''}${e.nombre.replace(/^Extra\s+/i, '')}`);
+                        .map(e => `${e.nombre.replace(/^Extra\s+/i, '')}${e.qty > 1 ? ' (' + e.qty + ')' : ''}`);
 
                     mensaje += `*${item.cantidad}x ${item.nombre}*\n`;
                     if (con.length > 0) mensaje += `   + EXTRAS: ${con.join(', ')}\n`;
@@ -3053,15 +3292,18 @@
             function updateTotal() {
                 let extraTotal = 0;
 
-                document.querySelectorAll('.extra-card').forEach(card => {
+                modal.querySelectorAll('.extra-card').forEach(card => {
+                    if (card.style.display === 'none') return;
+
                     const valSpan = card.querySelector('.extra-qty-val');
                     const valText = valSpan.innerText;
                     const qty = valText === 'SÍ' ? 1 : (valText === 'NO' ? 0 : (parseInt(valText) || 0));
                     
                     const extraPriceRaw = card.dataset.extraPrice || "0";
-                    const extraPriceValue = parseFloat(extraPriceRaw.toString().replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
+                    const extraPriceValue = parseFloat(extraPriceRaw.toString().replace(',', '.')) || 0;
                     extraTotal += qty * extraPriceValue;
                 });
+
                 let finalTotal = (basePrice + extraTotal) * (currentMainQty || 1);
                 if (isNaN(finalTotal)) finalTotal = basePrice || 0;
 
@@ -3070,7 +3312,7 @@
             }
             
             window.addEventListener('click', (e) => {
-                if (e.target === modal || e.target === modalUpsellDrinks) cerrarFunc();
+                if (e.target === modal || e.target === modalUpsellDrinks || e.target === modalPromoSelection) cerrarFunc();
             });
 
             btnUpsellShowDrinks.addEventListener('click', () => {
