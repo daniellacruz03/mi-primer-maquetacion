@@ -33,7 +33,7 @@
         }
 
         body {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('brasas.webp') !important;
+            background: linear-gradient(to bottom, #1a0000 0%, #080808 100%) !important;
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
@@ -56,9 +56,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background:
-                radial-gradient(circle at 50% 120%, rgba(255, 90, 20, 0.16) 0%, rgba(255, 90, 20, 0) 46%),
-                linear-gradient(180deg, #000000 0%, #070707 55%, #120404 100%);
+            background: linear-gradient(to bottom, #1a0000 0%, #080808 100%);
             overflow: hidden;
             transition: opacity 0.9s ease, filter 0.9s ease;
         }
@@ -72,19 +70,6 @@
                 radial-gradient(circle at 80% 42%, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px);
             background-size: 6px 6px, 7px 7px;
             opacity: 0.2;
-        }
-
-        .contenedor-logo::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            bottom: 16%;
-            width: 320px;
-            height: 130px;
-            transform: translateX(-50%);
-            background: radial-gradient(ellipse at center, rgba(255, 100, 20, 0.28) 0%, rgba(255, 100, 20, 0) 72%);
-            filter: blur(7px);
-            animation: preloader-heat 2.4s ease-in-out infinite;
         }
 
         .preloader-inner {
@@ -2641,7 +2626,8 @@
                     btn.classList.add('active');
 
                     const category = btn.dataset.category;
-                    const sections = document.querySelectorAll('#main-menu section'); // Target sections within main-menu
+                    const sections = document.querySelectorAll('#main-menu section');
+                    const footer = document.querySelector('.bh-footer');
                     
                     searchInput.value = ''; // Limpiar barra de búsqueda al filtrar por categoría
                     
@@ -2653,6 +2639,15 @@
                             section.classList.add('hidden-search');
                         }
                     });
+
+                    // Mostrar el footer solo en la vista "Todos"
+                    if (footer) {
+                        if (category === 'all') {
+                            footer.classList.remove('hidden');
+                        } else {
+                            footer.classList.add('hidden');
+                        }
+                    }
 
                     // Scroll to the top of the menu container after filtering
                     document.getElementById('main-menu').scrollTo({
@@ -3235,14 +3230,9 @@
                     totalPedido += item.subtotal;
                 });
 
-                const costoDelivery = parseFloat(window.deliveryCost) || 0;
-                const totalFinal = totalPedido + costoDelivery;
-
                 mensaje += `\n------------------------------\n`;
-                mensaje += `*RESUMEN DE PAGO:*\n`;
-                mensaje += `Subtotal Productos: $${totalPedido.toFixed(2)} REF\n`;
-                mensaje += `Envío (Delivery): $${costoDelivery.toFixed(2)} REF\n`;
-                mensaje += `*TOTAL A PAGAR: $${totalFinal.toFixed(2)} REF*\n`;
+                mensaje += `*TOTAL DEL PEDIDO: $${totalPedido.toFixed(2)} REF*\n`;
+                mensaje += `_(El costo del delivery se calcula al recibir la ubicación)_\n`;
                 mensaje += `------------------------------\n\n`;
 
                 mensaje += `*DATOS DE ENTREGA:*\n`;
