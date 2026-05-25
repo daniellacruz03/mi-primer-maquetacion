@@ -94,10 +94,6 @@
             }, 200);
         };
 
-        document.getElementById('bh-promo-banner-close')?.addEventListener('click', () => {
-            document.getElementById('bh-promo-banner')?.classList.add('hidden');
-        });
-
         const imgs = Array.from(document.querySelectorAll('img'));
         let cargadas = 0;
         const total = imgs.length;
@@ -903,7 +899,6 @@
                 history.pushState({ orderSent: true }, '');
                 return;
             }
-            /* El modal de historias lo cierra stories.js */
             const activeModal = document.querySelector('.modal.active');
             const cartOpen = cartSidebar && !cartSidebar.classList.contains('cart-closed');
             if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
@@ -982,5 +977,66 @@
                 );
             });
         }
+
+        /* ——— Banner promocional: cerrar y ocultar al scroll ——— */
+        const initPromoBanner = () => {
+            const banner = document.getElementById('bh-promo-banner');
+            const closeBtn = document.getElementById('bh-promo-banner-close');
+            const menu = document.getElementById('main-menu');
+            if (!banner || !menu) return;
+
+            try {
+                localStorage.removeItem('bh_banner_dismissed');
+            } catch {
+                /* ignore */
+            }
+
+            const revealBanner = () => {
+                if (banner.classList.contains('is-dismissed')) return;
+                banner.classList.remove('is-scroll-hidden');
+            };
+
+            if (sessionStorage.getItem('bh_banner_dismissed') === '1') {
+                banner.classList.add('is-dismissed');
+                return;
+            }
+
+            revealBanner();
+
+            if (!menu.classList.contains('mostrar-menu')) {
+                const menuObserver = new MutationObserver(() => {
+                    if (menu.classList.contains('mostrar-menu')) {
+                        revealBanner();
+                        menuObserver.disconnect();
+                    }
+                });
+                menuObserver.observe(menu, { attributes: true, attributeFilter: ['class'] });
+            }
+
+            let lastScrollTop = 0;
+            const onScroll = () => {
+                if (banner.classList.contains('is-dismissed')) return;
+                const top = menu.scrollTop;
+                if (top > 28 && top > lastScrollTop) {
+                    banner.classList.add('is-scroll-hidden');
+                } else if (top <= 12) {
+                    revealBanner();
+                }
+                lastScrollTop = top;
+            };
+
+            menu.addEventListener('scroll', onScroll, { passive: true });
+
+            closeBtn?.addEventListener('click', () => {
+                banner.classList.add('is-dismissed');
+                try {
+                    sessionStorage.setItem('bh_banner_dismissed', '1');
+                } catch {
+                    /* ignore */
+                }
+            });
+        };
+
+        initPromoBanner();
     });
 })();
