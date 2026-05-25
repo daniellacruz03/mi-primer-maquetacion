@@ -1072,5 +1072,52 @@ h1 {
     object-fit: cover !important;
 }
 
-.
+/* --- CAPA DEL MENÚ SUPERIOR / INFERIOR --- */
+.sticky-nav, .nav-container, nav {
+    position: fixed !important;
+    z-index: 9999 !important; /* Asegura que el menú quede siempre arriba del feed */
+}
 
+/* --- FORZAR CONTENEDOR DE HISTORIAS --- */
+#bh-video-feed-scroll, .bh-video-feed-scroll {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 15px !important;
+    padding: 15px 20px !important;
+    width: 100% !important;
+    min-height: 210px !important; /* Altura fija para que no colapse a 0px */
+    margin-top: 100px !important; /* Ajustado para centrar entre categorías y menú */
+    background: transparent !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none !important;
+    touch-action: pan-x !important; /* Solo permite scroll horizontal */
+    overscroll-behavior: contain !important; /* Previene propagación del scroll */
+}
+#bh-video-feed-scroll::-webkit-scrollbar { display: none !important; }
+
+/* --- ESPACIADO DE SECCIÓN DE PRODUCTOS --- */
+.menu-container, #main-menu {
+    padding-top: 20px !important; /* Espacio para que no se deje pisar por las historias */
+}
+
+/* --- TARJETAS DE VIDEO --- */
+.video-story-card {
+    flex: 0 0 115px !important;
+    width: 115px !important;
+    height: 190px !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    background: #111 !important; /* Fondo oscuro por si el video tarda en cargar */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important; /* Borde sutil semitransparente */
+    cursor: pointer !important;
+}
+
+.video-story-card video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
