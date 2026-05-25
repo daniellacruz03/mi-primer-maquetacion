@@ -24,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
         [videoSources[i], videoSources[j]] = [videoSources[j], videoSources[i]];
     }
 
+    // Almacenar referencias a videos activos
+    const activeVideos = [];
+
     // Renderizado limpio con botón de mute en tarjetas pequeñas
     videoSources.forEach(src => {
         const card = document.createElement("div");
@@ -41,11 +44,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const muteBtn = document.createElement("button");
         muteBtn.className = "card-mute-btn";
         muteBtn.innerHTML = "🔇";
-        muteBtn.style.cssText = "position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 14px; display: flex; align-items: center; justify-content: center;";
+        muteBtn.style.cssText = "position: absolute; bottom: 8px; right: 8px; background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 14px; display: flex; align-items: center; justify-content: center;";
         
         let isMuted = true;
         muteBtn.addEventListener("click", (e) => {
             e.stopPropagation();
+            
+            // Silenciar todos los demás videos
+            activeVideos.forEach(v => {
+                if (v !== video && !v.muted) {
+                    v.muted = true;
+                    const otherBtn = v.parentElement.querySelector('.card-mute-btn');
+                    if (otherBtn) otherBtn.innerHTML = "🔇";
+                }
+            });
+            
+            // Alternar volumen del video actual
             isMuted = !isMuted;
             video.muted = isMuted;
             muteBtn.innerHTML = isMuted ? "🔇" : "🔊";
@@ -57,6 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
         card.appendChild(video);
         card.appendChild(muteBtn);
         videoFeed.appendChild(card);
+        
+        // Agregar video a la lista de activos
+        activeVideos.push(video);
     });
 
     // Lógica de imágenes en la raíz para Promonuggets (1, 2, 3)
@@ -175,13 +192,13 @@ function abrirVideoModal(videoSrc) {
     // Restaurar estructura original del modal
     const container = modal.querySelector(".story-full-container");
     container.innerHTML = `
-        <video id="story-player" playsinline></video>
+        <video id="story-player" playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
         <div class="story-overlay-controls">
-            <button id="story-btn-mute" class="story-mute-btn" aria-label="Silenciar">
+            <button id="story-btn-mute" class="story-mute-btn" aria-label="Silenciar" style="background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%); border: none; color: white; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
                 <span class="icon-muted">🔇</span>
                 <span class="icon-unmuted" hidden>🔊</span>
             </button>
-            <button id="story-btn-close" class="story-close-btn">&times;</button>
+            <button id="story-btn-close" class="story-close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 20; background: rgba(0,0,0,0.5); border: none; color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
         </div>
     `;
     

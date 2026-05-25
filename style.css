@@ -1072,6 +1072,41 @@ h1 {
     object-fit: cover !important;
 }
 
+/* --- MODAL DE HISTORIAS EN PANTALLA COMPLETA --- */
+.modal-story-view {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 10000 !important;
+    overflow: hidden !important;
+}
+
+.modal-story-view .story-full-container {
+    width: 100% !important;
+    height: 100% !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.modal-story-view #story-player {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+.modal-story-view .story-overlay-controls {
+    position: absolute !important;
+    top: 20px !important;
+    left: 20px !important;
+    right: 20px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+}
 /* --- CAPA DEL MENÚ SUPERIOR / INFERIOR --- */
 .sticky-nav, .nav-container, nav {
     position: fixed !important;
