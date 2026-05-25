@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Almacenar referencias a videos activos
     const activeVideos = [];
 
-    // Renderizado limpio con botón de mute en tarjetas pequeñas
-    videoSources.forEach(src => {
+    // Renderizado optimizado con lazy loading y preload
+    videoSources.forEach((src, index) => {
         const card = document.createElement("div");
         card.className = "video-story-card";
         
@@ -38,13 +38,22 @@ document.addEventListener("DOMContentLoaded", () => {
         video.muted = true;
         video.loop = true;
         video.playsinline = true;
-        video.preload = "auto";
+        // Optimización: preload="metadata" para los primeros 3, "none" para el resto
+        video.preload = index < 3 ? "metadata" : "none";
+        video.loading = "lazy";
+        
+        // Optimización: usar requestAnimationFrame para carga diferida
+        requestAnimationFrame(() => {
+            if (index < 3) {
+                video.load();
+            }
+        });
         
         // Botón de mute para tarjeta pequeña
         const muteBtn = document.createElement("button");
         muteBtn.className = "card-mute-btn";
         muteBtn.innerHTML = "🔇";
-        muteBtn.style.cssText = "position: absolute; bottom: 8px; right: 8px; background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 14px; display: flex; align-items: center; justify-content: center;";
+        muteBtn.style.cssText = "position: absolute; bottom: 8px; right: 8px; background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 14px; display: flex; align-items: center; justify-content: center; will-change: transform;";
         
         let isMuted = true;
         muteBtn.addEventListener("click", (e) => {
@@ -74,6 +83,32 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Agregar video a la lista de activos
         activeVideos.push(video);
+    });
+
+    // Optimización: Intersection Observer para cargar videos cuando sean visibles
+    const observerOptions = {
+        root: videoFeed,
+        rootMargin: '100px',
+        threshold: 0.1
+    };
+
+    const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const video = entry.target.querySelector('video');
+            if (video) {
+                if (entry.isIntersecting) {
+                    video.preload = "metadata";
+                    video.load();
+                } else {
+                    video.preload = "none";
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observar todas las tarjetas de video
+    document.querySelectorAll('.video-story-card').forEach(card => {
+        videoObserver.observe(card);
     });
 
     // Lógica de imágenes en la raíz para Promonuggets (1, 2, 3)
@@ -183,52 +218,79 @@ function abrirVideoModal(videoSrc) {
     const modal = document.getElementById("modal-story");
     if (!modal) return;
     
-    const player = document.getElementById("story-player");
-    const btnMute = document.getElementById("story-btn-mute");
-    const btnClose = document.getElementById("story-btn-close");
-    
-    if (!player || !btnMute || !btnClose) return;
-    
-    // Restaurar estructura original del modal
     const container = modal.querySelector(".story-full-container");
-    container.innerHTML = `
-        <video id="story-player" playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
-        <div class="story-overlay-controls">
-            <button id="story-btn-mute" class="story-mute-btn" aria-label="Silenciar" style="background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%); border: none; color: white; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                <span class="icon-muted">🔇</span>
-                <span class="icon-unmuted" hidden>🔊</span>
-            </button>
-            <button id="story-btn-close" class="story-close-btn" style="position: absolute; top: 20px; right: 20px; z-index: 20; background: rgba(0,0,0,0.5); border: none; color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
-        </div>
-    `;
+    if (!container) return;
     
-    // Reasignar referencias
-    const newPlayer = document.getElementById("story-player");
-    const newBtnMute = document.getElementById("story-btn-mute");
-    const newBtnClose = document.getElementById("story-btn-close");
+    // Limpiar modal
+    container.innerHTML = '';
     
-    // Configurar video
-    newPlayer.src = videoSrc;
-    newPlayer.currentTime = 0;
-    newPlayer.muted = true;
+    // Crear video con pantalla completa
+    const video = document.createElement("video");
+    video.id = "story-player";
+    video.src = videoSrc;
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    video.playsinline = true;
+    video.style.cssText = "width: 100%; height: 100%; object-fit: contain; background: #000;";
     
-    // Configurar botón de mute
-    const iconMuted = newBtnMute.querySelector('.icon-muted');
-    const iconUnmuted = newBtnMute.querySelector('.icon-unmuted');
+    // Crear botón de cerrar (esquina superior derecha)
+    const closeBtn = document.createElement("button");
+    closeBtn.id = "story-btn-close";
+    closeBtn.className = "story-close-btn";
+    closeBtn.innerHTML = "&times;";
+    closeBtn.style.cssText = "position: absolute; top: 20px; right: 20px; z-index: 30; background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%); border: 2px solid rgba(255, 255, 255, 0.3); color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(230, 0, 0, 0.4); transition: transform 0.3s ease, box-shadow 0.3s ease;";
     
-    newBtnMute.addEventListener("click", (e) => {
-        e.stopPropagation();
-        newPlayer.muted = !newPlayer.muted;
-        if (iconMuted) iconMuted.hidden = !newPlayer.muted;
-        if (iconUnmuted) iconUnmuted.hidden = newPlayer.muted;
-        if (!newPlayer.muted && newPlayer.paused) newPlayer.play().catch(() => {});
+    closeBtn.addEventListener("mouseenter", () => {
+        closeBtn.style.transform = "scale(1.1)";
+        closeBtn.style.boxShadow = "0 6px 20px rgba(230, 0, 0, 0.6)";
     });
     
-    // Configurar botón de cerrar
-    newBtnClose.addEventListener("click", (e) => {
+    closeBtn.addEventListener("mouseleave", () => {
+        closeBtn.style.transform = "scale(1)";
+        closeBtn.style.boxShadow = "0 4px 15px rgba(230, 0, 0, 0.4)";
+    });
+    
+    closeBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         cerrarVideoModal();
     });
+    
+    // Crear botón de mute (esquina superior izquierda)
+    const muteBtn = document.createElement("button");
+    muteBtn.id = "story-btn-mute";
+    muteBtn.className = "story-mute-btn";
+    muteBtn.setAttribute("aria-label", "Silenciar");
+    muteBtn.innerHTML = `
+        <span class="icon-muted">🔇</span>
+        <span class="icon-unmuted" hidden>🔊</span>
+    `;
+    muteBtn.style.cssText = "position: absolute; top: 20px; left: 20px; z-index: 30; background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%); border: 2px solid rgba(255, 255, 255, 0.3); color: white; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 15px rgba(230, 0, 0, 0.4); transition: transform 0.3s ease, box-shadow 0.3s ease;";
+    
+    muteBtn.addEventListener("mouseenter", () => {
+        muteBtn.style.transform = "scale(1.1)";
+        muteBtn.style.boxShadow = "0 6px 20px rgba(230, 0, 0, 0.6)";
+    });
+    
+    muteBtn.addEventListener("mouseleave", () => {
+        muteBtn.style.transform = "scale(1)";
+        muteBtn.style.boxShadow = "0 4px 15px rgba(230, 0, 0, 0.4)";
+    });
+    
+    muteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        video.muted = !video.muted;
+        const iconMuted = muteBtn.querySelector('.icon-muted');
+        const iconUnmuted = muteBtn.querySelector('.icon-unmuted');
+        if (iconMuted) iconMuted.hidden = !video.muted;
+        if (iconUnmuted) iconUnmuted.hidden = video.muted;
+        if (!video.muted && video.paused) video.play().catch(() => {});
+    });
+    
+    // Agregar elementos al contenedor
+    container.appendChild(video);
+    container.appendChild(closeBtn);
+    container.appendChild(muteBtn);
     
     // Mostrar modal
     modal.classList.add("active");
@@ -236,7 +298,7 @@ function abrirVideoModal(videoSrc) {
     document.body.style.overflow = "hidden";
     
     // Reproducir video
-    newPlayer.play().catch(() => {});
+    video.play().catch(() => {});
     
     // Cerrar al hacer clic fuera
     modal.addEventListener("click", (e) => {

@@ -44,7 +44,7 @@
 
         section {
             scroll-margin-top: 30px;
-            margin-top: 5px !important;
+            margin-top: 0 !important;
             position: relative;
             clear: both;
         }
@@ -322,11 +322,11 @@
                 radial-gradient(circle at 0% 100%, rgba(255, 0, 0, 0.1) 0%, transparent 40%),
                 radial-gradient(circle at 100% 100%, rgba(255, 0, 0, 0.1) 0%, transparent 40%),
                 rgba(10, 10, 10, 0.98);
-            padding: 0 30px 100px;
+            padding: 0 15px 100px;
             border-radius: 50px;
             backdrop-filter: blur(8px);
             margin: 0 auto;
-            max-width: 900px;
+            max-width: 100%;
             border: 1px solid rgba(255, 255, 255, 0.08);
             opacity: 0;
             transform: translateY(40px);
@@ -337,24 +337,41 @@
         }
 
         .sticky-nav {
-            position: sticky;
-            top: 0;
-            z-index: 2000;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 9999 !important;
             background: rgba(8, 8, 8, 0.95) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
-            padding: 15px 30px 5px !important;
-            margin: 0 -30px 10px -30px !important;
+            padding: 10px 15px 5px !important;
+            margin: 0 !important;
             border-radius: 0 !important;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .sticky-nav.mostrar-menu {
+            opacity: 1;
+            visibility: visible;
         }
 
         .menu-header {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: space-between;
             gap: 15px;
-            margin-bottom: 5px; /* Reducido para acercar las categorías */
+            margin-bottom: 3px;
+            width: 100%;
+            max-width: 100%;
+            padding: 0 15px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .menu-container::before {
@@ -399,16 +416,21 @@
         section:not(#bebidas) .menu-item {
             height: auto; /* Altura automática para acomodar imagen + texto */
             padding: 0 !important;
-            margin-bottom: 20px !important;
+            margin-bottom: 8px !important;
             border-radius: 30px !important;
             overflow: hidden !important;
             display: flex !important;
             flex-direction: column !important;
             position: relative !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
+            border: none !important;
+            box-shadow: none !important;
             transition: transform 0.3s ease;
-            background: rgba(15, 15, 15, 0.6);
+            background: transparent !important;
+        }
+
+        section:not(#bebidas) .menu-item.banner-card {
+            border-radius: 0 !important;
+            margin: 0 auto 5px !important;
         }
 
         section:not(#bebidas) .item-img-bg {
@@ -523,7 +545,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 15px 15px 18px; /* Espaciado más generoso para que el texto tenga su propio aire */
+            padding: 12px 15px 14px; /* Espaciado más compacto */
             width: 100%;
         }
 
@@ -686,14 +708,14 @@
         }
 
         .modal {
-            background: rgba(0, 0, 0, 0.72) !important;
-            backdrop-filter: blur(8px) !important;
-            -webkit-backdrop-filter: blur(8px) !important;
+            background: rgba(0, 0, 0, 0.8) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
             /* Estilos para fade-in suave */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.4s ease, visibility 0.4s ease;
-            display: flex !important; /* Se mantiene flex para centrado */
+            display: none !important;
             pointer-events: none;
             z-index: 6000;
             -webkit-overflow-scrolling: touch;
@@ -701,6 +723,7 @@
         }
 
         .modal.active {
+            display: flex !important;
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
@@ -733,6 +756,7 @@
             margin-bottom: 12px !important;
         }
 
+        /* Estilos antiguos de búsqueda (mantenidos para compatibilidad, pero sobrescritos por .search-container-full) */
         .search-container {
             flex: 1;
             max-width: 200px;
@@ -1108,16 +1132,31 @@
             padding: 12px 16px !important;
             border-radius: 12px !important;
             display: flex !important;
-            align-items: center !important;
-            gap: 10px !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
             margin-top: -5px !important;
             margin-bottom: 10px !important;
         }
-        .delivery-notice-premium span {
+        .delivery-notice-premium svg {
+            flex-shrink: 0 !important;
+            margin-top: 2px !important;
+        }
+        .delivery-notice-content {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4px !important;
+        }
+        .delivery-notice-main {
             color: #ffc107 !important;
-            font-size: 0.8rem !important;
-            font-weight: 500 !important;
-            line-height: 1.4 !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            line-height: 1.3 !important;
+        }
+        .delivery-notice-sub {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 0.75rem !important;
+            font-weight: 400 !important;
+            line-height: 1.3 !important;
         }
 
         .checkout-form input::placeholder {
@@ -1141,10 +1180,14 @@
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
             border-radius: 0;
-            padding: 10px 0 !important;
+            padding: 8px 15px !important;
             border: none !important;
             box-shadow: none !important;
-            margin-top: 5px;
+            margin-top: 3px;
+            width: 100%;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .category-bar::-webkit-scrollbar {
@@ -1241,36 +1284,37 @@
             .menu-container {
                 width: 100% !important;
                 max-width: 100% !important;
-                height: 100vh !important;
-                min-height: 100vh !important;
                 margin: 0 !important;
-                padding: 0 15px 0 !important;
+                padding: 240px 15px 60px !important;
                 border-radius: 0 !important;
                 backdrop-filter: none !important;
                 background: rgba(10, 10, 10, 0.98) !important;
                 overflow-y: auto !important;
-                display: flex;
-                flex-direction: column;
+                -webkit-overflow-scrolling: touch;
             }
 
             .sticky-nav {
-                margin: 0 -15px 10px -15px !important;
-                padding: 15px 15px 5px !important;
-                border-radius: 0;
+                margin: 0 !important;
+                padding: 0 !important;
+                border-radius: 0 !important;
             }
 
-            .menu-header {
-                display: flex !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                justify-content: flex-start !important;
-                gap: 12px !important;
-                padding: 0 0 4px 0 !important;
+            .header-top-row {
+                padding: 10px 15px 6px !important;
             }
 
             .menu-header-logo {
-                width: 45px !important;
+                width: 42px !important;
                 height: auto !important;
+            }
+
+            .header-search-row {
+                padding: 0 15px 8px !important;
+            }
+
+            .category-bar {
+                padding: 0 15px 10px !important;
+                gap: 8px !important;
             }
 
             section:not(#bebidas) .item-img-bg {
@@ -1561,45 +1605,58 @@
         </div>
     </div>
 
-    <div id="cart-floating-btn" class="cart-btn-hidden">
-        <span id="cart-badge">0</span>
-        <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto" width="30" height="30">
+    <!-- Menú fijo fuera del contenedor principal -->
+    <div class="sticky-nav">
+        <!-- Fila Superior: Logo (izquierda) y Carrito (derecha) -->
+        <div class="header-top-row">
+            <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo" width="50" height="50">
+            <div id="cart-floating-btn" class="cart-btn-hidden">
+                <span id="cart-badge">0</span>
+                <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto" width="30" height="30">
+            </div>
+        </div>
+        
+        <!-- Fila Central: Barra de búsqueda -->
+        <div class="header-search-row">
+            <div class="search-container-full">
+                <div class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <input type="text" id="menu-search" class="search-input" placeholder="Busca aquí tu producto..." aria-label="Buscar productos">
+            </div>
+        </div>
+        
+        <!-- Fila Inferior: Categorías horizontales -->
+        <div class="category-bar">
+            <button class="category-btn active" data-category="all">Todos</button>
+            <button class="category-btn" data-category="hamburguesas">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                Hamburguesas
+            </button>
+            <button class="category-btn" data-category="ensaladas">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 7a7 7 0 0 1-10 11Z"/><path d="M7 12.1a3 3 0 0 1 5-2.4"/></svg>
+                Ensaladas
+            </button>
+            <button class="category-btn" data-category="kids">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                Menú Kids
+            </button>
+            <button class="category-btn" data-category="servicios">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10V2"/><path d="M9 10V5"/><path d="M13 10V3"/><path d="M17 10V6"/><path d="M2 10h20l-2 12H4L2 10Z"/></svg>
+                Servicios
+            </button>
+            <button class="category-btn" data-category="bebidas">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2Z"/><path d="M5 5h14"/><path d="M12 5V2"/><path d="m9 2 3 3"/></svg>
+                Bebidas
+            </button>
+        </div>
     </div>
 
     <main id="main-menu" class="menu-container">
-        <div class="sticky-nav">
-            <div class="menu-header">
-                <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo" width="45" height="45">
-                <div class="search-container">
-                    <div class="search-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    </div>
-                    <input type="text" id="menu-search" class="search-input" placeholder="Buscar..." aria-label="Buscar productos">
-                </div>
-            </div>
-            <!-- Barra de Categorías ahora en el Top -->
-            <div class="category-bar">
-                <button class="category-btn active" data-category="all">Todos</button>
-                <button class="category-btn" data-category="hamburguesas">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-                    Hamburguesas
-                </button>
-                <button class="category-btn" data-category="ensaladas">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 7a7 7 0 0 1-10 11Z"/><path d="M7 12.1a3 3 0 0 1 5-2.4"/></svg>
-                    Ensaladas
-                </button>
-                <button class="category-btn" data-category="kids">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                    Menú Kids
-                </button>
-                <button class="category-btn" data-category="servicios">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10V2"/><path d="M9 10V5"/><path d="M13 10V3"/><path d="M17 10V6"/><path d="M2 10h20l-2 12H4L2 10Z"/></svg>
-                    Servicios
-                </button>
-                <button class="category-btn" data-category="bebidas">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 8h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2Z"/><path d="M5 5h14"/><path d="M12 5V2"/><path d="m9 2 3 3"/></svg>
-                    Bebidas
-                </button>
+        <!-- Banner Card -->
+        <div class="promo-banner-section">
+            <div class="menu-item banner-card">
+                <img src="bannerbh.webp" class="item-img-bg" alt="Banner Burger House" loading="lazy" width="900" height="500">
             </div>
         </div>
 
@@ -1639,20 +1696,6 @@
             </div>
 
             <div class="menu-item">
-                <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy" loading="lazy" width="400" height="220">
-                <div class="item-info-split">
-                    <div class="item-info">
-                        <span class="item-name">Junior Crispy</span>
-                        <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
-                    </div>
-                    <div class="item-price-wrapper" data-img-src="junior crispy.webp">
-                        <span class="item-price">$10,99</span>
-                        <span class="item-ref">REF</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-item">
                 <img src="crispy house.webp" class="item-img-bg ajuste-alejar" alt="Crispy House" loading="lazy" width="400" height="220">
                 <div class="item-info-split">
                     <div class="item-info">
@@ -1661,6 +1704,20 @@
                     </div>
                     <div class="item-price-wrapper" data-img-src="crispy house.webp">
                         <span class="item-price">$12,99</span>
+                        <span class="item-ref">REF</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <img src="junior crispy.webp" class="item-img-bg ajuste-crispy" alt="Junior Crispy" loading="lazy" width="400" height="220">
+                <div class="item-info-split">
+                    <div class="item-info">
+                        <span class="item-name">Junior Crispy</span>
+                        <p class="item-desc">Pan de papa, pollo crispy, pepinillos, tocineta, queso americano, lechuga, salsa de la casa, papas fritas.</p>
+                    </div>
+                    <div class="item-price-wrapper" data-img-src="junior crispy.webp">
+                        <span class="item-price">$10,99</span>
                         <span class="item-ref">REF</span>
                     </div>
                 </div>
@@ -2065,7 +2122,10 @@
                     
                     <div class="delivery-notice-premium">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                        <span>El costo del delivery varía según la zona de entrega</span>
+                        <div class="delivery-notice-content">
+                            <span class="delivery-notice-main">Si cancelas en divisas, ¡el delivery es gratis en el casco de la ciudad!</span>
+                            <span class="delivery-notice-sub">El costo del delivery varía según la zona de entrega</span>
+                        </div>
                     </div>
                     <input type="text" id="full-name" name="full-name" placeholder="Tu nombre completo" required autocomplete="name" enterkeyhint="next">
                     <textarea id="additional-notes" name="additional-notes" placeholder="Notas adicionales / Punto de referencia (Ej: Portón blanco, llamar al llegar...)" enterkeyhint="done"></textarea>
@@ -2161,6 +2221,16 @@
                         <div class="extra-card" data-extra-price="3.50">
                             <div class="extra-info-text">
                                 <span class="extra-name">Extra Chuleta</span> <span class="extra-cost">+$3.50</span>
+                            </div>
+                            <div class="extra-counter">
+                                <button class="extra-qty-btn minus">-</button>
+                                <span class="extra-qty-val">0</span>
+                                <button class="extra-qty-btn plus">+</button>
+                            </div>
+                        </div>
+                        <div class="extra-card" data-extra-price="1.00">
+                            <div class="extra-info-text">
+                                <span class="extra-name">Huevo (proteína)</span> <span class="extra-cost">+$1.00</span>
                             </div>
                             <div class="extra-counter">
                                 <button class="extra-qty-btn minus">-</button>
@@ -2479,18 +2549,6 @@
         </div>
     </div>
 
-    <div id="modal-upsell-drinks" class="modal">
-        <div class="modal-content upsell-content">
-            <div class="modal-details" style="text-align: center;">
-                <h2 class="modal-title">¿Deseas añadir una bebida?</h2>
-                <p class="modal-description">¡Acompaña tu hamburguesa con una bebida bien fría!</p>
-                <div class="upsell-buttons">
-                    <button id="btn-upsell-show-drinks" class="btn-add-order" style="width: 100%;">Muéstrame</button>
-                    <button id="btn-upsell-continue" class="btn-back-to-cart btn-large-cancel" style="margin-top: 10px; width: 100%;">Seguir con la compra</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="modal-closed" class="modal" style="z-index: 10000;">
         <div class="modal-content upsell-content closed-store-content">
@@ -2525,9 +2583,11 @@
                     const logoCarga = document.getElementById('preloader');
                     const menu = document.getElementById('main-menu');
                     const cartBtn = document.getElementById('cart-floating-btn');
+                    const stickyNav = document.querySelector('.sticky-nav');
                     
                     if (logoCarga) logoCarga.classList.add('ocultar');
                     if (menu) menu.classList.add('mostrar-menu');
+                    if (stickyNav) stickyNav.classList.add('mostrar-menu');
                     if (cartBtn) cartBtn.classList.remove('cart-btn-hidden');
 
                     // Mostrar el anuncio después de 1 segundo
@@ -2595,6 +2655,9 @@
                 if (!estaAbierto) {
                     document.getElementById('modal-closed').classList.add('active');
                     document.body.style.overflow = 'hidden';
+                    // Ocultar header cuando se abre el modal de tienda cerrada
+                    const stickyNav = document.querySelector('.sticky-nav');
+                    if (stickyNav) stickyNav.style.display = 'none';
                     isPreOrder = true;
                 }
             };
@@ -2631,13 +2694,37 @@
                     const category = btn.dataset.category;
                     const sections = document.querySelectorAll('#main-menu section');
                     const footer = document.querySelector('.bh-footer');
+                    const videoFeed = document.getElementById('bh-video-feed-scroll');
                     
                     searchInput.value = ''; // Limpiar barra de búsqueda al filtrar por categoría
+                    
+                    // Ocultar videos cuando no esté en "Todos"
+                    if (videoFeed) {
+                        if (category === 'all') {
+                            videoFeed.classList.remove('hidden');
+                        } else {
+                            videoFeed.classList.add('hidden');
+                        }
+                    }
+
+                    // Ocultar banner cuando no esté en "Todos"
+                    const bannerCard = document.querySelector('.banner-card');
+                    if (bannerCard) {
+                        if (category === 'all') {
+                            bannerCard.classList.remove('hidden');
+                        } else {
+                            bannerCard.classList.add('hidden');
+                        }
+                    }
+                    
+                    // Primero, remover todas las clases hidden-search de todos los items
+                    document.querySelectorAll('.menu-item').forEach(item => {
+                        item.classList.remove('hidden-search');
+                    });
                     
                     sections.forEach(section => {
                         if (category === 'all' || section.id === category) {
                             section.classList.remove('hidden-search');
-                            section.querySelectorAll('.menu-item').forEach(item => item.classList.remove('hidden-search'));
                         } else {
                             section.classList.add('hidden-search');
                         }
@@ -2652,10 +2739,14 @@
                         }
                     }
 
-                    // Scroll to the top of the menu container after filtering
-                    document.getElementById('main-menu').scrollTo({
-                        top: 0, behavior: 'smooth'
-                    });
+                    // Scroll to the top after filtering
+                    setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        const menuContainer = document.getElementById('main-menu');
+                        if (menuContainer) {
+                            menuContainer.scrollTop = 0;
+                        }
+                    }, 100);
                 });
             });
 
@@ -2674,6 +2765,9 @@
                 if (esDiaPromo && esHoraTrabajo) {
                     promoModal.classList.add('active');
                     document.body.style.overflow = 'hidden';
+                    // Ocultar header cuando se abre el modal promo
+                    const stickyNav = document.querySelector('.sticky-nav');
+                    if (stickyNav) stickyNav.style.display = 'none';
                 }
             }
 
@@ -2681,6 +2775,9 @@
             document.getElementById('btn-close-promo').onclick = () => {
                 document.getElementById('modal-promo-lunes-miercoles').classList.remove('active');
                 document.body.style.overflow = 'auto';
+                // Mostrar header cuando se cierra el modal promo
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
             };
 
             const menu = document.getElementById('main-menu');
@@ -2738,6 +2835,9 @@
                         document.body.style.overflow = 'hidden';
                         document.getElementById('modal-promo-img').src = 'houseclasic.webp';
                         updatePromoUI(); // Ahora sí está definida
+                        // Ocultar header cuando se abre el modal de selección de promo
+                        const stickyNav = document.querySelector('.sticky-nav');
+                        if (stickyNav) stickyNav.style.display = 'none';
                     }
                 });
             }
@@ -2772,6 +2872,9 @@
                 modalPromoSelection.classList.remove('active');
                 document.body.style.overflow = 'auto';
                 menu.style.overflow = '';
+                // Mostrar header cuando se cierra el modal de selección de promo
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
             };
 
             btnAddPromoToCart.onclick = () => {
@@ -2805,6 +2908,9 @@
                 modalPromoSelection.classList.remove('active');
                 document.body.style.overflow = 'auto';
                 menu.style.overflow = '';
+                // Mostrar header cuando se cierra el modal de selección de promo
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
                 abrirCarritoConFeedback();
             };
 
@@ -2894,6 +3000,9 @@
                     modalReminder.classList.remove('active');
                     document.body.style.overflow = 'auto';
                     menu.style.overflow = '';
+                    // Mostrar header cuando se cierra el modal
+                    const stickyNav = document.querySelector('.sticky-nav');
+                    if (stickyNav) stickyNav.style.display = 'block';
                 }
             };
             function guardarCarrito() {
@@ -2964,12 +3073,18 @@
                 history.pushState({ ui: 'cart' }, "");
                 document.body.style.overflow = 'hidden';
                 menu.style.overflow = 'hidden';
+                // Ocultar header cuando se abre el carrito
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'none';
             });
             closeCart.addEventListener('click', () => {
                 // Cerramos directamente la interfaz para asegurar respuesta inmediata
                 cartSidebar.classList.add('cart-closed');
                 document.body.style.overflow = 'auto';
                 menu.style.overflow = '';
+                // Mostrar header cuando se cierra el carrito
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
                 // Si hay un estado en el historial, volvemos atrás para sincronizar
                 if (window.history.state && window.history.state.ui === 'cart') {
                     history.back();
@@ -3080,6 +3195,9 @@
                     history.pushState({ ui: 'modal' }, "");
                     document.body.style.overflow = 'hidden';
                     menu.style.overflow = 'hidden';
+                    // Ocultar header cuando se abre el modal
+                    const stickyNav = document.querySelector('.sticky-nav');
+                    if (stickyNav) stickyNav.style.display = 'none';
                 });
             });
 
@@ -3180,10 +3298,15 @@
 
                 if (esHamburguesa) {
                     setTimeout(() => {
-                        modalUpsellDrinks.classList.add('active');
-                        history.pushState({ ui: 'modal-upsell' }, "");
-                        document.body.style.overflow = 'hidden';
-                        menu.style.overflow = 'hidden';
+                      if (modalUpsellDrinks) {
+    modalUpsellDrinks.classList.add('active');
+    history.pushState({ ui: 'modal-upsell' }, "");
+    document.body.style.overflow = 'hidden';
+    menu.style.overflow = 'hidden';
+}
+                        // Ocultar header cuando se abre el modal upsell
+                        const stickyNav = document.querySelector('.sticky-nav');
+                        if (stickyNav) stickyNav.style.display = 'none';
                     }, 400);
                 } else {
                     abrirCarritoConFeedback();
@@ -3260,12 +3383,18 @@
                 window.open(url, '_blank');
                 cartSidebar.classList.add('cart-closed');
                 modalReminder.classList.add('active');
+                // Ocultar header cuando se abre el modal de recordatorio
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'none';
             });
 
             btnReminderOk.addEventListener('click', () => {
                 pedidoConfirmado = false; 
                 currentMainQty = 1;
                 mainQtyVal.innerText = 1;
+                // Mostrar header cuando se cierra el modal de recordatorio
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
                 window.location.reload();
             });
 
@@ -3280,6 +3409,9 @@
                 modalClosed.classList.remove('active');
                 document.body.style.overflow = 'auto';
                 menu.style.overflow = '';
+                // Mostrar header cuando se cierra el modal de tienda cerrada
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
             });
 
             function updateTotal() {
@@ -3308,24 +3440,34 @@
                 if (e.target === modal || e.target === modalUpsellDrinks || e.target === modalPromoSelection) cerrarFunc();
             });
 
-            btnUpsellShowDrinks.addEventListener('click', () => {
-                history.back(); // Cierra el modal de upsell
-                setTimeout(() => {
-                    // Simular un clic en el botón de categoría "Bebidas"
-                    const bebidasCategoryBtn = document.querySelector('.category-btn[data-category="bebidas"]');
-                    if (bebidasCategoryBtn) {
-                        bebidasCategoryBtn.click(); // Esto activará el filtro y hará scroll
-                    }
-                    // Si por alguna razón el botón no existe, el scroll directo ya no es necesario aquí
-                }, 400);
-            });
+            if (btnUpsellShowDrinks) {
+                btnUpsellShowDrinks.addEventListener('click', () => {
+                    history.back(); // Cierra el modal de upsell
+                    // Mostrar header cuando se cierra el modal upsell
+                    const stickyNav = document.querySelector('.sticky-nav');
+                    if (stickyNav) stickyNav.style.display = 'block';
+                    setTimeout(() => {
+                        // Simular un clic en el botón de categoría "Bebidas"
+                        const bebidasCategoryBtn = document.querySelector('.category-btn[data-category="bebidas"]');
+                        if (bebidasCategoryBtn) {
+                            bebidasCategoryBtn.click(); // Esto activará el filtro y hará scroll
+                        }
+                        // Si por alguna razón el botón no existe, el scroll directo ya no es necesario aquí
+                    }, 400);
+                });
+            }
 
-            btnUpsellContinue.addEventListener('click', () => {
-                history.back(); // Cierra el modal de upsell
-                setTimeout(() => {
-                    abrirCarritoConFeedback();
-                }, 400);
-            });
+            if (btnUpsellContinue) {
+                btnUpsellContinue.addEventListener('click', () => {
+                    history.back(); // Cierra el modal de upsell
+                    // Mostrar header cuando se cierra el modal upsell
+                    const stickyNav = document.querySelector('.sticky-nav');
+                    if (stickyNav) stickyNav.style.display = 'block';
+                    setTimeout(() => {
+                        abrirCarritoConFeedback();
+                    }, 400);
+                });
+            }
 
             // Limpiar formulario al inicio
             const formDelivery = document.getElementById('form-delivery');
@@ -3347,6 +3489,9 @@
                     cartSidebar.classList.add('cart-closed');
                     document.body.style.overflow = 'auto';
                     menu.style.overflow = '';
+                    // Mostrar header cuando se cierra el modal vía botón atrás
+                    const stickyNav = document.querySelector('.sticky-nav');
+                    if (stickyNav) stickyNav.style.display = 'block';
                 }
             });
 
