@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -1602,6 +1602,9 @@
                 </button>
             </div>
         </div>
+
+        <!-- Carrusel de Historias Minimalista -->
+        <div id="bh-video-feed-scroll" class="bh-video-feed-scroll"></div>
 
         <section id="hamburguesas">
             
@@ -3456,5 +3459,21 @@
         });
     </script>
 
+    <!-- Modal para ver Historias (Video Player Fullscreen) -->
+    <div id="modal-story" class="modal modal-story-view" aria-hidden="true">
+        <div class="story-full-container">
+            <video id="story-player" playsinline></video>
+            <div class="story-overlay-controls">
+                <button id="story-btn-mute" class="story-mute-btn" aria-label="Silenciar">
+                    <span class="icon-muted">🔇</span>
+                    <span class="icon-unmuted" hidden>🔊</span>
+                </button>
+                <button id="story-btn-close" class="story-close-btn">&times;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carga de lógica de historias -->
+    <script src="stories.js"></script>
 </body>
 </html>

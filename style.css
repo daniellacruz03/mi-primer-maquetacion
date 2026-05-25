@@ -1038,3 +1038,175 @@ h1 {
 }
 
 .footer-credits b { color: rgba(255, 255, 255, 0.8); }
+
+/* === CORRECCIÓN CRÍTICA DE JERARQUÍA Z-INDEX === */
+.sticky-nav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+    background: rgba(8, 8, 8, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+/* === FEED DE VIDEOS HORIZONTAL (ESTILO CARRUSEL) === */
+.bh-video-feed-scroll {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 12px !important;
+    padding: 15px 20px !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    position: relative;
+    z-index: 1;
+}
+
+.bh-video-feed-scroll::-webkit-scrollbar { display: none !important; }
+
+.video-story-card {
+    flex: 0 0 115px !important; 
+    width: 115px !important; 
+    height: 190px !important; 
+    border-radius: 16px !important; 
+    overflow: hidden !important; 
+    position: relative !important; 
+    background: #000;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-story-card video {
+    width: 100% !important; 
+    height: 100% !important; 
+    object-fit: cover !important;
+}
+
+.modal-story-view { padding: 0 !important; background: #000 !important; }
+
+.story-full-container {
+    width: 100%; height: 100%; display: flex;
+    align-items: center; justify-content: center; position: relative;
+}
+
+#story-player { width: 100%; height: 100%; object-fit: contain; }
+
+.story-overlay-controls {
+    position: absolute; top: env(safe-area-inset-top, 20px);
+    width: 100%; display: flex; justify-content: space-between;
+    padding: 0 20px; z-index: 10;
+}
+
+.story-mute-btn, .story-close-btn {
+    background: rgba(0,0,0,0.5); border: none; color: white;
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(5px);
+}
+
+.story-close-btn { font-size: 2rem; line-height: 1; }
+
+/* Ajuste para que los videos se sientan como reels en el feed */
+.video-story-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+/* Barras de progreso estilo Instagram para promonuggets */
+.promo-progress-bars {
+    position: absolute;
+    top: env(safe-area-inset-top, 20px);
+    left: 20px;
+    right: 60px;
+    display: flex;
+    gap: 4px;
+    z-index: 15;
+}
+
+.promo-progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.promo-progress-bar.active {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.promo-progress-bar.active::after {
+    content: '';
+    display: block;
+    width: 0%;
+    height: 100%;
+    background: white;
+    animation: progressFill 3s linear forwards;
+}
+
+.promo-progress-bar.completed {
+    background: white;
+}
+
+@keyframes progressFill {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+.promo-carousel-image {
+    display: block;
+}
+
+/* --- CAPA DEL MENÚ SUPERIOR / INFERIOR --- */
+.sticky-nav, .nav-container, nav {
+    position: fixed !important;
+    z-index: 9999 !important; /* Asegura que el menú quede siempre arriba del feed */
+}
+
+/* --- FORZAR CONTENEDOR DE HISTORIAS --- */
+#bh-video-feed-scroll, .bh-video-feed-scroll {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 15px !important;
+    padding: 15px 20px !important;
+    width: 100% !important;
+    min-height: 210px !important; /* Altura fija para que no colapse a 0px */
+    margin-top: 100px !important; /* Ajustado para centrar entre categorías y menú */
+    background: transparent !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none !important;
+}
+#bh-video-feed-scroll::-webkit-scrollbar { display: none !important; }
+
+/* --- ESPACIADO DE SECCIÓN DE PRODUCTOS --- */
+.menu-container, #main-menu {
+    padding-top: 20px !important; /* Espacio para que no se deje pisar por las historias */
+}
+
+/* --- TARJETAS DE VIDEO --- */
+.video-story-card {
+    flex: 0 0 115px !important;
+    width: 115px !important;
+    height: 190px !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    background: #111 !important; /* Fondo oscuro por si el video tarda en cargar */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important; /* Borde sutil semitransparente */
+    cursor: pointer !important;
+}
+
+.video-story-card video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
