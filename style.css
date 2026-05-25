@@ -1183,8 +1183,17 @@ h1 {
     background: transparent !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none !important;
+    touch-action: pan-x !important; /* Solo permite scroll horizontal */
+    overscroll-behavior: contain !important; /* Previene propagación del scroll */
 }
 #bh-video-feed-scroll::-webkit-scrollbar { display: none !important; }
+
+/* --- PREVENIR SCROLL VERTICAL EN VIDEOS --- */
+.video-story-card video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
 
 /* --- ESPACIADO DE SECCIÓN DE PRODUCTOS --- */
 .menu-container, #main-menu {
