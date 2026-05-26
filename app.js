@@ -7,8 +7,6 @@
 
     const CONFIG = {
         TIMEZONE: 'America/Caracas',
-        STORE_LAT: 8.553563,
-        STORE_LON: -71.205238,
         WHATSAPP: '584127510090',
         PRELOADER_FALLBACK_MS: 3000,
         WEEKDAY_OPEN: 1020,
@@ -16,8 +14,7 @@
         WEEKEND_OPEN: 780,
         PROMO_BASE_PRICE: 6.5,
         PROMO_COMBO_PRICE: 8.5,
-        PROMO_COMBO_EXTRA: 2.0,
-        DELIVERY_MAX_KM: 12
+        PROMO_COMBO_EXTRA: 2.0
     };
 
     const getCaracasDate = () =>
@@ -48,28 +45,6 @@
         );
     };
 
-    const calcularDistanciaHaversine = (lat1, lon1, lat2, lon2) => {
-        const R = 6371;
-        const dLat = ((lat2 - lat1) * Math.PI) / 180;
-        const dLon = ((lon2 - lon1) * Math.PI) / 180;
-        const a =
-            Math.sin(dLat / 2) ** 2 +
-            Math.cos((lat1 * Math.PI) / 180) *
-                Math.cos((lat2 * Math.PI) / 180) *
-                Math.sin(dLon / 2) ** 2;
-        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-    };
-
-    const obtenerCostoDelivery = (distancia) => {
-        if (distancia <= 1.2) return 1.0;
-        if (distancia <= 2.8) return 1.5;
-        if (distancia <= 4.5) return 2.0;
-        if (distancia <= 6.5) return 2.5;
-        if (distancia <= 9.0) return 3.0;
-        if (distancia <= 11.5) return 3.5;
-        return 5.0;
-    };
-
     const parsePrice = (priceStr) =>
         parseFloat(priceStr.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
 
@@ -80,6 +55,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         /* ——— Preloader ——— */
         const preloaderProgress = document.getElementById('preloader-progress');
+        const stickyNav = document.querySelector('.sticky-nav');
 
         const finalizarCarga = () => {
             if (!preloaderProgress || preloaderProgress.dataset.finished === 'true') return;
@@ -89,7 +65,7 @@
             setTimeout(() => {
                 document.getElementById('preloader')?.classList.add('ocultar');
                 document.getElementById('main-menu')?.classList.add('mostrar-menu');
-                document.querySelector('.sticky-nav')?.classList.add('mostrar-menu');
+                stickyNav?.classList.add('mostrar-menu');
                 document.getElementById('cart-floating-btn')?.classList.remove('cart-btn-hidden');
                 setTimeout(verificarYMostrarPromo, 1000);
             }, 200);
@@ -157,6 +133,7 @@
 
                 const category = btn.dataset.category;
                 const footer = document.querySelector('.bh-footer');
+                const startOrderText = document.querySelector('.start-order-text');
                 if (searchInput) searchInput.value = '';
 
                 document.querySelectorAll('#main-menu section').forEach((section) => {
@@ -174,6 +151,8 @@
                 // Sincronizar visibilidad de videos con la categoría seleccionada
                 const videoFeed = document.getElementById('bh-video-feed-scroll');
                 videoFeed?.classList.toggle('hidden', category !== 'all');
+                // Ocultar botón "Empieza a Pedir" cuando no esté en "Todos"
+                startOrderText?.classList.toggle('hidden', category !== 'all');
                 document.getElementById('main-menu')?.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
@@ -185,6 +164,30 @@
             promoModal.classList.add('active');
             lockBodyScroll(true);
         }
+        
+        /* ——— Modal de Ayuda ——— */
+        const helpBtn = document.getElementById('help-btn');
+        const modalHelp = document.getElementById('modal-help');
+        const helpCloseBtn = document.getElementById('help-close-btn');
+
+        if (helpBtn && modalHelp) {
+            helpBtn.addEventListener('click', () => {
+                modalHelp.classList.add('active');
+                lockBodyScroll(true);
+                if (stickyNav) stickyNav.style.display = 'none';
+            });
+        }
+
+        const cerrarHelp = () => {
+            modalHelp?.classList.remove('active');
+            lockBodyScroll(false);
+            if (stickyNav) stickyNav.style.display = 'block';
+        };
+
+        helpCloseBtn?.addEventListener('click', cerrarHelp);
+        modalHelp?.addEventListener('click', (e) => {
+            if (e.target === modalHelp) cerrarHelp();
+        });
 
         document.getElementById('btn-close-promo')?.addEventListener('click', () => {
             document.getElementById('modal-promo-lunes-miercoles')?.classList.remove('active');
@@ -212,9 +215,8 @@
         const modalReminder = document.getElementById('modal-reminder');
         const btnReminderOk = document.getElementById('btn-reminder-ok');
         const btnNewOrder = document.getElementById('btn-new-order');
-        const modalUpsellDrinks = document.getElementById('modal-upsell-drinks');
-        const btnUpsellShowDrinks = document.getElementById('btn-upsell-show-drinks');
-        const btnUpsellContinue = document.getElementById('btn-upsell-continue');
+        const btnUpsellMore = document.getElementById('btn-upsell-more'); // Agregado para upsell
+
         const btnAddOrderMain = modal?.querySelector('.btn-add-order');
         const modalClosed = document.getElementById('modal-closed');
         const btnPreOrder = document.getElementById('btn-pre-order');
@@ -335,9 +337,6 @@
 
         const setDeliveryMethod = (method) => {
             currentDeliveryMethod = method;
-            const taxCost = document.getElementById('tax-cost');
-            const taxBar = document.getElementById('tax-bar-fill');
-            const taxStatus = document.querySelector('.tax-status');
 
             if (method === 'delivery') {
                 btnModeDelivery?.classList.add('active');
@@ -349,21 +348,6 @@
                     deliveryNotice.innerText =
                         'El costo del delivery varía según la zona de entrega';
                 }
-                if (window.deliveryDistance) {
-                    window.deliveryCost = window.lastCalculatedCost;
-                    const progress = Math.min(
-                        (window.deliveryDistance / CONFIG.DELIVERY_MAX_KM) * 100,
-                        100
-                    );
-                    if (taxBar) taxBar.style.width = `${progress}%`;
-                    if (taxCost) taxCost.innerText = `DELIVERY: $${window.deliveryCost}`;
-                    if (taxStatus) taxStatus.innerText = 'UBICACIÓN DETECTADA';
-                } else {
-                    window.deliveryCost = 0;
-                    if (taxBar) taxBar.style.width = '0%';
-                    if (taxCost) taxCost.innerText = 'DELIVERY: -- $';
-                    if (taxStatus) taxStatus.innerText = 'Calculando al obtener ubicación...';
-                }
             } else {
                 btnModePickup?.classList.add('active');
                 btnModeDelivery?.classList.remove('active');
@@ -373,11 +357,6 @@
                 if (deliveryNotice) {
                     deliveryNotice.innerText = 'Retira tu pedido directamente en nuestra sede';
                 }
-                if (window.deliveryCost > 0) {
-                    window.lastCalculatedCost = window.deliveryCost;
-                }
-                window.deliveryCost = 0;
-                if (taxCost) taxCost.innerText = 'DELIVERY: GRATIS';
             }
             actualizarInterfazCarrito();
         };
@@ -403,9 +382,9 @@
             } else {
                 modal?.classList.remove('active');
                 modalReminder?.classList.remove('active');
+                // Solo mostrar header si el carrito no está abierto
+                if (stickyNav && cartSidebar?.classList.contains('cart-closed')) stickyNav.style.display = 'block';
                 lockBodyScroll(false);
-                const stickyNav = document.querySelector('.sticky-nav');
-                if (stickyNav) stickyNav.style.display = 'block';
                 if (menu) menu.style.overflow = '';
             }
         };
@@ -419,6 +398,7 @@
         }
 
         function abrirCarritoConFeedback() {
+            if (stickyNav) stickyNav.style.display = 'none';
             checkoutView?.classList.add('hidden');
             cartItemsView?.classList.remove('hidden');
             setTimeout(() => {
@@ -490,6 +470,7 @@
         }
 
         cartBtn?.addEventListener('click', () => {
+            if (stickyNav) stickyNav.style.display = 'none';
             cartSidebar?.classList.remove('cart-closed');
             history.pushState({ ui: 'cart' }, '');
             lockBodyScroll(true);
@@ -497,6 +478,7 @@
 
         closeCart?.addEventListener('click', () => {
             cartSidebar?.classList.add('cart-closed');
+            if (stickyNav) stickyNav.style.display = 'block';
             lockBodyScroll(false);
             if (menu) menu.style.overflow = '';
             if (window.history.state?.ui === 'cart') history.back();
@@ -509,7 +491,6 @@
                 e.preventDefault();
                 e.stopPropagation(); 
                 e.stopImmediatePropagation(); // Bloquea otros scripts (como el inline de index.html) que intenten actuar sobre este clic
-                const stickyNav = document.querySelector('.sticky-nav');
                 if (stickyNav) stickyNav.style.display = 'none';
                 const name = item.querySelector('.item-name')?.textContent.trim() ?? '';
                 const desc = item.querySelector('.item-desc')?.textContent.trim() ?? '';
@@ -760,7 +741,7 @@
             });
 
             cerrarFunc();
-            // Simplificación: Abrir carrito directamente para todos los productos
+
             abrirCarritoConFeedback();
         };
 
@@ -800,12 +781,12 @@
                 const extras = item.extras || [];
                 const sin = extras
                     .filter((ex) => ex.isToggle && ex.val === 'NO')
-                    .map((ex) => ex.nombre.replace(/^Extra\s+/i, ''));
+                    .map((ex) => ex.nombre.toUpperCase().replace(/^EXTRA\s+/i, ''));
                 const con = extras
                     .filter((ex) => !(ex.isToggle && ex.val === 'NO'))
                     .map(
                         (ex) =>
-                            `${ex.nombre.replace(/^Extra\s+/i, '')}${ex.qty > 1 ? ` (${ex.qty})` : ''}`
+                            `${ex.nombre}${ex.qty > 1 ? ` (${ex.qty})` : ''}`
                     );
 
                 mensaje += `*${item.cantidad}x ${item.nombre}*\n`;
@@ -816,11 +797,25 @@
 
             mensaje += '\n------------------------------\n';
             mensaje += `*TOTAL DEL PEDIDO: $${totalPedido.toFixed(2)} REF*\n`;
-            mensaje += '_(El costo del delivery se calcula al recibir la ubicación)_\n';
+            if (currentDeliveryMethod === 'delivery') {
+                mensaje += '_(El costo del delivery se calcula al recibir la ubicación)_\n';
+            }
             mensaje += '------------------------------\n\n';
+            
             mensaje += '*DATOS DE ENTREGA:*\n';
-            if (notas) mensaje += `*Notas/Referencia:* ${notas}\n`;
-            if (mapsLink) mensaje += `*Ubicación Maps:* ${mapsLink}\n`;
+            mensaje += `*Método:* ${currentDeliveryMethod === 'delivery' ? 'DELIVERY 🛵' : 'PICK UP (Retiro en sede) 🏠'}\n`;
+
+            if (currentDeliveryMethod === 'delivery') {
+                if (!mapsLink) {
+                    alert('Por favor, obtén tu ubicación haciendo clic en el botón "Enviar dirección" para poder procesar tu delivery.');
+                    return;
+                }
+                if (notas) mensaje += `*Notas/Referencia:* ${notas}\n`;
+                if (mapsLink) mensaje += `*Ubicación Maps:* ${mapsLink}\n`;
+            } else {
+                if (notas) mensaje += `*Notas adicionales:* ${notas}\n`;
+            }
+
             if (isPreOrder) mensaje += '\n\nPROCESAR AL ABRIR';
 
             const url = `https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
@@ -836,7 +831,21 @@
             window.open(url, '_blank');
             cartSidebar?.classList.add('cart-closed');
             modalReminder?.classList.add('active');
+            if (stickyNav) stickyNav.style.display = 'none';
         });
+
+        // Lógica de Upsell (Bebidas) si existe el botón en el HTML
+        if (btnUpsellMore) {
+            btnUpsellMore.addEventListener('click', () => {
+                cerrarFunc();
+                setTimeout(() => {
+                    const bebidasBtn = document.querySelector('.category-btn[data-category="bebidas"]');
+                    if (bebidasBtn) {
+                        bebidasBtn.click();
+                    }
+                }, 500);
+            });
+        }
 
         const reloadAfterOrder = () => {
             pedidoConfirmado = false;
@@ -875,21 +884,9 @@
         }
 
         window.addEventListener('click', (e) => {
-            if (e.target === modal || e.target === modalUpsellDrinks || e.target === modalPromoSelection) {
+            if (e.target === modal || e.target === modalPromoSelection) {
                 cerrarFunc();
             }
-        });
-
-        btnUpsellShowDrinks?.addEventListener('click', () => {
-            history.back();
-            setTimeout(() => {
-                document.querySelector('.category-btn[data-category="bebidas"]')?.click();
-            }, 400);
-        });
-
-        btnUpsellContinue?.addEventListener('click', () => {
-            history.back();
-            setTimeout(abrirCarritoConFeedback, 400);
         });
 
         document.getElementById('form-delivery')?.reset();
@@ -901,12 +898,16 @@
                 return;
             }
             const activeModal = document.querySelector('.modal.active');
-            const cartOpen = cartSidebar && !cartSidebar.classList.contains('cart-closed');
-            const stickyNav = document.querySelector('.sticky-nav');
-            if (stickyNav) stickyNav.style.display = 'block';
             activeModal?.classList.remove('active');
             cartSidebar?.classList.add('cart-closed');
             lockBodyScroll(false);
+
+            // Solo mostrar el header si volvemos a un estado sin UI activa (ni modal ni carrito)
+            const state = event.state;
+            if (stickyNav && (!state || !state.ui)) {
+                stickyNav.style.display = 'block';
+            }
+
             if (menu) menu.style.overflow = '';
         });
 
@@ -918,17 +919,6 @@
         const btnLocation = document.getElementById('btn-get-location');
         const inputMaps = document.getElementById('maps');
         const textSpan = btnLocation?.querySelector('span');
-
-        const actualizarTaximetro = (distancia, costo) => {
-            const taxBar = document.getElementById('tax-bar-fill');
-            const taxCost = document.getElementById('tax-cost');
-            const taxStatus = document.querySelector('.tax-status');
-            if (!taxBar || !taxCost) return;
-            const progress = Math.min((distancia / CONFIG.DELIVERY_MAX_KM) * 100, 100);
-            taxBar.style.width = `${progress}%`;
-            taxCost.innerText = `DELIVERY: $${costo.toFixed(2)}`;
-            if (taxStatus) taxStatus.innerText = 'UBICACIÓN DETECTADA';
-        };
 
         if (btnLocation && inputMaps && textSpan) {
             btnLocation.addEventListener('click', () => {
@@ -944,18 +934,6 @@
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const { latitude: lat, longitude: lng } = position.coords;
-                        const distancia = calcularDistanciaHaversine(
-                            lat,
-                            lng,
-                            CONFIG.STORE_LAT,
-                            CONFIG.STORE_LON
-                        );
-                        const costo = obtenerCostoDelivery(distancia);
-
-                        window.deliveryDistance = distancia.toFixed(2);
-                        window.deliveryCost = costo.toFixed(2);
-                        actualizarTaximetro(distancia, costo);
-
                         inputMaps.value = `https://maps.google.com/?q=${lat},${lng}`;
                         inputMaps.classList.add('location-success');
                         setTimeout(() => inputMaps.classList.remove('location-success'), 2000);

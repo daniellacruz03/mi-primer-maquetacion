@@ -22,7 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
         entries.forEach(entry => {
             const video = entry.target.querySelector('video');
             if (video) {
-                entry.isIntersecting ? video.play().catch(() => {}) : video.pause();
+                if (entry.isIntersecting) {
+                    video.play().catch((err) => {
+                        console.log('Error al reproducir video:', err);
+                    });
+                } else {
+                    video.pause();
+                }
             }
         });
     }, observerOptions);
@@ -48,8 +54,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         muteBtn.addEventListener("click", (e) => {
             e.stopPropagation();
+            const wasMuted = video.muted;
             video.muted = !video.muted;
             muteBtn.innerHTML = video.muted ? "🔇" : "🔊";
+
+            // Si se activó el volumen, silenciar todos los demás videos
+            if (!video.muted) {
+                activeVideos.forEach((v) => {
+                    if (v !== video) {
+                        v.muted = true;
+                        // Actualizar el botón de mute del video silenciado
+                        const card = v.parentElement;
+                        const btn = card.querySelector('.card-mute-btn');
+                        if (btn) btn.innerHTML = "🔇";
+                    }
+                });
+            }
         });
         
         card.addEventListener("click", () => abrirVideoModal(src));
