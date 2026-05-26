@@ -89,6 +89,7 @@
             setTimeout(() => {
                 document.getElementById('preloader')?.classList.add('ocultar');
                 document.getElementById('main-menu')?.classList.add('mostrar-menu');
+                document.querySelector('.sticky-nav')?.classList.add('mostrar-menu');
                 document.getElementById('cart-floating-btn')?.classList.remove('cart-btn-hidden');
                 setTimeout(verificarYMostrarPromo, 1000);
             }, 200);
@@ -170,6 +171,9 @@
                 });
 
                 footer?.classList.toggle('hidden', category !== 'all');
+                // Sincronizar visibilidad de videos con la categoría seleccionada
+                const videoFeed = document.getElementById('bh-video-feed-scroll');
+                videoFeed?.classList.toggle('hidden', category !== 'all');
                 document.getElementById('main-menu')?.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
@@ -400,6 +404,8 @@
                 modal?.classList.remove('active');
                 modalReminder?.classList.remove('active');
                 lockBodyScroll(false);
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
                 if (menu) menu.style.overflow = '';
             }
         };
@@ -487,7 +493,6 @@
             cartSidebar?.classList.remove('cart-closed');
             history.pushState({ ui: 'cart' }, '');
             lockBodyScroll(true);
-            if (menu) menu.style.overflow = 'hidden';
         });
 
         closeCart?.addEventListener('click', () => {
@@ -500,7 +505,12 @@
         closeModal?.addEventListener('click', cerrarFunc);
 
         document.querySelectorAll('.menu-item').forEach((item) => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation(); 
+                e.stopImmediatePropagation(); // Bloquea otros scripts (como el inline de index.html) que intenten actuar sobre este clic
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'none';
                 const name = item.querySelector('.item-name')?.textContent.trim() ?? '';
                 const desc = item.querySelector('.item-desc')?.textContent.trim() ?? '';
                 const priceStr = item.querySelector('.item-price')?.innerText ?? '0';
@@ -508,7 +518,7 @@
                 esKids = !!item.closest('#kids');
                 const nameLower = name.toLowerCase();
                 const esNuggets = nameLower.includes('nuggets');
-                esComboHouse = nameLower.includes('combo house');
+                const esComboHouseLocal = nameLower.includes('combo house');
                 esHamburguesa = !!item.closest('#hamburguesas') || esKids;
 
                 const esBebida = !!item.closest('#bebidas');
@@ -576,7 +586,7 @@
                             );
                         }
                         const finalVisible =
-                            (visible && esHamburguesa && !esComboHouse) ||
+                            (visible && esHamburguesa && !esComboHouseLocal) ||
                             (visible && nameLower.includes('nuggets'));
                         card.style.display = finalVisible ? 'flex' : 'none';
                         card.dataset.rank = String(rank);
@@ -594,7 +604,7 @@
                         v = ['salsa', 'ketchup', 'mostaza', 'mayonesa', 'queso'].some((kw) =>
                             cn.includes(kw)
                         );
-                    } else if (esComboHouse) v = false;
+                    } else if (esComboHouseLocal) v = false;
                     card.style.display = v ? 'flex' : 'none';
                     const valSpan = card.querySelector('.extra-qty-val');
                     if (valSpan) valSpan.innerText = '0';
@@ -606,7 +616,7 @@
 
                 if (extrasContainer) {
                     extrasContainer.style.display =
-                        (esHamburguesa || nameLower.includes('nuggets')) && !esComboHouse
+                        (esHamburguesa || nameLower.includes('nuggets')) && !esComboHouseLocal
                             ? 'block'
                             : 'none';
                 }
@@ -750,17 +760,8 @@
             });
 
             cerrarFunc();
-
-            if (esHamburguesa) {
-                setTimeout(() => {
-                    modalUpsellDrinks?.classList.add('active');
-                    history.pushState({ ui: 'modal-upsell' }, '');
-                    lockBodyScroll(true);
-                    if (menu) menu.style.overflow = 'hidden';
-                }, 400);
-            } else {
-                abrirCarritoConFeedback();
-            }
+            // Simplificación: Abrir carrito directamente para todos los productos
+            abrirCarritoConFeedback();
         };
 
         btnAddOrderMain?.addEventListener('click', agregarAlPedido);
@@ -901,12 +902,12 @@
             }
             const activeModal = document.querySelector('.modal.active');
             const cartOpen = cartSidebar && !cartSidebar.classList.contains('cart-closed');
-            if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
-                activeModal?.classList.remove('active');
-                cartSidebar?.classList.add('cart-closed');
-                lockBodyScroll(false);
-                if (menu) menu.style.overflow = '';
-            }
+            const stickyNav = document.querySelector('.sticky-nav');
+            if (stickyNav) stickyNav.style.display = 'block';
+            activeModal?.classList.remove('active');
+            cartSidebar?.classList.add('cart-closed');
+            lockBodyScroll(false);
+            if (menu) menu.style.overflow = '';
         });
 
         window.addEventListener('beforeunload', (e) => {
@@ -978,65 +979,5 @@
             });
         }
 
-        /* ——— Banner promocional: cerrar y ocultar al scroll ——— */
-        const initPromoBanner = () => {
-            const banner = document.getElementById('bh-promo-banner');
-            const closeBtn = document.getElementById('bh-promo-banner-close');
-            const menu = document.getElementById('main-menu');
-            if (!banner || !menu) return;
-
-            try {
-                localStorage.removeItem('bh_banner_dismissed');
-            } catch {
-                /* ignore */
-            }
-
-            const revealBanner = () => {
-                if (banner.classList.contains('is-dismissed')) return;
-                banner.classList.remove('is-scroll-hidden');
-            };
-
-            if (sessionStorage.getItem('bh_banner_dismissed') === '1') {
-                banner.classList.add('is-dismissed');
-                return;
-            }
-
-            revealBanner();
-
-            if (!menu.classList.contains('mostrar-menu')) {
-                const menuObserver = new MutationObserver(() => {
-                    if (menu.classList.contains('mostrar-menu')) {
-                        revealBanner();
-                        menuObserver.disconnect();
-                    }
-                });
-                menuObserver.observe(menu, { attributes: true, attributeFilter: ['class'] });
-            }
-
-            let lastScrollTop = 0;
-            const onScroll = () => {
-                if (banner.classList.contains('is-dismissed')) return;
-                const top = menu.scrollTop;
-                if (top > 28 && top > lastScrollTop) {
-                    banner.classList.add('is-scroll-hidden');
-                } else if (top <= 12) {
-                    revealBanner();
-                }
-                lastScrollTop = top;
-            };
-
-            menu.addEventListener('scroll', onScroll, { passive: true });
-
-            closeBtn?.addEventListener('click', () => {
-                banner.classList.add('is-dismissed');
-                try {
-                    sessionStorage.setItem('bh_banner_dismissed', '1');
-                } catch {
-                    /* ignore */
-                }
-            });
-        };
-
-        initPromoBanner();
     });
 })();

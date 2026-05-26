@@ -428,10 +428,6 @@
             background: transparent !important;
         }
 
-        section:not(#bebidas) .menu-item.banner-card {
-            border-radius: 0 !important;
-            margin: 0 auto 5px !important;
-        }
 
         section:not(#bebidas) .item-img-bg {
             display: block !important;
@@ -1043,73 +1039,7 @@
             background: rgba(40, 167, 69, 0.1) !important;
             transition: all 0.5s ease;
         }
-        
-        /* Taxímetro Delivery Dinámico */
-        .taximetro-container {
-            background: rgba(0, 0, 0, 0.4) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-radius: 12px !important;
-            padding: 10px 14px !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 6px;
-            min-height: 52px;
-            width: 100%;
-        }
 
-        .taximetro-info {
-            display: flex;
-            justify-content: center;
-            align-items: baseline;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            color: #fff;
-            text-transform: uppercase;
-        }
-
-        .taximetro-info span { font-size: 0.85rem; letter-spacing: 0.3px; }
-
-        .taximetro-bar-bg {
-            width: 100%;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            position: relative;
-            overflow: visible;
-        }
-
-        .taximetro-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff9800 0%, #ff0000 100%);
-            border-radius: 10px;
-            position: relative;
-            transition: width 0.8s ease-in-out;
-        }
-
-        .taximetro-pin {
-            position: absolute;
-            right: -6px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #ff0000, 0 0 5px #fff;
-            z-index: 2;
-        }
-
-        .tax-status {
-            font-size: 0.6rem !important;
-            text-align: center;
-            margin: 2px 0 0 0 !important;
-            color: rgba(255, 255, 255, 0.35) !important;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
 
         .btn-checkout-final {
             background: linear-gradient(180deg, #1b5e20 0%, #28a745 100%) !important;
@@ -1650,16 +1580,17 @@
                 Bebidas
             </button>
         </div>
+
+        <!-- Texto de instrucción para clientes -->
+        <div class="start-order-text">
+            <span>Empieza a Pedir</span>
+            <button class="help-btn" id="help-btn" title="¿Cómo empezar a pedir?">
+                <span>!</span>
+            </button>
+        </div>
     </div>
 
     <main id="main-menu" class="menu-container">
-        <!-- Banner Card -->
-        <div class="promo-banner-section">
-            <div class="menu-item banner-card">
-                <img src="bannerbh.webp" class="item-img-bg" alt="Banner Burger House" loading="lazy" width="900" height="500">
-            </div>
-        </div>
-
         <!-- Carrusel de Historias Minimalista -->
         <div id="bh-video-feed-scroll" class="bh-video-feed-scroll"></div>
 
@@ -2707,16 +2638,6 @@
                         }
                     }
 
-                    // Ocultar banner cuando no esté en "Todos"
-                    const bannerCard = document.querySelector('.banner-card');
-                    if (bannerCard) {
-                        if (category === 'all') {
-                            bannerCard.classList.remove('hidden');
-                        } else {
-                            bannerCard.classList.add('hidden');
-                        }
-                    }
-                    
                     // Primero, remover todas las clases hidden-search de todos los items
                     document.querySelectorAll('.menu-item').forEach(item => {
                         item.classList.remove('hidden-search');
@@ -2933,14 +2854,12 @@
             const btnModePickup = document.getElementById('btn-mode-pickup');
             const deliveryTools = document.getElementById('delivery-tools');
             const pickupInfo = document.getElementById('pickup-location-info');
+            const deliveryNoticeContainer = document.querySelector('.delivery-notice-premium');
             const deliveryNotice = document.querySelector('.delivery-notice-premium span');
             const additionalNotes = document.getElementById('additional-notes');
 
             const setDeliveryMethod = (method) => {
                 currentDeliveryMethod = method;
-                const taxCost = document.getElementById('tax-cost');
-                const taxBar = document.getElementById('tax-bar-fill');
-                const taxStatus = document.querySelector('.tax-status');
 
                 if (method === 'delivery') {
                     btnModeDelivery.classList.add('active');
@@ -2948,20 +2867,10 @@
                     deliveryTools.classList.remove('hidden');
                     pickupInfo.classList.add('hidden');
                     additionalNotes.classList.remove('hidden');
-                    deliveryNotice.innerText = "El costo del delivery varía según la zona de entrega";
-                    
-                    // Restaurar estado del taxímetro
-                    if (window.deliveryDistance) {
-                        window.deliveryCost = window.lastCalculatedCost;
-                        const progress = Math.min((window.deliveryDistance / 12) * 100, 100);
-                        if (taxBar) taxBar.style.width = `${progress}%`;
-                        if (taxCost) taxCost.innerText = `DELIVERY: $${window.deliveryCost}`;
-                        if (taxStatus) taxStatus.innerText = "UBICACIÓN DETECTADA";
-                    } else {
-                        window.deliveryCost = 0;
-                        if (taxBar) taxBar.style.width = `0%`;
-                        if (taxCost) taxCost.innerText = `DELIVERY: -- $`;
-                        if (taxStatus) taxStatus.innerText = "Calculando al obtener ubicación...";
+                    if (deliveryNoticeContainer) deliveryNoticeContainer.classList.remove('hidden');
+                    // Restaurar mensaje original de divisas en delivery
+                    if (deliveryNotice) {
+                        deliveryNotice.innerHTML = 'Si cancelas en divisas, ¡el delivery es gratis en el casco de la ciudad!<br><span class="delivery-notice-sub">El costo del delivery varía según la zona de entrega</span>';
                     }
                 } else {
                     btnModePickup.classList.add('active');
@@ -2969,15 +2878,13 @@
                     deliveryTools.classList.add('hidden');
                     pickupInfo.classList.remove('hidden');
                     additionalNotes.classList.add('hidden');
-                    deliveryNotice.innerText = "Retira tu pedido directamente en nuestra sede";
-                    
+                    if (deliveryNoticeContainer) deliveryNoticeContainer.classList.add('hidden');
+
                     // Guardar costo actual antes de poner a 0 para el total
                     if (window.deliveryCost > 0) {
                         window.lastCalculatedCost = window.deliveryCost;
                     }
                     window.deliveryCost = 0;
-                    
-                    if (taxCost) taxCost.innerText = `DELIVERY: GRATIS`;
                 }
                 actualizarInterfazCarrito(); // Para refrescar totales
             };
@@ -2992,27 +2899,29 @@
             }
 
             const cerrarFunc = () => {
+                // Mostrar header inmediatamente cuando se cierra cualquier modal
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
+
                 const activeModal = document.querySelector('.modal.active');
-                if (activeModal && activeModal.id !== 'modal-closed') {
-                    history.back();
-                } else {
-                    modal.classList.remove('active');
-                    modalReminder.classList.remove('active');
-                    document.body.style.overflow = 'auto';
-                    menu.style.overflow = '';
-                    // Mostrar header cuando se cierra el modal
-                    const stickyNav = document.querySelector('.sticky-nav');
-                    if (stickyNav) stickyNav.style.display = 'block';
+                if (activeModal) {
+                    activeModal.classList.remove('active');
                 }
+                document.body.style.overflow = 'auto';
+                menu.style.overflow = '';
             };
             function guardarCarrito() {
                 localStorage.setItem('bh_cart', JSON.stringify(carrito));
             }
             function abrirCarritoConFeedback() {
                 // FIX: Asegurar que siempre inicie en la vista de pedido y no en la de entrega
-                checkoutView.classList.add('hidden');
-                cartItemsView.classList.remove('hidden');
-                
+                if (checkoutView) checkoutView.classList.add('hidden');
+                if (cartItemsView) cartItemsView.classList.remove('hidden');
+
+                // Ocultar header cuando se abre el carrito para que no choque con los elementos del pedido
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'none';
+
                 setTimeout(() => {
                     cartSidebar.classList.remove('cart-closed');
                     if(cartBtn) {
@@ -3023,13 +2932,15 @@
             }
             function actualizarInterfazCarrito() {
                 const totalItems = carrito.length;
-                cartBadge.style.display = totalItems > 0 ? 'flex' : 'none';
-                cartBadge.innerText = totalItems;
-                cartItemsContainer.innerHTML = '';
+                if (cartBadge) {
+                    cartBadge.style.display = totalItems > 0 ? 'flex' : 'none';
+                    cartBadge.innerText = totalItems;
+                }
+                if (cartItemsContainer) cartItemsContainer.innerHTML = '';
                 let total = 0;
                 if (carrito.length === 0) {
-                    checkoutView.classList.add('hidden');
-                    cartItemsView.classList.remove('hidden');
+                    if (checkoutView) checkoutView.classList.add('hidden');
+                    if (cartItemsView) cartItemsView.classList.remove('hidden');
                 }
                 guardarCarrito();
                 carrito.forEach((item, index) => {
@@ -3085,10 +2996,6 @@
                 // Mostrar header cuando se cierra el carrito
                 const stickyNav = document.querySelector('.sticky-nav');
                 if (stickyNav) stickyNav.style.display = 'block';
-                // Si hay un estado en el historial, volvemos atrás para sincronizar
-                if (window.history.state && window.history.state.ui === 'cart') {
-                    history.back();
-                }
             });
             closeModal.addEventListener('click', cerrarFunc);
             document.querySelectorAll('.menu-item').forEach(item => {
@@ -3293,24 +3200,17 @@
                         valSpan.innerText = '0';
                     }
                 });
-                
-                cerrarFunc();
 
-                if (esHamburguesa) {
-                    setTimeout(() => {
-                      if (modalUpsellDrinks) {
-    modalUpsellDrinks.classList.add('active');
-    history.pushState({ ui: 'modal-upsell' }, "");
-    document.body.style.overflow = 'hidden';
-    menu.style.overflow = 'hidden';
-}
-                        // Ocultar header cuando se abre el modal upsell
-                        const stickyNav = document.querySelector('.sticky-nav');
-                        if (stickyNav) stickyNav.style.display = 'none';
-                    }, 400);
-                } else {
-                    abrirCarritoConFeedback();
-                }
+                // Cerrar modal directamente sin usar cerrarFunc
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                menu.style.overflow = '';
+                // Mostrar header cuando se cierra el modal
+                const stickyNav = document.querySelector('.sticky-nav');
+                if (stickyNav) stickyNav.style.display = 'block';
+
+                // Siempre abrir el carrito directamente después de agregar un producto
+                abrirCarritoConFeedback();
             };
 
             btnAddOrderMain.addEventListener('click', agregarAlPedido);
@@ -3358,14 +3258,20 @@
 
                 mensaje += `\n------------------------------\n`;
                 mensaje += `*TOTAL DEL PEDIDO: $${totalPedido.toFixed(2)} REF*\n`;
-                mensaje += `_(El costo del delivery se calcula al recibir la ubicación)_\n`;
+                if (currentDeliveryMethod === 'delivery') {
+                    mensaje += `_(El costo del delivery se calcula al recibir la ubicación)_\n`;
+                } else {
+                    mensaje += `_(Retira tu pedido directamente en nuestra sede)_\n`;
+                }
                 mensaje += `------------------------------\n\n`;
 
                 mensaje += `*DATOS DE ENTREGA:*\n`;
-                if (notas) mensaje += `*Notas/Referencia:* ${notas}\n`;
-
-                if (mapsLink) {
-                    mensaje += `*Ubicación Maps:* ${mapsLink}\n`;
+                if (currentDeliveryMethod === 'delivery') {
+                    if (notas) mensaje += `*Notas/Referencia:* ${notas}\n`;
+                    if (mapsLink) mensaje += `*Ubicación Maps:* ${mapsLink}\n`;
+                } else {
+                    mensaje += `*Método:* Pick Up (Retiro en sede)_\n`;
+                    if (notas) mensaje += `*Notas adicionales:* ${notas}\n`;
                 }
 
                 if (isPreOrder) {
@@ -3442,10 +3348,7 @@
 
             if (btnUpsellShowDrinks) {
                 btnUpsellShowDrinks.addEventListener('click', () => {
-                    history.back(); // Cierra el modal de upsell
-                    // Mostrar header cuando se cierra el modal upsell
-                    const stickyNav = document.querySelector('.sticky-nav');
-                    if (stickyNav) stickyNav.style.display = 'block';
+                    cerrarFunc(); // Cierra el modal de upsell
                     setTimeout(() => {
                         // Simular un clic en el botón de categoría "Bebidas"
                         const bebidasCategoryBtn = document.querySelector('.category-btn[data-category="bebidas"]');
@@ -3459,10 +3362,7 @@
 
             if (btnUpsellContinue) {
                 btnUpsellContinue.addEventListener('click', () => {
-                    history.back(); // Cierra el modal de upsell
-                    // Mostrar header cuando se cierra el modal upsell
-                    const stickyNav = document.querySelector('.sticky-nav');
-                    if (stickyNav) stickyNav.style.display = 'block';
+                    cerrarFunc(); // Cierra el modal de upsell
                     setTimeout(() => {
                         abrirCarritoConFeedback();
                     }, 400);
@@ -3473,27 +3373,6 @@
             const formDelivery = document.getElementById('form-delivery');
             if (formDelivery) formDelivery.reset();
 
-            // Manejo del botón atrás del navegador y cierre de modales
-            window.addEventListener('popstate', (e) => {
-                if (pedidoConfirmado) {
-                    modalReminder.classList.add('active');
-                    history.pushState({ orderSent: true }, "");
-                    return;
-                }
-
-                const activeModal = document.querySelector('.modal.active');
-                const cartOpen = !cartSidebar.classList.contains('cart-closed');
-
-                if ((activeModal && activeModal.id !== 'modal-closed') || cartOpen) {
-                    if (activeModal) activeModal.classList.remove('active');
-                    cartSidebar.classList.add('cart-closed');
-                    document.body.style.overflow = 'auto';
-                    menu.style.overflow = '';
-                    // Mostrar header cuando se cierra el modal vía botón atrás
-                    const stickyNav = document.querySelector('.sticky-nav');
-                    if (stickyNav) stickyNav.style.display = 'block';
-                }
-            });
 
             // Evitar pérdida de datos si el pedido está confirmado
             window.addEventListener('beforeunload', (e) => {
@@ -3563,20 +3442,6 @@
                             window.deliveryDistance = distancia.toFixed(2);
                             window.deliveryCost = costo.toFixed(2);
 
-                            // --- ACTUALIZACIÓN DEL TAXÍMETRO ---
-                            const taxBar = document.getElementById('tax-bar-fill');
-                            const taxCost = document.getElementById('tax-cost');
-                            const taxStatus = document.querySelector('.tax-status');
-                            
-                            if (taxBar && taxCost) {
-                                // Visualización basada en un rango máximo de 12km
-                                const progress = Math.min((distancia / 12) * 100, 100);
-                                taxBar.style.width = `${progress}%`;
-                                taxCost.innerText = `DELIVERY: $${costo.toFixed(2)}`;
-                                if (taxStatus) taxStatus.innerText = "UBICACIÓN DETECTADA";
-                            }
-                            // ------------------------------------------
-
                             const googleMapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
                             
                             inputMaps.value = googleMapsUrl;
@@ -3601,6 +3466,47 @@
                     );
                 });
             }
+
+            // Lógica del Modal de Ayuda
+            const helpBtn = document.getElementById('help-btn');
+            const modalHelp = document.getElementById('modal-help');
+            const helpCloseBtn = document.getElementById('help-close-btn');
+
+            if (helpBtn && modalHelp) {
+                helpBtn.addEventListener('click', () => {
+                    modalHelp.classList.add('active');
+                    modalHelp.setAttribute('aria-hidden', 'false');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (helpCloseBtn && modalHelp) {
+                helpCloseBtn.addEventListener('click', () => {
+                    modalHelp.classList.remove('active');
+                    modalHelp.setAttribute('aria-hidden', 'true');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            // Cerrar modal de ayuda al hacer clic fuera
+            if (modalHelp) {
+                modalHelp.addEventListener('click', (e) => {
+                    if (e.target === modalHelp) {
+                        modalHelp.classList.remove('active');
+                        modalHelp.setAttribute('aria-hidden', 'true');
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+
+            // Cerrar modal de ayuda con Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modalHelp && modalHelp.classList.contains('active')) {
+                    modalHelp.classList.remove('active');
+                    modalHelp.setAttribute('aria-hidden', 'true');
+                    document.body.style.overflow = 'auto';
+                }
+            });
         });
     </script>
 
@@ -3614,6 +3520,51 @@
                     <span class="icon-unmuted" hidden>🔊</span>
                 </button>
                 <button id="story-btn-close" class="story-close-btn">&times;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ayuda -->
+    <div id="modal-help" class="modal" aria-hidden="true">
+        <div class="modal-content-help">
+            <button class="help-close-btn" id="help-close-btn">&times;</button>
+            <h2 class="help-title">¿Cómo empezar a pedir?</h2>
+            <div class="help-steps">
+                <div class="help-step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h3>Selecciona tu hamburguesa</h3>
+                        <p>Pasa por las categorías y presiona sobre la hamburguesa que deseas.</p>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h3>Personaliza tu pedido</h3>
+                        <p>Agrega o quita extras según tu preferencia.</p>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h3>Agrega al carrito</h3>
+                        <p>Presiona "Agregar al pedido" para añadir tu hamburguesa al carrito.</p>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h3>Completa tu pedido</h3>
+                        <p>Revisa tu carrito, agrega más productos si lo deseas y completa los datos de entrega.</p>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <h3>Envía por WhatsApp</h3>
+                        <p>Presiona "Enviar Pedido" para enviar tu orden directamente por WhatsApp.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
