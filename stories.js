@@ -17,15 +17,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const activeVideos = [];
-    const observerOptions = { root: null, rootMargin: '50px', threshold: 0.1 };
+    // Subimos el threshold a 0.5 para que solo se reproduzca el video que esté mayormente visible
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
     const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const video = entry.target.querySelector('video');
             if (video) {
                 if (entry.isIntersecting) {
-                    video.play().catch((err) => {
-                        console.log('Error al reproducir video:', err);
-                    });
+                    // Usamos una promesa para evitar errores si el video no ha cargado
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) { playPromise.catch(() => { /* Auto-play prevenido */ }); }
                 } else {
                     video.pause();
                 }
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         card.className = "video-story-card";
         const video = document.createElement("video");
         video.src = src;
-        video.autoplay = true; video.muted = true; video.loop = true; video.playsinline = true;
+        video.preload = "metadata"; video.muted = true; video.loop = true; video.playsinline = true;
         
         const muteBtn = document.createElement("button");
         muteBtn.className = "card-mute-btn";
@@ -86,6 +87,11 @@ function cerrarVideoModal() {
     const modal = document.getElementById("modal-story");
     const player = document.getElementById("story-player");
     if (player) { player.pause(); player.removeAttribute("src"); }
+    
+    // Reanudar los videos del feed al cerrar el modal
+    const cards = document.querySelectorAll('.video-story-card video');
+    cards.forEach(v => { if (v.dataset.wasPlaying === "true") v.play().catch(()=> {}); });
+
     if (modal) {
         modal.classList.remove("active");
         document.body.style.overflow = "";
@@ -96,13 +102,25 @@ function abrirVideoModal(videoSrc) {
     const modal = document.getElementById("modal-story");
     if (!modal) return;
     const container = modal.querySelector(".story-full-container");
+    
+    // Pausar videos del fondo para ahorrar recursos
+    const feedVideos = document.querySelectorAll('.video-story-card video');
+    feedVideos.forEach(v => {
+        v.dataset.wasPlaying = !v.paused;
+        v.pause();
+    });
+
     container.innerHTML = '';
 
     const video = document.createElement("video");
     video.id = "story-player";
     video.src = videoSrc;
-    video.autoplay = true; video.muted = true; video.loop = true; video.playsinline = true;
+    // Importante: En el modal empezamos con sonido porque hubo una acción del usuario (click)
+    video.autoplay = true; video.muted = false; video.loop = true; video.playsinline = true;
     video.style.cssText = "width: 100%; height: 100%; object-fit: contain; background: #000;";
+    
+    // Manejo de error de reproducción
+    video.play().catch(() => { video.muted = true; video.play(); });
 
     const closeBtn = document.createElement("button");
     closeBtn.innerHTML = "&times;";
@@ -118,7 +136,7 @@ function abrirVideoModal(videoSrc) {
     closeBtn.onclick = (e) => { e.stopPropagation(); cerrarVideoModal(); };
 
     const muteBtn = document.createElement("button");
-    muteBtn.innerHTML = "🔇";
+    muteBtn.innerHTML = "🔊";
     muteBtn.style.cssText = "position: absolute; top: 20px; left: 20px; z-index: 30; background: linear-gradient(180deg, #8b0000 0%, #e60000 100%); border: 2px solid rgba(255, 255, 255, 0.3); color: white; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 15px rgba(230, 0, 0, 0.4); transition: transform 0.3s ease, box-shadow 0.3s ease;";
     muteBtn.addEventListener("mouseenter", () => {
         muteBtn.style.transform = "scale(1.1)";
