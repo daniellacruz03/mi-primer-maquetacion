@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -52,7 +52,7 @@
         .contenedor-logo {
             position: fixed;
             inset: 0;
-            z-index: 5000;
+            z-index: calc(var(--layer-c3) + 500);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -274,12 +274,12 @@
         }
 
         .background-decor {
-            z-index: 6 !important;
+            z-index: 10 !important; /* C1 */
             pointer-events: auto;
         }
 
         .corner-item {
-            z-index: 6;
+            z-index: 10; /* C1 */
             pointer-events: auto;
             opacity: 0.9;
             filter: drop-shadow(0 10px 18px rgba(255, 140, 0, 0.5));
@@ -332,7 +332,7 @@
             transform: translateY(40px);
             transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
             position: relative;
-            z-index: 10;
+            z-index: var(--layer-c2);
             filter: blur(8px);
         }
 
@@ -341,7 +341,7 @@
             top: 0 !important;
             left: 0 !important;
             right: 0 !important;
-            z-index: 9999 !important;
+            z-index: calc(var(--layer-c2) + 20) !important;
             background: rgba(8, 8, 8, 0.95) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
@@ -619,7 +619,7 @@
             width: 100vw !important;
             height: 100vh !important;
             border-radius: 0 !important;
-            z-index: 7000 !important;
+            z-index: var(--layer-c3) !important;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
             overflow-y: auto !important;
             display: flex;
@@ -713,7 +713,7 @@
             transition: opacity 0.4s ease, visibility 0.4s ease;
             display: none !important;
             pointer-events: none;
-            z-index: 6000;
+            z-index: var(--layer-c3);
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
         }
@@ -1394,7 +1394,7 @@
             left: 0;
             width: 100%;
             background: #0a0a0a;
-            z-index: 5500; /* Por debajo de modales, por encima de todo lo demás */
+            z-index: calc(var(--layer-c2) + 10);
             padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
@@ -1588,6 +1588,10 @@
             <button class="help-btn" id="help-btn" data-tooltip="¿Cómo pedir?">
                 <span>!</span>
             </button>
+            <div class="help-tooltip" id="help-tooltip">
+                <span class="tooltip-text">¿Cómo pedir?</span>
+                <div class="tooltip-arrow"></div>
+            </div>
         </div>
 
         <section id="hamburguesas">
@@ -2050,7 +2054,7 @@
                     <div class="delivery-notice-premium">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                         <div class="delivery-notice-content">
-                            <span class="delivery-notice-main">Si cancelas en divisas, ¡el delivery es gratis en el casco de la ciudad!</span>
+                            <span class="delivery-notice-main">Si cancelas en divisas el delivery es gratis en el casco central de la ciudad</span>
                             <span class="delivery-notice-sub">El costo del delivery varía según la zona de entrega</span>
                         </div>
                     </div>
@@ -2477,7 +2481,7 @@
     </div>
 
 
-    <div id="modal-closed" class="modal" style="z-index: 10000;">
+    <div id="modal-closed" class="modal" style="z-index: var(--layer-c3);">
         <div class="modal-content upsell-content closed-store-content">
             <div class="modal-details">
                 <img src="logobh.webp" alt="Logo" style="width: 70px; border-radius: 50%; margin-bottom: 15px;">
@@ -2493,20 +2497,6 @@
         </div>
     </div>
 
-    <!-- Modal para ver Historias (Video Player Fullscreen) -->
-    <div id="modal-story" class="modal modal-story-view" aria-hidden="true">
-        <div class="story-full-container">
-            <video id="story-player" playsinline></video>
-            <div class="story-overlay-controls">
-                <button id="story-btn-mute" class="story-mute-btn" aria-label="Silenciar">
-                    <span class="icon-muted">🔇</span>
-                    <span class="icon-unmuted" hidden>🔊</span>
-                </button>
-                <button id="story-btn-close" class="story-close-btn">&times;</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal de Ayuda -->
     <div id="modal-help" class="modal" aria-hidden="true">
         <div class="modal-content-help">
@@ -2516,34 +2506,82 @@
                 <div class="help-step">
                     <span class="step-number">1</span>
                     <div class="step-content">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                            </svg>
+                        </div>
                         <h3>Selecciona tu hamburguesa</h3>
                         <p>Pasa por las categorías y presiona sobre la hamburguesa que deseas.</p>
                     </div>
                 </div>
+                <div class="step-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                    </svg>
+                </div>
                 <div class="help-step">
                     <span class="step-number">2</span>
                     <div class="step-content">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                        </div>
                         <h3>Personaliza tu pedido</h3>
                         <p>Agrega o quita extras según tu preferencia.</p>
                     </div>
                 </div>
+                <div class="step-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                    </svg>
+                </div>
                 <div class="help-step">
                     <span class="step-number">3</span>
                     <div class="step-content">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"/>
+                                <circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                        </div>
                         <h3>Agrega al carrito</h3>
                         <p>Presiona "Agregar al pedido" para añadir tu hamburguesa al carrito.</p>
                     </div>
                 </div>
+                <div class="step-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                    </svg>
+                </div>
                 <div class="help-step">
                     <span class="step-number">4</span>
                     <div class="step-content">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3h18v18H3zM9 9h6M9 13h6M9 17h6"/>
+                            </svg>
+                        </div>
                         <h3>Completa tu pedido</h3>
                         <p>Revisa tu carrito, agrega más productos si lo deseas y completa los datos de entrega.</p>
                     </div>
                 </div>
+                <div class="step-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                    </svg>
+                </div>
                 <div class="help-step">
                     <span class="step-number">5</span>
                     <div class="step-content">
+                        <div class="step-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e60000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
                         <h3>Envía por WhatsApp</h3>
                         <p>Presiona "Enviar Pedido" para enviar tu orden directamente por WhatsApp.</p>
                     </div>
@@ -2551,6 +2589,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
 
     <!-- Carga de lógica de historias -->
     <script src="app.js"></script>

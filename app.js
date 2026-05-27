@@ -52,6 +52,21 @@
         document.body.style.overflow = locked ? 'hidden' : 'auto';
     };
 
+    const showToast = (message, type = 'info') => {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerText = message;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         /* ——— Preloader ——— */
         const preloaderProgress = document.getElementById('preloader-progress');
@@ -285,7 +300,7 @@
                 c.classList.contains('selected')
             );
             if (!selectedBurgerCard) {
-                alert('Por favor selecciona una hamburguesa.');
+                showToast('Por favor selecciona una hamburguesa.', 'error');
                 return;
             }
             const burgerName = selectedBurgerCard.dataset.burger;
@@ -332,7 +347,7 @@
         const btnModePickup = document.getElementById('btn-mode-pickup');
         const deliveryTools = document.getElementById('delivery-tools');
         const pickupInfo = document.getElementById('pickup-location-info');
-        const deliveryNotice = document.querySelector('.delivery-notice-premium span');
+        const deliveryNotice = document.querySelector('.delivery-notice-premium');
         const additionalNotes = document.getElementById('additional-notes');
 
         const setDeliveryMethod = (method) => {
@@ -344,19 +359,14 @@
                 deliveryTools?.classList.remove('hidden');
                 pickupInfo?.classList.add('hidden');
                 additionalNotes?.classList.remove('hidden');
-                if (deliveryNotice) {
-                    deliveryNotice.innerText =
-                        'El costo del delivery varía según la zona de entrega';
-                }
+                deliveryNotice?.classList.remove('hidden');
             } else {
                 btnModePickup?.classList.add('active');
                 btnModeDelivery?.classList.remove('active');
                 deliveryTools?.classList.add('hidden');
                 pickupInfo?.classList.remove('hidden');
                 additionalNotes?.classList.add('hidden');
-                if (deliveryNotice) {
-                    deliveryNotice.innerText = 'Retira tu pedido directamente en nuestra sede';
-                }
+                deliveryNotice?.classList.add('hidden');
             }
             actualizarInterfazCarrito();
         };
@@ -749,7 +759,7 @@
 
         document.getElementById('btn-go-checkout')?.addEventListener('click', () => {
             if (carrito.length === 0) {
-                alert('Añade algo al carrito primero');
+                showToast('Añade algo al carrito primero', 'error');
                 return;
             }
             cartItemsView?.classList.add('hidden');
@@ -768,7 +778,7 @@
             const mapsLink = document.getElementById('maps')?.value.trim() ?? '';
 
             if (!nombre) {
-                alert('Por favor, ingresa tu nombre.');
+                showToast('Por favor, ingresa tu nombre.', 'error');
                 return;
             }
 
@@ -807,7 +817,7 @@
 
             if (currentDeliveryMethod === 'delivery') {
                 if (!mapsLink) {
-                    alert('Por favor, obtén tu ubicación haciendo clic en el botón "Enviar dirección" para poder procesar tu delivery.');
+                    showToast('Por favor, obtén tu ubicación haciendo clic en el botón "Enviar dirección" para poder procesar tu delivery.', 'error');
                     return;
                 }
                 if (notas) mensaje += `*Notas/Referencia:* ${notas}\n`;
@@ -923,7 +933,7 @@
         if (btnLocation && inputMaps && textSpan) {
             btnLocation.addEventListener('click', () => {
                 if (!navigator.geolocation) {
-                    alert('Lo sentimos, tu navegador no soporta geolocalización.');
+                    showToast('Lo sentimos, tu navegador no soporta geolocalización.', 'error');
                     return;
                 }
 
@@ -950,7 +960,7 @@
                         const mensajes = {
                             1: 'Por favor, permite el acceso a tu ubicación para facilitarnos la entrega.'
                         };
-                        alert(mensajes[error.code] ?? 'No pudimos obtener tu ubicación.');
+                        showToast(mensajes[error.code] ?? 'No pudimos obtener tu ubicación.', 'error');
                     },
                     { enableHighAccuracy: true, timeout: 10000 }
                 );
