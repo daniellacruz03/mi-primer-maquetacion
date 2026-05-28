@@ -132,6 +132,22 @@
         const searchInput = document.getElementById('menu-search');
         searchInput?.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
+            const isSearching = term.length > 0;
+
+            // Ocultar historias y guía de ayuda durante la búsqueda para mejorar el espacio
+            const videoFeed = document.getElementById('bh-video-feed-scroll');
+            const startOrderText = document.querySelector('.start-order-text');
+            const activeCategory = document.querySelector('.category-btn.active')?.dataset.category || 'all';
+
+            if (isSearching) {
+                videoFeed?.classList.add('hidden');
+                startOrderText?.classList.add('hidden');
+            } else {
+                // Al limpiar la búsqueda, restaurar visibilidad solo si estamos en la categoría "Todos"
+                videoFeed?.classList.toggle('hidden', activeCategory !== 'all');
+                startOrderText?.classList.toggle('hidden', activeCategory !== 'all');
+            }
+
             document.querySelectorAll('.menu-item').forEach((item) => {
                 const name = item.querySelector('.item-name')?.innerText.toLowerCase() ?? '';
                 const desc = item.querySelector('.item-desc')?.innerText.toLowerCase() ?? '';
@@ -173,7 +189,19 @@
                 videoFeed?.classList.toggle('hidden', category !== 'all');
                 // Ocultar botón "Empieza a Pedir" cuando no esté en "Todos"
                 startOrderText?.classList.toggle('hidden', category !== 'all');
-                document.getElementById('main-menu')?.scrollTo({ top: 0, behavior: 'smooth' });
+
+                if (category === 'all') {
+                    document.getElementById('main-menu')?.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const targetSection = document.getElementById(category);
+                    if (targetSection) {
+                        // Pequeño delay para permitir que el filtrado (display: none)
+                        // se procese antes de calcular el scroll exacto
+                        setTimeout(() => {
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 60);
+                    }
+                }
             });
         });
 
