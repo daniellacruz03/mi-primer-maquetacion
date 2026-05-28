@@ -141,11 +141,12 @@ body {
 .menu-container {
     opacity: 0;
     visibility: hidden;
-    max-width: 600px;
-    width: 95%;
+    max-width: 100%;
+    width: 100%;
     margin: 0 auto;
-    padding-top: calc(180px + env(safe-area-inset-top));
+    padding-top: calc(175px + env(safe-area-inset-top));
     padding-bottom: 20px;
+    min-height: 100vh;
     z-index: var(--layer-c2);
     transition: opacity 1s ease, visibility 1s;
     position: relative;
@@ -183,6 +184,7 @@ body {
     border-radius: 50%;
     border: none;
     box-shadow: none !important;
+    object-fit: contain;
 }
 
 /* Carrito dentro del header (ya no es fixed) */
@@ -1439,7 +1441,7 @@ h1 {
     padding: 5px 20px 0 !important;
     margin-top: 0 !important;
     width: 100% !important;
-    min-height: 210px !important; /* Altura fija para que no colapse a 0px */
+    min-height: 195px !important; /* Altura optimizada para reducir scroll */
     background: transparent !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none !important;
@@ -1455,18 +1457,18 @@ h1 {
 
 /* --- ESPACIADO DE SECCIÓN DE PRODUCTOS --- */
 .menu-container {
-    padding-top: calc(185px + env(safe-area-inset-top)) !important; /* Espacio optimizado para reducir gap */
+    padding-top: calc(175px + env(safe-area-inset-top)) !important; /* Espacio optimizado para reducir gap */
 }
 
 #main-menu section {
-    scroll-margin-top: 240px; /* Compensar altura del header fijo para scrollIntoView */
+    scroll-margin-top: 180px; /* Compensar altura del header fijo para scrollIntoView */
 }
 
 /* --- TARJETAS DE VIDEO --- */
 .video-story-card {
     flex: 0 0 115px !important;
     width: 115px !important;
-    height: 190px !important;
+    height: 175px !important;
     border-radius: 16px !important;
     overflow: hidden !important;
     position: relative !important;
@@ -1490,7 +1492,7 @@ h1 {
     align-items: center !important;
     justify-content: center !important;
     gap: 10px !important;
-    margin: 20px auto 15px !important;
+    margin: 10px auto 10px !important;
     font-family: var(--font-heading) !important;
     text-transform: uppercase !important;
     letter-spacing: 2px !important;
@@ -1651,25 +1653,33 @@ h1 {
 }
 
 /* --- ESTILOS PARA EL MODAL DE AYUDA --- */
+#modal-help {
+    padding: 0 !important;
+}
+
 .modal-content-help {
     background: #111 !important;
-    width: 90% !important;
-    max-width: 400px !important;
-    margin: auto !important;
-    border-radius: 25px !important;
-    padding: 35px 25px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: calc(20px + env(safe-area-inset-top)) 25px !important;
     position: relative !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8) !important;
     animation: zoomIn 0.3s ease-out !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
 }
 
 .help-title {
     font-family: var(--font-heading) !important;
     color: var(--primary-color) !important;
-    font-size: 1.8rem !important;
+    font-size: 1.6rem !important;
     text-align: center !important;
-    margin-bottom: 25px !important;
+    margin-bottom: 20px !important;
     text-transform: uppercase !important;
     letter-spacing: 1px !important;
 }
@@ -1677,7 +1687,9 @@ h1 {
 .help-steps {
     display: flex !important;
     flex-direction: column !important;
-    gap: 22px !important;
+    gap: 15px !important;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .help-step {
@@ -1716,14 +1728,14 @@ h1 {
 }
 
 .step-icon {
-    width: 40px !important;
-    height: 40px !important;
+    width: 32px !important;
+    height: 32px !important;
     background: rgba(230, 0, 0, 0.15) !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 5px !important;
     border: 1px solid rgba(230, 0, 0, 0.3) !important;
     box-shadow: 0 2px 8px rgba(230, 0, 0, 0.2) !important;
 }
@@ -1749,10 +1761,10 @@ h1 {
 
 .help-close-btn {
     position: absolute !important;
-    top: -15px !important;
-    right: -15px !important;
+    top: 20px !important;
+    right: 20px !important;
     background: var(--primary-color) !important;
-    border: 2px solid white !important;
+    border: none !important;
     color: white !important;
     width: 35px !important;
     height: 35px !important;

@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Burguer House Merida</title>
-    <link rel="icon" type="image/webp" href="logobh.webp">
+    <!-- Favicon e Icono de Aplicación -->
+    <link rel="icon" href="logobh.webp" type="image/webp">
+    <link rel="apple-touch-icon" href="logobh.webp">
     <!-- Precarga del logo para evitar que desaparezca durante la carga -->
     
     <!-- Meta Tags para Redes Sociales (Open Graph) -->
     <meta property="og:title" content="Burger House | Menú Digital">
     <meta property="og:description" content="Explora nuestras hamburguesas artesanales y haz tu pedido directamente por WhatsApp.">
-    <meta property="og:image" content="https://tu-dominio.com/logobh.webp">
-    <meta property="og:url" content="https://tu-dominio.com">
+    <meta property="og:image" content="logobh.webp">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#080808">
 
@@ -345,7 +346,7 @@
             background: rgba(8, 8, 8, 0.95) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
-            padding: 10px 15px 5px !important;
+            padding: calc(10px + env(safe-area-inset-top)) 15px 5px !important;
             margin: 0 !important;
             border-radius: 0 !important;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
