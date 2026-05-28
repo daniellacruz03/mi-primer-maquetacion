@@ -145,7 +145,7 @@ body {
     width: 100%;
     margin: 0 auto;
     padding-top: calc(175px + env(safe-area-inset-top));
-    padding-bottom: 20px;
+    padding-bottom: 0 !important;
     min-height: 100vh;
     z-index: var(--layer-c2);
     transition: opacity 1s ease, visibility 1s;
@@ -1315,7 +1315,7 @@ h1 {
     background-color: #7a0000; /* Rojo profundo / Borgoña */
     color: #ffffff;
     width: 100%;
-    padding: 40px 20px 120px; /* Padding extra abajo para que no lo tape la barra de categorías si existiera */
+    padding: 40px 20px calc(30px + env(safe-area-inset-bottom)) !important;
     text-align: center;
     font-family: var(--font-body);
     position: relative;
