@@ -116,6 +116,11 @@
 
         /* ——— Horario / tienda cerrada ——— */
         let isPreOrder = false;
+        let backPressCount = 0;
+        
+        // Inicializar estado del menú principal para manejo del botón atrás
+        history.pushState({ mainMenu: true }, '');
+
         const verificarHorario = () => {
             if (isStoreOpenNow()) return;
             document.getElementById('modal-closed')?.classList.add('active');
@@ -605,11 +610,21 @@
                 sortedToggles.forEach((c) => extrasGrid.appendChild(c));
                 costed.forEach((c) => extrasGrid.appendChild(c));
 
-                if (extrasContainer) {
-                    extrasContainer.style.display =
-                        (esHamburguesa || nameLower.includes('nuggets')) && !esComboHouseLocal
-                            ? 'block'
-                            : 'none';
+                // Lógica específica para Bowl
+                if (nameLower === 'bowl') {
+                    const allExtras = extrasGrid.querySelectorAll('.extra-card');
+                    allExtras.forEach(card => {
+                        const isBowlExtra = card.dataset.product === 'bowl';
+                        card.style.display = isBowlExtra ? 'flex' : 'none';
+                    });
+                    extrasContainer.style.display = 'block';
+                } else {
+                    if (extrasContainer) {
+                        extrasContainer.style.display =
+                            (esHamburguesa || nameLower.includes('nuggets')) && !esComboHouseLocal
+                                ? 'block'
+                                : 'none';
+                    }
                 }
 
                 updateTotal();
@@ -907,18 +922,38 @@
                 history.pushState({ orderSent: true }, '');
                 return;
             }
-            const activeModal = document.querySelector('.modal.active');
-            activeModal?.classList.remove('active');
-            cartSidebar?.classList.add('cart-closed');
-            lockBodyScroll(false);
 
-            // Solo mostrar el header si volvemos a un estado sin UI activa (ni modal ni carrito)
-            const state = event.state;
-            if (stickyNav && (!state || !state.ui)) {
-                stickyNav.style.display = 'block';
+            const activeModal = document.querySelector('.modal.active');
+            const isCartOpen = !cartSidebar?.classList.contains('cart-closed');
+
+            // Si hay un modal o carrito abierto, cerrarlo
+            if (activeModal || isCartOpen) {
+                activeModal?.classList.remove('active');
+                cartSidebar?.classList.add('cart-closed');
+                lockBodyScroll(false);
+
+                // Solo mostrar el header si volvemos a un estado sin UI activa (ni modal ni carrito)
+                const state = event.state;
+                if (stickyNav && (!state || !state.ui)) {
+                    stickyNav.style.display = 'block';
+                }
+
+                if (menu) menu.style.overflow = '';
+                return;
             }
 
-            if (menu) menu.style.overflow = '';
+            // Si estamos en el menú principal, prevenir salida y requerir doble tap
+            if (!backPressCount) {
+                backPressCount = 1;
+                showToast('Presiona de nuevo para salir', 'info');
+                history.pushState({ mainMenu: true }, '');
+                setTimeout(() => {
+                    backPressCount = 0;
+                }, 2000);
+            } else {
+                // Segundo tap, permitir salir
+                backPressCount = 0;
+            }
         });
 
         window.addEventListener('beforeunload', (e) => {

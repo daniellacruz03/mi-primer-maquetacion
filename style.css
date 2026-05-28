@@ -1680,25 +1680,6 @@ h1 {
     box-shadow: 0 2px 8px rgba(230, 0, 0, 0.2) !important;
 }
 
-.step-arrow {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 10px 0 !important;
-    animation: arrowBounce 2s ease-in-out infinite;
-}
-
-@keyframes arrowBounce {
-    0%, 100% {
-        transform: translateY(0);
-        opacity: 0.6;
-    }
-    50% {
-        transform: translateY(5px);
-        opacity: 1;
-    }
-}
-
 .help-close-btn {
     position: absolute !important;
     top: -15px !important;
