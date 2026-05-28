@@ -620,6 +620,14 @@
                     extrasContainer.style.display = 'block';
                 } else {
                     if (extrasContainer) {
+                        // Ocultar extras que pertenecen a productos específicos (como el Bowl) cuando no aplican
+                        const allExtras = extrasGrid.querySelectorAll('.extra-card');
+                        allExtras.forEach(card => {
+                            if (card.dataset.product && card.dataset.product !== nameLower) {
+                                card.style.display = 'none';
+                            }
+                        });
+
                         extrasContainer.style.display =
                             (esHamburguesa || nameLower.includes('nuggets')) && !esComboHouseLocal
                                 ? 'block'
