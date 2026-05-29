@@ -43,13 +43,15 @@
             position: relative;
         }
 
-        /* Capa 1: Spoiler sutil de la App con desenfoque inmersivo */
-        body::before {
-            content: '';
+        /* Estilo para el video de fondo que reemplaza la imagen anterior */
+        .video-background {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('pantallaprincipal.png') center/cover no-repeat;
-            filter: blur(6px) brightness(0.7);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(6px) brightness(0.6);
             z-index: -2;
         }
 
@@ -58,7 +60,7 @@
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(8, 8, 8, 0.4) 50%, rgba(0, 0, 0, 0.95) 100%);
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(8, 8, 8, 0.6) 60%, rgba(0, 0, 0, 0.98) 100%);
             z-index: -1;
         }
 
@@ -182,6 +184,11 @@
     </style>
 </head>
 <body>
+    <!-- Video de fondo optimizado -->
+    <video autoplay muted loop playsinline class="video-background" poster="assets/videos/comingsoon.jpg">
+        <source src="assets/videos/comingsoon.mp4" type="video/mp4">
+    </video>
+
     <div class="app-shell">
         <img src="logobh.webp" alt="BH Logo" class="logo-header">
         
@@ -208,7 +215,7 @@
             const now = new Date().getTime();
             const diff = launch - now;
             if (diff < 0) {
-                document.getElementById("timer").innerHTML = "<p style='grid-column: span 4; font-family: Oswald;'>¡YA ESTAMOS ABIERTOS!</p>";
+                document.getElementById("timer").innerHTML = `<p style='grid-column: span 4; font-family: var(--font-heading); font-weight: 800; color: var(--primary-color);'>¡YA ESTAMOS ABIERTOS!</p>`;
                 return;
             }
             document.getElementById("d").innerText = Math.floor(diff / (864e5)).toString().padStart(2, '0');

@@ -487,9 +487,7 @@
                                   return `+ Extra ${cleanName}${e.qty > 1 ? ` (${e.qty})` : ''}`;
                               })
                               .join(', ')
-                        : item.nombre.startsWith('PROMO')
-                          ? ''
-                          : 'Sin adicionales';
+                        : '';
 
                 div.innerHTML = `
                         <div class="cart-item-info">

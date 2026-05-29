@@ -1839,3 +1839,48 @@ p, .item-desc {
 .help-close-btn:active {
     transform: scale(0.9);
 }
+
+.emergencia-side-icon {
+    width: clamp(40px, 10vw, 60px);
+    fill: var(--primary-color);
+    filter: drop-shadow(0 0 10px rgba(230, 0, 0, 0.6));
+    opacity: 0.8;
+}
+
+.emergencia-text-content h2 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: #ffffff;
+    font-size: clamp(1.4rem, 5vw, 2.5rem);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.emergencia-text-content p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+    .emergencia-icon-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .emergencia-logo {
+        order: 1;
+    }
+    .emergencia-side-icon {
+        order: 2;
+        width: 45px;
+    }
+}
+
+.oculto {
+    display: none !important;
+}

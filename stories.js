@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         './assets/videos/video5bh.mp4', './assets/videos/video6bh.mp4', './assets/videos/video7bh.mp4'
     ];
 
-    // Mezcla aleatoria
+    // Mezcla aleatoria completa de todos los videos para un feed dinámico en cada carga
     for (let i = videoSources.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [videoSources[i], videoSources[j]] = [videoSources[j], videoSources[i]];
