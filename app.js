@@ -1,5 +1,5 @@
 /**
- * Burger House — lógica de menú, carrito, horarios y geolocalización.
+ * Burguer House — lógica de menú, carrito, horarios y geolocalización.
  * Mantiene el mismo comportamiento que el script inline original.
  */
 (function () {
@@ -271,7 +271,7 @@
 
         const modalPromoSelection = document.getElementById('modal-promo-selection');
         const closePromoSelection = document.getElementById('close-promo-selection');
-        const promoBurgerCards = document.querySelectorAll('#promo-burger-options .promo-burger-card');
+        const promoBurguerCards = document.querySelectorAll('#promo-burguer-options .promo-burguer-card');
         const promoComboCard = document.getElementById('promo-combo-option');
         const promoPriceDisplay = document.getElementById('promo-selection-price');
         const btnAddPromoToCart = document.getElementById('btn-add-promo-to-cart');
@@ -297,9 +297,9 @@
             updatePromoUI();
         });
 
-        promoBurgerCards.forEach((card) => {
+        promoBurguerCards.forEach((card) => {
             card.onclick = () => {
-                promoBurgerCards.forEach((c) => {
+                promoBurguerCards.forEach((c) => {
                     c.classList.remove('selected');
                     const span = c.querySelector('.extra-qty-val');
                     if (span) span.innerText = 'NO';
@@ -329,14 +329,14 @@
         });
 
         btnAddPromoToCart?.addEventListener('click', () => {
-            const selectedBurgerCard = Array.from(promoBurgerCards).find((c) =>
+            const selectedBurguerCard = Array.from(promoBurguerCards).find((c) =>
                 c.classList.contains('selected')
             );
-            if (!selectedBurgerCard) {
+            if (!selectedBurguerCard) {
                 showToast('Por favor selecciona una hamburguesa.', 'error');
                 return;
             }
-            const burgerName = selectedBurgerCard.dataset.burger;
+            const burguerName = selectedBurguerCard.dataset.burguer;
             const hasCombo = promoComboCard?.querySelector('.extra-qty-val')?.innerText === 'SÍ';
             const finalPrice = hasCombo ? CONFIG.PROMO_COMBO_PRICE : CONFIG.PROMO_BASE_PRICE;
             const extrasPromo = hasCombo
@@ -353,7 +353,7 @@
 
             carrito.push({
                 id: `promo-${Date.now()}`,
-                nombre: `PROMO ${burgerName}`,
+                nombre: `PROMO ${burguerName}`,
                 cantidad: 1,
                 precioUnitario: CONFIG.PROMO_BASE_PRICE,
                 extras: extrasPromo,
@@ -638,11 +638,11 @@
                 sortedToggles.forEach((c) => extrasGrid.appendChild(c));
                 costed.forEach((c) => extrasGrid.appendChild(c));
 
-                // Lógica específica para Bowl
-                if (nameLower === 'bowl') {
+                // Lógica específica para Crispy Bowl
+                if (nameLower === 'crispy bowl') {
                     const allExtras = extrasGrid.querySelectorAll('.extra-card');
                     allExtras.forEach(card => {
-                        const isBowlExtra = card.dataset.product === 'bowl';
+                        const isBowlExtra = card.dataset.product === 'crispy bowl';
                         card.style.display = isBowlExtra ? 'flex' : 'none';
                     });
                     extrasContainer.style.display = 'block';
@@ -833,7 +833,7 @@
                 return;
             }
 
-            let mensaje = '🍔 *NUEVO PEDIDO - BURGER HOUSE* 🍔\n\n';
+            let mensaje = '🍔 *NUEVO PEDIDO - BURGUER HOUSE* 🍔\n\n';
             mensaje += `👤 *Cliente:* ${nombre}\n\n`;
             mensaje += '📝 *DETALLE DEL PEDIDO:*\n';
 

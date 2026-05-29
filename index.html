@@ -10,7 +10,7 @@
     <!-- Precarga del logo para evitar que desaparezca durante la carga -->
     
     <!-- Meta Tags para Redes Sociales (Open Graph) -->
-    <meta property="og:title" content="Burger House | Menú Digital">
+    <meta property="og:title" content="Burguer House | Menú Digital">
     <meta property="og:description" content="Explora nuestras hamburguesas artesanales y haz tu pedido directamente por WhatsApp.">
     <meta property="og:image" content="logobh.webp">
     <meta property="og:type" content="website">
@@ -30,7 +30,7 @@
     <!-- Optimización de fuentes: Preconectar y cargar vía link es más rápido que @import -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         * {
@@ -50,7 +50,7 @@
             background-attachment: fixed !important;
             min-height: 100vh;
             color: #ffffff !important;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         section {
@@ -472,9 +472,11 @@
         .item-name {
             color: #ffffff !important; /* Explicitly white as requested */
             text-shadow: 1px 1px 5px rgba(0,0,0,0.5) !important;
-            font-size: 1.1rem !important; /* Ligeramente más pequeño para ahorrar espacio */
-            font-weight: bold !important; /* Cambiado a bold para consistencia con la petición */
-            text-transform: uppercase;
+            font-size: 1.1rem !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            font-family: 'Montserrat', sans-serif !important;
         }
 
         .seccion-titulo {
@@ -618,9 +620,11 @@
         .item-desc {
             display: block !important; /* Mostrar la descripción */
             color: #aaa; /* Color gris claro */
-            font-size: 0.8rem; /* Reducido para compactar el bloque de texto */
-            margin-top: 2px; 
-            line-height: 1.4;
+            font-size: 0.8rem;
+            margin-top: 2px;
+            font-weight: 500;
+            line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
         }
 
         #cart-sidebar {
@@ -823,14 +827,14 @@
             color: #ffffff !important;
             padding: 0 !important;
             border: none !important;
+            font-family: 'Montserrat', sans-serif !important;
             box-shadow: none !important;
             min-width: auto !important;
             font-size: 2.1rem !important;
-            font-weight: 900 !important;
+            font-weight: 800 !important;
             margin: 15px auto 25px !important;
             line-height: 1 !important;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8) !important;
-            font-family: 'Oswald', sans-serif;
         }
 
         .modal-ref {
@@ -1533,7 +1537,7 @@
     <div class="contenedor-logo" id="preloader">
         <div class="preloader-inner">
             <div class="logo-glow-wrap">
-                <img src="logobh.webp" alt="Logo Burger House" class="logo-animado" width="165" height="165">
+                <img src="logobh.webp" alt="Logo Burguer House" class="logo-animado" width="165" height="165">
             </div>
             <div class="preloader-bar" aria-hidden="true">
                 <div id="preloader-progress" class="preloader-progress"></div>
@@ -1546,7 +1550,7 @@
     <div class="sticky-nav">
         <!-- Fila Superior: Logo (izquierda) y Carrito (derecha) -->
         <div class="header-top-row">
-            <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo" width="50" height="50">
+            <img src="logobh.webp" alt="Logo Burguer House" class="menu-header-logo" width="50" height="50">
             <div id="cart-floating-btn" class="cart-btn-hidden">
                 <span id="cart-badge">0</span>
                 <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto" width="30" height="30">
@@ -1608,11 +1612,11 @@
         <section id="hamburguesas">
             
             <div class="menu-item">
-                <img src="bowl.webp" class="item-img-bg ajuste-subir" alt="Bowl" loading="lazy" width="900" height="500">
+                <img src="bowl.webp" class="item-img-bg ajuste-subir" alt="Crispy Bowl" loading="lazy" width="900" height="500">
                 <div class="item-info-split">
                     <div class="item-info">
                         <span class="badge-new">NUEVO</span>
-                        <span class="item-name">Bowl</span>
+                        <span class="item-name">Crispy Bowl</span>
                         <p class="item-desc">150grs de pechuga crispy, 250grs de papas fritas, barbecue, queso fundido y salsa de la casa.</p>
                     </div>
                     <div class="item-price-wrapper" data-img-src="bowl.webp">
@@ -1710,10 +1714,10 @@
             </div>
 
             <div class="menu-item">
-                <img src="grand house.webp" class="item-img-bg" alt="Grand House Burger" loading="lazy" width="400" height="220">
+                <img src="grand house.webp" class="item-img-bg" alt="Grand House Burguer" loading="lazy" width="400" height="220">
                 <div class="item-info-split">
                     <div class="item-info">
-                        <span class="item-name">Grand House Burger</span>
+                        <span class="item-name">Grand House Burguer</span>
                         <p class="item-desc">Pan de papa, triple carne, tocineta, pepinillo, triple queso americano, lechuga, salsa de la casa, papas fritas.</p>
                     </div>
                     <div class="item-price-wrapper" data-img-src="grand house.webp">
@@ -1856,11 +1860,11 @@
 
         <section id="servicios">
             <div class="menu-item">
-                <img src="bowl.webp" class="item-img-bg" alt="Bowl" loading="lazy" width="400" height="220">
+                <img src="bowl.webp" class="item-img-bg" alt="Crispy Bowl" loading="lazy" width="400" height="220">
                 <div class="item-info-split">
                     <div class="item-info">
                         <span class="badge-new">NUEVO</span>
-                        <span class="item-name">Bowl</span>
+                        <span class="item-name">Crispy Bowl</span>
                         <p class="item-desc">150grs de pechuga crispy, 250grs de papas fritas, barbecue, queso fundido y salsa de la casa.</p>
                     </div>
                     <div class="item-price-wrapper" data-img-src="bowl.webp">
@@ -2053,7 +2057,7 @@
             </div>
 
             <div class="footer-credits">
-                <p>&copy; 2026<b>Burger House</b>. Todos los derechos reservados.</p>
+                <p>&copy; 2026<b>Burguer House</b>. Todos los derechos reservados.</p>
                 <p>Las mejores hamburguesas de la ciudad.</p>
                 <div style="margin-top: 20px; opacity: 0.4; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase;">
                     <p>Digital Experience by <b>lacrush</b></p>
@@ -2245,7 +2249,7 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true" data-product="bowl">
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true" data-product="crispy bowl">
                             <div class="extra-info-text">
                                 <span class="extra-name">Salsa BBQ</span>
                             </div>
@@ -2255,7 +2259,7 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true" data-product="bowl">
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true" data-product="crispy bowl">
                             <div class="extra-info-text">
                                 <span class="extra-name">Salsa de la Casa</span>
                             </div>
@@ -2265,7 +2269,7 @@
                                 <button class="extra-qty-btn plus">+</button>
                             </div>
                         </div>
-                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true" data-product="bowl">
+                        <div class="extra-card" data-extra-price="0.00" data-is-toggle="true" data-product="crispy bowl">
                             <div class="extra-info-text">
                                 <span class="extra-name">Queso Fundido</span>
                             </div>
@@ -2490,22 +2494,22 @@
                 
                 <div class="modal-extras-container">
                     <h3 class="extras-title">Selecciona tu Burger</h3>
-                    <div class="extras-grid" id="promo-burger-options">
-                        <div class="extra-card promo-burger-card selected" data-burger="House Classic" data-img-src="houseclasic.webp">
+                    <div class="extras-grid" id="promo-burguer-options">
+                        <div class="extra-card promo-burguer-card selected" data-burguer="House Classic" data-img-src="houseclasic.webp">
                             <div class="extra-info-text"><span class="extra-name">House Classic</span></div>
                             <div class="promo-toggle-switch">
                                 <span class="promo-switch-indicator"></span>
                                 <span class="extra-qty-val hidden">SÍ</span>
                             </div>
                         </div>
-                        <div class="extra-card promo-burger-card" data-burger="Cheese House" data-img-src="cheese house.webp">
+                        <div class="extra-card promo-burguer-card" data-burguer="Cheese House" data-img-src="cheese house.webp">
                             <div class="extra-info-text"><span class="extra-name">Cheese House</span></div>
                             <div class="promo-toggle-switch">
                                 <span class="promo-switch-indicator"></span>
                                 <span class="extra-qty-val hidden">NO</span>
                             </div>
                         </div>
-                        <div class="extra-card promo-burger-card" data-burger="Baby Crispy" data-img-src="baby crispy.webp">
+                        <div class="extra-card promo-burguer-card" data-burguer="Baby Crispy" data-img-src="baby crispy.webp">
                             <div class="extra-info-text"><span class="extra-name">Baby Crispy</span></div>
                             <div class="promo-toggle-switch">
                                 <span class="promo-switch-indicator"></span>
@@ -2516,7 +2520,7 @@
 
                     <h3 class="extras-title" style="margin-top: 20px;">Potencia tu Promo</h3>
                     <div class="extras-grid">
-                        <div class="extra-card promo-burger-card" id="promo-combo-option">
+                        <div class="extra-card promo-burguer-card" id="promo-combo-option">
                             <div class="extra-info-text">
                                 <span class="extra-name">Papitas + Bombita</span> <span class="extra-cost">+$2.00</span>
                             </div>

@@ -1,4 +1,4 @@
-# 🍔 Burger House - Menú Digital Inteligente
+# 🍔 Burguer House - Menú Digital Inteligente
 
 Menú digital premium optimizado para dispositivos móviles con sistema de pedidos automatizado vía WhatsApp y cálculo de delivery por geolocalización.
 
@@ -44,7 +44,7 @@ Para evitar solapamientos, usamos variables CSS de jerarquía:
 
 ### 2. Estética Visual
 - **Paleta:** Rojo profundo/Borgoña (`#7a0000`), Negro mate (`#080808`), y acentos en Rojo vibrante (`#e60000`).
-- **Tipografía:** `Oswald` para títulos (fuerza y estilo burger) y `Poppins` para textos de lectura.
+- **Tipografía:** `Oswald` para títulos (fuerza y estilo burguer) y `Poppins` para textos de lectura.
 - **UI:** Estilo "App Nativa" (UberEats/Farmatodo), con bordes redondeados (30px+), desenfoques (`backdrop-filter`) y transiciones suaves.
 
 ### 3. Lógica de Videos

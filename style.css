@@ -4,8 +4,8 @@
     --bg-color: #080808;
     --text-main: #ffffff;
     --text-muted: #aaaaaa;
-    --font-heading: 'Oswald', sans-serif;
-    --font-body: 'Poppins', sans-serif;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
 
     /* Definición de Capas (Stacking Contexts) */
     --layer-c1: 10;   /* Fondo y Decoraciones */
@@ -128,7 +128,7 @@ body {
 
 .papa-top-left { width: 280px; top: 5%; left: -60px; }
 .papa-top-right { width: 240px; top: 20%; right: -50px; animation-delay: -3s; }
-.burger-bottom-left { width: 300px; bottom: 10%; left: -70px; animation-delay: -6s; }
+.burguer-bottom-left { width: 300px; bottom: 10%; left: -70px; animation-delay: -6s; }
 .nuggets-bottom-left { width: 280px; bottom: 20px; left: 20px; animation-delay: -4s; transform: rotate(-15deg); }
 .plato-bottom-right { width: 350px; bottom: 2%; right: -90px; }
 
@@ -411,12 +411,18 @@ h1 {
     font-size: clamp(2rem, 10vw, 3.5rem); 
     margin-bottom: 0; 
 }
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
 .seccion-titulo {
     color: var(--primary-color);
     font-family: var(--font-heading);
     font-size: clamp(1.8rem, 5vw, 2.2rem);
     margin: 25px 0 15px;
+    font-weight: 800;
     border-bottom: 2px solid rgba(230, 0, 0, 0.3);
     text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.2);
 }
@@ -476,9 +482,15 @@ h1 {
     text-transform: uppercase;
 }
 
-.item-name { font-family: var(--font-heading); font-size: 1.6rem; color: var(--text-main); }
+.item-name { font-family: var(--font-heading); font-size: 1.6rem; color: var(--text-main); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
-.item-desc { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+p, .item-desc { 
+    color: var(--text-muted); 
+    font-size: 0.9rem; 
+    margin-top: 4px; 
+    font-weight: 500;
+    line-height: 1.6;
+}
 
 /* Contenedor para productos con doble imagen (Transiciones suaves) */
 .menu-item-img-wrapper {
@@ -770,8 +782,9 @@ h1 {
     font-family: var(--font-body); 
     color: var(--text-muted); 
     font-size: 1rem; 
-    line-height: 1.5; 
+    line-height: 1.6; 
     margin-bottom: 25px; 
+    font-weight: 500;
 }
 
 .modal-main-qty {
@@ -1287,7 +1300,7 @@ h1 {
     border: none !important;
     border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 12px;
-    font-family: 'Oswald', sans-serif;
+    font-family: var(--font-heading);
     font-size: 0.95rem;
     font-weight: 700;
     text-transform: uppercase;
