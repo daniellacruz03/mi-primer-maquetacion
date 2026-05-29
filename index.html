@@ -185,7 +185,7 @@
 </head>
 <body>
     <!-- Video de fondo optimizado -->
-    <video autoplay muted loop playsinline poster="assets/videos/comingsoon.jpg" class="video-background" preload="auto" style="pointer-events: none;">
+    <video id="bg-video" autoplay muted loop playsinline poster="assets/videos/comingsoon.jpg" class="video-background" preload="auto" style="pointer-events: none;">
         <source src="assets/videos/comingsoon.mp4" type="video/mp4" muted>
     </video>
 
@@ -210,6 +210,32 @@
     </div>
 
     <script>
+        // Script de Fuerza Bruta para Autoplay en Móviles
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('bg-video');
+            if (!video) return;
+
+            const iniciarVideo = () => {
+                video.muted = true;
+                video.play()
+                    .then(() => {
+                        console.log("✅ Video de fondo iniciado correctamente.");
+                        // Limpieza de listeners para liberar memoria tras el éxito
+                        document.removeEventListener('click', iniciarVideo);
+                        document.removeEventListener('touchstart', iniciarVideo);
+                    })
+                    .catch(error => {
+                        console.error("❌ Autoplay bloqueado por el navegador:", error.message);
+                    });
+            };
+
+            video.currentTime = 0;
+            iniciarVideo();
+            // Fallback: Si no arrancó solo, arrancará al primer toque del usuario
+            document.addEventListener('click', iniciarVideo);
+            document.addEventListener('touchstart', iniciarVideo);
+        });
+
         const launch = new Date("June 15, 2026 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
