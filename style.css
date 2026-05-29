@@ -45,6 +45,25 @@
     margin-bottom: 0px !important;
 }
 
+/* Optimización de Banners para PC */
+@media (min-width: 768px) {
+    .promo-banner-section {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        gap: 30px !important; /* Espacio entre las dos tarjetas */
+    }
+
+    .promo-banner-section .banner-card {
+        flex: 1 !important;
+        max-width: 500px !important;
+        margin: 20px 0 !important; /* Ajuste de margen para desktop */
+    }
+}
+
 .banner-card img {
     width: 100% !important;
     height: auto !important;

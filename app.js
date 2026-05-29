@@ -524,20 +524,26 @@
         });
 
         closeCart?.addEventListener('click', () => {
-            cartSidebar?.classList.add('cart-closed');
-            if (stickyNav) stickyNav.style.display = 'block';
-            lockBodyScroll(false);
-            if (menu) menu.style.overflow = '';
-            if (window.history.state?.ui === 'cart') history.back();
+            if (window.history.state?.ui === 'cart') {
+                history.back();
+            } else {
+                cartSidebar?.classList.add('cart-closed');
+                if (stickyNav) stickyNav.style.display = 'block';
+                lockBodyScroll(false);
+                if (menu) menu.style.overflow = '';
+            }
         });
 
         document.getElementById('btn-ver-bebidas')?.addEventListener('click', () => {
             // 1. Cerrar el carrito con la lógica existente
-            cartSidebar?.classList.add('cart-closed');
-            if (stickyNav) stickyNav.style.display = 'block';
-            lockBodyScroll(false);
-            if (menu) menu.style.overflow = '';
-            if (window.history.state?.ui === 'cart') history.back();
+            if (window.history.state?.ui === 'cart') {
+                history.back();
+            } else {
+                cartSidebar?.classList.add('cart-closed');
+                if (stickyNav) stickyNav.style.display = 'block';
+                lockBodyScroll(false);
+                if (menu) menu.style.overflow = '';
+            }
 
             // 2. Disparar el filtro de bebidas y el scroll con un pequeño delay
             setTimeout(() => {
@@ -971,7 +977,7 @@
 
         document.getElementById('form-delivery')?.reset();
 
-        window.addEventListener('popstate', () => {
+        window.addEventListener('popstate', (event) => {
             if (pedidoConfirmado) {
                 modalReminder?.classList.add('active');
                 history.pushState({ orderSent: true }, '');
