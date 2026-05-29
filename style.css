@@ -57,10 +57,13 @@ html {
     margin: 0; 
     padding: 0; 
     height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic height para móviles */
     scroll-behavior: smooth; 
     background-color: #080808;
     image-rendering: -webkit-optimize-contrast;
-    overscroll-behavior: none; /* Evita el rebote de toda la página */
+    overscroll-behavior: none;
+    overflow: hidden;
 }
 
 body {
@@ -68,12 +71,15 @@ body {
     padding: 0;
     background: linear-gradient(to bottom, #1a0000 0%, var(--bg-color) 100%);
     background-attachment: fixed;
-    min-height: 100%;
+    background-size: cover;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     font-family: var(--font-body);
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    overflow-x: hidden;
+    overflow: hidden;
     color: white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -146,7 +152,7 @@ body {
     margin: 0 auto;
     padding-top: calc(175px + env(safe-area-inset-top));
     padding-bottom: 0 !important;
-    min-height: 100vh;
+    height: 100dvh;
     z-index: var(--layer-c2);
     transition: opacity 1s ease, visibility 1s;
     position: relative;
@@ -1105,6 +1111,43 @@ p, .item-desc {
     margin-bottom: 20px;
     font-size: 1.2rem;
     font-family: var(--font-heading);
+}
+
+.sugerencia-bebida {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.sugerencia-bebida span {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.btn-sugerencia-outline {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-sugerencia-outline:active {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(0.95);
 }
 
 #cart-grand-total { color: var(--primary-color); font-size: 1.5rem; text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3); }

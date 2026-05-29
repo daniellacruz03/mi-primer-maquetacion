@@ -167,6 +167,9 @@
                 categoryBtns.forEach((b) => b.classList.remove('active'));
                 btn.classList.add('active');
 
+                // Centrar automáticamente la categoría seleccionada en la barra horizontal
+                btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
                 const category = btn.dataset.category;
                 const footer = document.querySelector('.bh-footer');
                 const startOrderText = document.querySelector('.start-order-text');
@@ -191,7 +194,10 @@
                 startOrderText?.classList.toggle('hidden', category !== 'all');
 
                 if (category === 'all') {
-                    document.getElementById('main-menu')?.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Añadimos un pequeño delay para permitir que el navegador recalcule el layout
+                    setTimeout(() => {
+                        document.getElementById('main-menu')?.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 60);
                 } else {
                     const targetSection = document.getElementById(category);
                     if (targetSection) {
@@ -525,6 +531,21 @@
             lockBodyScroll(false);
             if (menu) menu.style.overflow = '';
             if (window.history.state?.ui === 'cart') history.back();
+        });
+
+        document.getElementById('btn-ver-bebidas')?.addEventListener('click', () => {
+            // 1. Cerrar el carrito con la lógica existente
+            cartSidebar?.classList.add('cart-closed');
+            if (stickyNav) stickyNav.style.display = 'block';
+            lockBodyScroll(false);
+            if (menu) menu.style.overflow = '';
+            if (window.history.state?.ui === 'cart') history.back();
+
+            // 2. Disparar el filtro de bebidas y el scroll con un pequeño delay
+            setTimeout(() => {
+                const bebidasBtn = document.querySelector('.category-btn[data-category="bebidas"]');
+                if (bebidasBtn) bebidasBtn.click();
+            }, 350);
         });
 
         closeModal?.addEventListener('click', cerrarFunc);

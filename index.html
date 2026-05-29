@@ -48,7 +48,10 @@
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
-            min-height: 100vh;
+            height: 100% !important;
+            min-height: 100vh !important;
+            min-height: 100dvh !important;
+            overflow: hidden !important;
             color: #ffffff !important;
             font-family: 'Montserrat', sans-serif;
         }
@@ -345,6 +348,10 @@
             position: relative;
             z-index: var(--layer-c2);
             filter: blur(8px);
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow-y: auto !important;
+            min-height: auto !important;
         }
 
         .sticky-nav {
@@ -1230,6 +1237,8 @@
                 border-radius: 0 !important;
                 backdrop-filter: none !important;
                 background: rgba(10, 10, 10, 0.98) !important;
+                height: 100vh !important;
+                height: 100dvh !important;
                 overflow-y: auto !important;
                 -webkit-overflow-scrolling: touch;
             }
@@ -2084,6 +2093,10 @@
                         <span id="cart-grand-total">$0.00</span>
                     </div>
                     <button id="btn-go-checkout">Confirmar Pedido</button>
+                    <div class="sugerencia-bebida">
+                        <span>¿Deseas añadir una bebida?</span>
+                        <button id="btn-ver-bebidas" class="btn-sugerencia-outline">Ver Bebidas</button>
+                    </div>
                 </div>
             </div>
 
