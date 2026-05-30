@@ -447,6 +447,13 @@
             if (stickyNav) stickyNav.style.display = 'none';
             checkoutView?.classList.add('hidden');
             cartItemsView?.classList.remove('hidden');
+
+            // Asegurar que el estado 'cart' existe en el historial si el sidebar se abre por primera vez
+            if (cartSidebar?.classList.contains('cart-closed')) {
+                history.pushState({ ui: 'cart' }, '');
+                lockBodyScroll(true);
+            }
+
             setTimeout(() => {
                 cartSidebar?.classList.remove('cart-closed');
                 cartBtn?.classList.add('pulse-animation');
@@ -515,6 +522,11 @@
 
         cartBtn?.addEventListener('click', () => {
             if (stickyNav) stickyNav.style.display = 'none';
+
+            // Forzar vista de productos al abrir el carrito desde el botón flotante
+            checkoutView?.classList.add('hidden');
+            cartItemsView?.classList.remove('hidden');
+
             cartSidebar?.classList.remove('cart-closed');
             history.pushState({ ui: 'cart' }, '');
             lockBodyScroll(true);
