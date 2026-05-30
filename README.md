@@ -1,4 +1,4 @@
-# 🍔 Burguer House - Menú Digital Inteligente
+# 🍔 Burger House - Menú Digital Inteligente
 
 Menú digital premium optimizado para dispositivos móviles con sistema de pedidos automatizado vía WhatsApp y cálculo de delivery por geolocalización.
 
@@ -32,7 +32,7 @@ Esto convertirá automáticamente tus imágenes `.jpg` o `.png` a formato `.webp
 
 ---
 
-## 🏗️ Guía de Arquitectura y Estética (Contexto para IA/Windsurf)
+## 🏗️ Guía de Arquitectura y Estética
 
 Este proyecto sigue reglas estrictas de organización para mantener la fluidez en móviles:
 

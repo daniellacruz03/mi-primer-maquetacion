@@ -35,14 +35,8 @@
     };
 
     const isPromoWindowActive = () => {
-        const caracas = getCaracasDate();
-        const day = caracas.getDay();
-        const mins = minutesSinceMidnight(caracas);
-        return (
-            day >= 1 &&
-            day <= 3 &&
-            isMinutesInRange(mins, CONFIG.WEEKDAY_OPEN, CONFIG.WEEKDAY_CLOSE)
-        );
+        const day = getCaracasDate().getDay();
+        return day >= 1 && day <= 3; // Lunes (1), Martes (2) o Miércoles (3)
     };
 
     const parsePrice = (priceStr) =>
@@ -277,7 +271,7 @@
 
         const modalPromoSelection = document.getElementById('modal-promo-selection');
         const closePromoSelection = document.getElementById('close-promo-selection');
-        const promoBurguerCards = document.querySelectorAll('#promo-burguer-options .promo-burguer-card');
+        const promoBurgerCards = document.querySelectorAll('#promo-burger-options .promo-burger-card');
         const promoComboCard = document.getElementById('promo-combo-option');
         const promoPriceDisplay = document.getElementById('promo-selection-price');
         const btnAddPromoToCart = document.getElementById('btn-add-promo-to-cart');
@@ -303,9 +297,10 @@
             updatePromoUI();
         });
 
-        promoBurguerCards.forEach((card) => {
-            card.onclick = () => {
-                promoBurguerCards.forEach((c) => {
+        // Manejo de selección de hamburguesa en la promo (Selección única)
+        promoBurgerCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                promoBurgerCards.forEach((c) => {
                     c.classList.remove('selected');
                     const span = c.querySelector('.extra-qty-val');
                     if (span) span.innerText = 'NO';
@@ -313,12 +308,14 @@
                 card.classList.add('selected');
                 const val = card.querySelector('.extra-qty-val');
                 if (val) val.innerText = 'SÍ';
+                
                 const mainImg = document.getElementById('modal-promo-img');
                 if (mainImg && card.dataset.imgSrc) mainImg.src = card.dataset.imgSrc;
                 updatePromoUI();
-            };
+            });
         });
 
+        // Manejo de opción de combo en la promo (Toggle/Checkbox)
         promoComboCard?.addEventListener('click', () => {
             const valSpan = promoComboCard.querySelector('.extra-qty-val');
             if (!valSpan) return;
@@ -335,14 +332,14 @@
         });
 
         btnAddPromoToCart?.addEventListener('click', () => {
-            const selectedBurguerCard = Array.from(promoBurguerCards).find((c) =>
+            const selectedBurgerCard = Array.from(promoBurgerCards).find((c) =>
                 c.classList.contains('selected')
             );
-            if (!selectedBurguerCard) {
+            if (!selectedBurgerCard) {
                 showToast('Por favor selecciona una hamburguesa.', 'error');
                 return;
             }
-            const burguerName = selectedBurguerCard.dataset.burguer;
+            const burgerName = selectedBurgerCard.dataset.burger;
             const hasCombo = promoComboCard?.querySelector('.extra-qty-val')?.innerText === 'SÍ';
             const finalPrice = hasCombo ? CONFIG.PROMO_COMBO_PRICE : CONFIG.PROMO_BASE_PRICE;
             const extrasPromo = hasCombo
@@ -359,7 +356,7 @@
 
             carrito.push({
                 id: `promo-${Date.now()}`,
-                nombre: `PROMO ${burguerName}`,
+                nombre: `PROMO ${burgerName}`,
                 cantidad: 1,
                 precioUnitario: CONFIG.PROMO_BASE_PRICE,
                 extras: extrasPromo,
@@ -524,7 +521,7 @@
         });
 
         closeCart?.addEventListener('click', () => {
-            if (window.history.state?.ui === 'cart') {
+            if (window.history.state?.ui === 'cart' || window.history.state?.ui === 'checkout') {
                 history.back();
             } else {
                 cartSidebar?.classList.add('cart-closed');
@@ -840,11 +837,11 @@
             }
             cartItemsView?.classList.add('hidden');
             checkoutView?.classList.remove('hidden');
+            history.pushState({ ui: 'checkout' }, '');
         });
 
         document.getElementById('btn-back-to-cart')?.addEventListener('click', () => {
-            checkoutView?.classList.add('hidden');
-            cartItemsView?.classList.remove('hidden');
+            history.back();
         });
 
         document.getElementById('form-delivery')?.addEventListener('submit', (e) => {
@@ -858,7 +855,7 @@
                 return;
             }
 
-            let mensaje = '🍔 *NUEVO PEDIDO - BURGUER HOUSE* 🍔\n\n';
+            let mensaje = '🍔 *NUEVO PEDIDO - BURGER HOUSE* 🍔\n\n';
             mensaje += `👤 *Cliente:* ${nombre}\n\n`;
             mensaje += '📝 *DETALLE DEL PEDIDO:*\n';
 
@@ -984,26 +981,38 @@
                 return;
             }
 
+        const state = event.state;
             const activeModal = document.querySelector('.modal.active');
-            const isCartOpen = !cartSidebar?.classList.contains('cart-closed');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const isCartOpen = !cartSidebar?.classList.contains('cart-closed');
 
-            // Si hay un modal o carrito abierto, cerrarlo
-            if (activeModal || isCartOpen) {
-                activeModal?.classList.remove('active');
-                cartSidebar?.classList.add('cart-closed');
+        // 1. Gestión de estados internos del Carrito (Items vs Checkout)
+        if (isCartOpen) {
+            if (state && state.ui === 'cart') {
+                // Volvimos del checkout a la lista de productos
+                checkoutView?.classList.add('hidden');
+                cartItemsView?.classList.remove('hidden');
+            } else if (!state || !state.ui) {
+                // Volvimos al menú principal: cerrar todo el sidebar
+                cartSidebar.classList.add('cart-closed');
+                if (stickyNav) stickyNav.style.display = 'block';
                 lockBodyScroll(false);
-
-                // Solo mostrar el header si volvemos a un estado sin UI activa (ni modal ni carrito)
-                const state = event.state;
-                if (stickyNav && (!state || !state.ui)) {
-                    stickyNav.style.display = 'block';
-                }
-
-                if (menu) menu.style.overflow = '';
-                return;
             }
+            if (menu) menu.style.overflow = '';
+            return;
+        }
 
-            // Si estamos en el menú principal, prevenir salida y requerir doble tap
+        // 2. Gestión de Modales (Hamburguesas, Ayuda, etc)
+        if (activeModal && (!state || state.ui !== 'modal')) {
+            activeModal.classList.remove('active');
+            if (stickyNav) stickyNav.style.display = 'block';
+            lockBodyScroll(false);
+            if (menu) menu.style.overflow = '';
+            return;
+        }
+
+        // 3. Salida de la App (Doble tap en Menú Principal)
+        if (!state || state.mainMenu) {
             if (!backPressCount) {
                 backPressCount = 1;
                 showToast('Presiona de nuevo para salir', 'info');
@@ -1015,7 +1024,8 @@
                 // Segundo tap, permitir salir
                 backPressCount = 0;
             }
-        });
+        }
+    });
 
         window.addEventListener('beforeunload', (e) => {
             if (pedidoConfirmado) e.preventDefault();
@@ -1054,7 +1064,9 @@
                         textSpan.innerText = originalText;
                         btnLocation.classList.remove('loading');
                         const mensajes = {
-                            1: 'Por favor, permite el acceso a tu ubicación para facilitarnos la entrega.'
+                            1: 'Por favor, permite el acceso a tu ubicación para facilitarnos la entrega.',
+                            2: 'No pudimos determinar tu ubicación. Verifica tu señal GPS o conexión a internet.',
+                            3: 'Se agotó el tiempo de espera al intentar obtener tu ubicación. Por favor, intenta de nuevo.'
                         };
                         showToast(mensajes[error.code] ?? 'No pudimos obtener tu ubicación.', 'error');
                     },

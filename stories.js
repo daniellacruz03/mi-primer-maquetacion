@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!videoFeed) return;
     videoFeed.innerHTML = '';
 
+    // IMPORTANTE: Estos nombres deben coincidir con los archivos en /assets/videos/
+    // El script optimizar.py genera estos nombres basados en tu carpeta /videos_crudos/
     const videoSources = [
         './assets/videos/bowlbhvideo.mp4', './assets/videos/kidshousevideobh.mp4',
         './assets/videos/video1bh.mp4', './assets/videos/video2bh.mp4',
@@ -46,9 +48,16 @@ document.addEventListener("DOMContentLoaded", () => {
         // metadata carga solo lo esencial; muted y playsinline son obligatorios para autoplay en móvil
         video.preload = "metadata"; 
         video.muted = true; 
+        video.defaultMuted = true; // Refuerzo para iOS
         video.loop = true; 
-        video.playsinline = true;
-        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('playsinline', ''); // Atributo booleano crítico para iOS
+        video.setAttribute('webkit-playsinline', ''); // Compatibilidad antigua
+
+        // Manejo de errores para evitar "cuadros negros"
+        video.onerror = () => {
+            console.error(`❌ Error cargando video: ${src}. Verifique que el nombre coincida con el archivo optimizado.`);
+            card.style.display = 'none'; // Oculta la tarjeta si el video no existe
+        };
 
         card.appendChild(video);
         videoFeed.appendChild(card);

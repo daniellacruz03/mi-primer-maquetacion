@@ -81,8 +81,7 @@ html {
     scroll-behavior: smooth; 
     background-color: #080808;
     image-rendering: -webkit-optimize-contrast;
-    overscroll-behavior: none;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 body {
@@ -98,12 +97,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    overflow: hidden;
+    overflow-x: hidden;
     color: white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
-    overscroll-behavior: none;
     user-select: none;
 }
 
@@ -123,16 +121,13 @@ body {
     width: 80%;
     max-width: 250px;
     border-radius: 50%;
-    animation: latido 3s ease-in-out infinite;
+    animation: latido 1.8s ease-in-out infinite; /* Sincronizado con el ritmo del preloader */
     will-change: transform;
 }
 
 @keyframes latido {
-    0%, 100% { transform: scale(0.95); opacity: 0.8; }
-    50% { 
-        transform: scale(1); 
-        opacity: 1; 
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 .background-decor {
@@ -153,7 +148,7 @@ body {
 
 .papa-top-left { width: 280px; top: 5%; left: -60px; }
 .papa-top-right { width: 240px; top: 20%; right: -50px; animation-delay: -3s; }
-.burguer-bottom-left { width: 300px; bottom: 10%; left: -70px; animation-delay: -6s; }
+.burger-bottom-left { width: 300px; bottom: 10%; left: -70px; animation-delay: -6s; }
 .nuggets-bottom-left { width: 280px; bottom: 20px; left: 20px; animation-delay: -4s; transform: rotate(-15deg); }
 .plato-bottom-right { width: 350px; bottom: 2%; right: -90px; }
 
@@ -171,11 +166,9 @@ body {
     margin: 0 auto;
     padding-top: calc(175px + env(safe-area-inset-top));
     padding-bottom: 0 !important;
-    height: 100dvh;
     z-index: var(--layer-c2);
     transition: opacity 1s ease, visibility 1s;
     position: relative;
-    overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y !important;
@@ -1218,9 +1211,9 @@ p, .item-desc {
     display: flex; 
     flex-direction: column; 
     gap: 15px; 
-    max-height: 90vh; 
-    overflow-y: auto; 
+    flex: 1;
     -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom)) !important;
 }
 
 #btn-back-to-cart {
@@ -1288,29 +1281,31 @@ p, .item-desc {
 /* Estilos para el Pop-up Publicitario */
 .promo-modal-content {
     background: rgba(0, 0, 0, 0.98) !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
-    max-height: 100vh !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important; /* Reflejo de cristal premium */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important; /* Sombra profunda masiva */
+    width: 92% !important; /* Pequeño margen para que se aprecie el marco */
+    max-width: 400px !important;
+    height: auto !important; /* Altura flexible según contenido */
+    min-height: 250px !important;
+    max-height: 92vh !important; /* Evita que la tarjeta toque los bordes del dispositivo */
     position: relative !important;
-    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) !important;
+    padding: 0 !important; /* Eliminamos padding para permitir superposición total */
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
-    border-radius: 0 !important;
+    border-radius: 16px !important;
+    overflow: visible !important; /* Crucial: permite que el botón respire sin ser recortado */
 }
 
 .promo-img-container {
-    flex: 1;
+    flex: 0 1 auto; /* Permite que el contenedor se ajuste a la imagen */
     display: flex;
+    flex-direction: column; /* Stacks image and button vertically */
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     position: relative;
     width: 100%;
-    position: relative; /* Para posicionar el botón respecto a la imagen */
     overflow: visible;
 }
 
@@ -1329,60 +1324,67 @@ p, .item-desc {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: #ff1f1f !important;
-    color: white;
+    background: transparent !important; /* Minimalismo: sin fondo circular */
+    color: rgba(255, 255, 255, 0.6) !important; /* Gris suave para no competir */
     border: none !important;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
     font-size: 1.8rem;
-    font-weight: bold;
+    font-weight: 300; /* Líneas estilizadas */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 110;
-    box-shadow: 0 6px 14px rgba(255, 31, 31, 0.35);
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
 }
 
-.close-promo:active { transform: scale(0.9); }
+.close-promo:hover {
+    transform: rotate(90deg); /* Micro-interacción premium */
+    color: #ffffff !important;
+}
 
 /* Botón Ordenar Premium */
 .btn-promo-premium {
-    position: absolute;
-    bottom: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: block;
-    width: auto;
-    padding: 8px 20px;
-    background: linear-gradient(180deg, #8b0000 0%, #ff0000 100%) !important;
+    position: absolute !important; /* Posicionamiento ultra preciso */
+    bottom: 20px !important; /* Ubicación en el espacio vacío inferior */
+    left: 50% !important;
+    transform: translateX(-50%) !important; /* Centrado perfecto */
+    display: block !important;
+    width: 85% !important;
+    max-width: 310px !important; /* Incremento sutil */
+    padding: 14px 30px !important; /* Incremento sutil */
+    margin: 0 !important;
+    background: linear-gradient(135deg, rgba(230, 0, 0, 0.95), rgba(180, 0, 0, 0.95)) !important; /* Restaurado estilo Ayuda */
     color: white;
-    border: none !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
-    border-radius: 12px;
-    font-family: var(--font-heading);
-    font-size: 0.95rem;
-    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Restaurado borde sutil */
+    border-radius: 8px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 0.90rem !important; /* Incremento sutil */
+    font-weight: 600 !important; /* Restaurado peso tipográfico refinado */
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 2px; /* Aire exclusivo */
     cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 0 4px 20px rgba(230, 0, 0, 0.5), 0 0 40px rgba(230, 0, 0, 0.3) !important; /* Restaurado doble glow */
     transition: all 0.3s ease;
     animation: premium-pulse 2s infinite;
     z-index: 120;
     pointer-events: auto !important; /* Asegura que sea clickable */
 }
 
+.btn-promo-premium:hover {
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.95), rgba(200, 0, 0, 0.95)) !important;
+    box-shadow: 0 6px 25px rgba(230, 0, 0, 0.6), 0 0 50px rgba(230, 0, 0, 0.4) !important;
+    transform: translateX(-50%) translateY(-3px) !important; /* Mantiene centrado en hover */
+}
 @keyframes premium-pulse {
     0% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.05); }
+    50% { transform: translateX(-50%) scale(1.03); }
     100% { transform: translateX(-50%) scale(1); }
 }
 
 .btn-promo-premium:active {
-    transform: translateX(-50%) scale(0.96) !important; /* Mantenemos el centrado al presionar */
+    transform: translateX(-50%) scale(0.96) !important;
 }
 
 /* --- FOOTER MODERNO (ESTILO FARMATODO) --- */
@@ -1902,4 +1904,15 @@ p, .item-desc {
 
 .oculto {
     display: none !important;
+}
+
+/* Animaciones para los interruptores de la ventana de personalización de promos */
+.promo-burger-card.selected .promo-toggle-switch,
+#promo-combo-option.selected .promo-toggle-switch {
+    background: var(--primary-color) !important;
+}
+
+.promo-burger-card.selected .promo-switch-indicator,
+#promo-combo-option.selected .promo-switch-indicator {
+    transform: translateX(20px);
 }

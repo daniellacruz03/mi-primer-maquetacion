@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Burguer House Merida</title>
+    <title>Burger House Merida</title>
     <!-- Favicon e Icono de Aplicación -->
     <link rel="icon" href="logobh.webp" type="image/webp">
     <link rel="apple-touch-icon" href="logobh.webp">
     <!-- Precarga del logo para evitar que desaparezca durante la carga -->
     
     <!-- Meta Tags para Redes Sociales (Open Graph) -->
-    <meta property="og:title" content="Burguer House | Menú Digital">
+    <meta property="og:title" content="Burger House | Menú Digital">
     <meta property="og:description" content="Explora nuestras hamburguesas artesanales y haz tu pedido directamente por WhatsApp.">
     <meta property="og:image" content="logobh.webp">
     <meta property="og:type" content="website">
@@ -51,7 +51,7 @@
             height: 100% !important;
             min-height: 100vh !important;
             min-height: 100dvh !important;
-            overflow: hidden !important;
+            overflow-x: hidden !important;
             color: #ffffff !important;
             font-family: 'Montserrat', sans-serif;
         }
@@ -108,7 +108,6 @@
             width: 165px !important;
             max-width: 165px !important;
             border-radius: 50%;
-            animation: logo-pulse-fire 1.8s ease-in-out infinite;
             position: relative;
             z-index: 1;
             will-change: transform;
@@ -348,10 +347,7 @@
             position: relative;
             z-index: var(--layer-c2);
             filter: blur(8px);
-            height: 100vh !important;
-            height: 100dvh !important;
-            overflow-y: auto !important;
-            min-height: auto !important;
+            min-height: 100dvh !important;
         }
 
         .sticky-nav {
@@ -423,11 +419,6 @@
         @keyframes grill-glow {
             0%, 100% { transform: scale(1); opacity: 0.5; }
             50% { transform: scale(1.2); opacity: 0.8; }
-        }
-
-        @keyframes logo-pulse-fire {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
 
         /* Estilo de Tarjeta Global (PC y Móvil) */
@@ -691,11 +682,11 @@
         }
 
         #checkout-view {
-            padding: 24px 20px 40px !important;
+            padding: 24px 20px calc(60px + env(safe-area-inset-bottom)) !important;
             display: flex;
             flex-direction: column;
-            max-height: 90vh !important;
-            overflow-y: auto !important;
+            max-height: none !important;
+            flex: 1 !important;
         }
 
         .checkout-grid {
@@ -1226,21 +1217,17 @@
                 background-attachment: scroll !important;
                 background-size: cover !important;
                 background-position: center !important;
-                -webkit-overflow-scrolling: touch;
             }
 
             .menu-container {
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 !important;
-                padding: 185px 15px 60px !important;
+                padding: 185px 15px 40px !important;
                 border-radius: 0 !important;
                 backdrop-filter: none !important;
                 background: rgba(10, 10, 10, 0.98) !important;
-                height: 100vh !important;
-                height: 100dvh !important;
-                overflow-y: auto !important;
-                -webkit-overflow-scrolling: touch;
+                min-height: 100dvh !important;
             }
 
             .sticky-nav {
@@ -1473,7 +1460,7 @@
             gap: 12px;
         }
 
-        .promo-burger-card {
+        .promo-burguer-card {
             background: rgba(255, 255, 255, 0.05) !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             border-radius: 18px !important;
@@ -1487,7 +1474,7 @@
             height: auto !important;
         }
 
-        .promo-burger-card.selected {
+        .promo-burguer-card.selected {
             background: rgba(255, 255, 255, 0.08) !important;
             border-color: rgba(255, 255, 255, 0.1) !important;
         }
@@ -1546,7 +1533,7 @@
     <div class="contenedor-logo" id="preloader">
         <div class="preloader-inner">
             <div class="logo-glow-wrap">
-                <img src="logobh.webp" alt="Logo Burguer House" class="logo-animado" width="165" height="165">
+                <img src="logobh.webp" alt="Logo Burger House" class="logo-animado" width="165" height="165">
             </div>
             <div class="preloader-bar" aria-hidden="true">
                 <div id="preloader-progress" class="preloader-progress"></div>
@@ -1559,7 +1546,7 @@
     <div class="sticky-nav">
         <!-- Fila Superior: Logo (izquierda) y Carrito (derecha) -->
         <div class="header-top-row">
-            <img src="logobh.webp" alt="Logo Burguer House" class="menu-header-logo" width="50" height="50">
+            <img src="logobh.webp" alt="Logo Burger House" class="menu-header-logo" width="50" height="50">
             <div id="cart-floating-btn" class="cart-btn-hidden">
                 <span id="cart-badge">0</span>
                 <img src="bolsadelivery.webp" alt="Delivery" class="icono-moto" width="30" height="30">
@@ -2066,7 +2053,7 @@
             </div>
 
             <div class="footer-credits">
-                <p>&copy; 2026<b>Burguer House</b>. Todos los derechos reservados.</p>
+                <p>&copy; 2026<b>Burger House</b>. Todos los derechos reservados.</p>
                 <p>Las mejores hamburguesas de la ciudad.</p>
                 <div style="margin-top: 20px; opacity: 0.4; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase;">
                     <p>Digital Experience by <b>lacrush</b></p>
@@ -2507,22 +2494,22 @@
                 
                 <div class="modal-extras-container">
                     <h3 class="extras-title">Selecciona tu Burger</h3>
-                    <div class="extras-grid" id="promo-burguer-options">
-                        <div class="extra-card promo-burguer-card selected" data-burguer="House Classic" data-img-src="houseclasic.webp">
+                    <div class="extras-grid" id="promo-burger-options">
+                        <div class="extra-card promo-burger-card selected" data-burger="House Classic" data-img-src="houseclasic.webp">
                             <div class="extra-info-text"><span class="extra-name">House Classic</span></div>
                             <div class="promo-toggle-switch">
                                 <span class="promo-switch-indicator"></span>
                                 <span class="extra-qty-val hidden">SÍ</span>
                             </div>
                         </div>
-                        <div class="extra-card promo-burguer-card" data-burguer="Cheese House" data-img-src="cheese house.webp">
+                        <div class="extra-card promo-burger-card" data-burger="Cheese House" data-img-src="cheese house.webp">
                             <div class="extra-info-text"><span class="extra-name">Cheese House</span></div>
                             <div class="promo-toggle-switch">
                                 <span class="promo-switch-indicator"></span>
                                 <span class="extra-qty-val hidden">NO</span>
                             </div>
                         </div>
-                        <div class="extra-card promo-burguer-card" data-burguer="Baby Crispy" data-img-src="baby crispy.webp">
+                        <div class="extra-card promo-burger-card" data-burger="Baby Crispy" data-img-src="baby crispy.webp">
                             <div class="extra-info-text"><span class="extra-name">Baby Crispy</span></div>
                             <div class="promo-toggle-switch">
                                 <span class="promo-switch-indicator"></span>

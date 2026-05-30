@@ -112,7 +112,12 @@ def main() -> None:
     print("—" * 40)
     print(f"Listo: {ok} optimizado(s), {errores} error(es).")
     if ok:
-        print("Recarga la web; las historias leen desde assets/videos/")
+        print("\n✨ COPIA ESTE CÓDIGO PARA TU stories.js:")
+        print("-" * 40)
+        js_array = ",\n        ".join([f"'./assets/videos/{v.name}'" for v in sorted(OUTPUT_DIR.glob("*.mp4"))])
+        print(f"    const videoSources = [\n        {js_array}\n    ];")
+        print("-" * 40)
+        print("\nRecarga la web; las historias ahora están sincronizadas.")
 
 
 if __name__ == "__main__":
