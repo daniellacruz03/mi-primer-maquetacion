@@ -448,11 +448,11 @@
             checkoutView?.classList.add('hidden');
             cartItemsView?.classList.remove('hidden');
 
-            // Asegurar que el estado 'cart' existe en el historial si el sidebar se abre por primera vez
-            if (cartSidebar?.classList.contains('cart-closed')) {
+            // Asegurar que el estado 'cart' existe en el historial si no estamos en él
+            if (!window.history.state || window.history.state.ui !== 'cart') {
                 history.pushState({ ui: 'cart' }, '');
-                lockBodyScroll(true);
             }
+            lockBodyScroll(true);
 
             setTimeout(() => {
                 cartSidebar?.classList.remove('cart-closed');
@@ -523,23 +523,19 @@
         cartBtn?.addEventListener('click', () => {
             if (stickyNav) stickyNav.style.display = 'none';
 
-            // Forzar vista de productos al abrir el carrito desde el botón flotante
-            checkoutView?.classList.add('hidden');
-            cartItemsView?.classList.remove('hidden');
-
             cartSidebar?.classList.remove('cart-closed');
             history.pushState({ ui: 'cart' }, '');
             lockBodyScroll(true);
         });
 
         closeCart?.addEventListener('click', () => {
-            if (window.history.state?.ui === 'cart' || window.history.state?.ui === 'checkout') {
+            // Si estamos en checkout, cerramos todo el flujo de carrito (2 pasos atrás)
+            if (window.history.state?.ui === 'checkout') {
+                history.go(-2);
+            } else if (window.history.state?.ui === 'cart') {
                 history.back();
             } else {
                 cartSidebar?.classList.add('cart-closed');
-                if (stickyNav) stickyNav.style.display = 'block';
-                lockBodyScroll(false);
-                if (menu) menu.style.overflow = '';
             }
         });
 
@@ -993,51 +989,46 @@
                 return;
             }
 
-        const state = event.state;
+            const state = event.state;
             const activeModal = document.querySelector('.modal.active');
-        const cartSidebar = document.getElementById('cart-sidebar');
-        const isCartOpen = !cartSidebar?.classList.contains('cart-closed');
 
-        // 1. Gestión de estados internos del Carrito (Items vs Checkout)
-        if (isCartOpen) {
-            if (state && state.ui === 'cart') {
-                // Volvimos del checkout a la lista de productos
-                checkoutView?.classList.add('hidden');
+            // 1. Gestión Centralizada del Carrito (Estado 'cart' o 'checkout')
+            if (state?.ui === 'cart') {
+                cartSidebar?.classList.remove('cart-closed');
                 cartItemsView?.classList.remove('hidden');
-            } else if (!state || !state.ui) {
+                checkoutView?.classList.add('hidden');
+                lockBodyScroll(true);
+            } else if (state?.ui === 'checkout') {
+                cartSidebar?.classList.remove('cart-closed');
+                cartItemsView?.classList.add('hidden');
+                checkoutView?.classList.remove('hidden');
+                lockBodyScroll(true);
+            } else if (!state || !state.ui || state.mainMenu) {
                 // Volvimos al menú principal: cerrar todo el sidebar
-                cartSidebar.classList.add('cart-closed');
+                cartSidebar?.classList.add('cart-closed');
                 if (stickyNav) stickyNav.style.display = 'block';
-                lockBodyScroll(false);
+                if (!activeModal) lockBodyScroll(false);
             }
-            if (menu) menu.style.overflow = '';
-            return;
-        }
 
-        // 2. Gestión de Modales (Hamburguesas, Ayuda, etc)
-        if (activeModal && (!state || state.ui !== 'modal')) {
-            activeModal.classList.remove('active');
-            if (stickyNav) stickyNav.style.display = 'block';
-            lockBodyScroll(false);
-            if (menu) menu.style.overflow = '';
-            return;
-        }
-
-        // 3. Salida de la App (Doble tap en Menú Principal)
-        if (!state || state.mainMenu) {
-            if (!backPressCount) {
-                backPressCount = 1;
-                showToast('Presiona de nuevo para salir', 'info');
-                history.pushState({ mainMenu: true }, '');
-                setTimeout(() => {
-                    backPressCount = 0;
-                }, 2000);
-            } else {
-                // Segundo tap, permitir salir
-                backPressCount = 0;
+            // 2. Gestión de Modales
+            if (activeModal && state?.ui !== 'modal') {
+                activeModal.classList.remove('active');
+                if (!state?.ui) lockBodyScroll(false);
+                if (stickyNav) stickyNav.style.display = 'block';
             }
-        }
-    });
+
+            // 3. Salida de la App
+            if (!state || state.mainMenu) {
+                if (!backPressCount) {
+                    backPressCount = 1;
+                    showToast('Presiona de nuevo para salir', 'info');
+                    history.pushState({ mainMenu: true }, '');
+                    setTimeout(() => { backPressCount = 0; }, 2000);
+                }
+            }
+
+            if (menu) menu.style.overflow = (state?.ui ? 'hidden' : '');
+        });
 
         window.addEventListener('beforeunload', (e) => {
             if (pedidoConfirmado) e.preventDefault();
