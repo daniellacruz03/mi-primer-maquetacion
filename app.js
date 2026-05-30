@@ -61,6 +61,41 @@
         }, 3000);
     };
 
+    /**
+     * Crea un efecto visual de una imagen "volando" hacia el carrito.
+     */
+    const triggerFlyToCart = (sourceImgId) => {
+        const sourceImg = document.getElementById(sourceImgId);
+        const cartBtn = document.getElementById('cart-floating-btn');
+        if (!sourceImg || !cartBtn) return;
+
+        const rect = sourceImg.getBoundingClientRect();
+        const cartRect = cartBtn.getBoundingClientRect();
+        
+        // Si el carrito no es visible (está el modal encima), apuntamos a la esquina superior derecha
+        const hasValidCartPos = cartRect.top !== 0 || cartRect.left !== 0;
+        const targetX = hasValidCartPos ? (cartRect.left + cartRect.width / 2) : (window.innerWidth - 50);
+        const targetY = hasValidCartPos ? (cartRect.top + cartRect.height / 2) : 50;
+
+        const flyImg = document.createElement('img');
+        flyImg.src = sourceImg.src;
+        flyImg.className = 'product-fly-particle';
+        flyImg.style.width = `${rect.width}px`;
+        flyImg.style.height = `${rect.height}px`;
+        flyImg.style.top = `${rect.top}px`;
+        flyImg.style.left = `${rect.left}px`;
+        document.body.appendChild(flyImg);
+
+        // Forzar reflow y ejecutar animación
+        flyImg.offsetWidth;
+        const diffX = targetX - (rect.left + rect.width / 2);
+        const diffY = targetY - (rect.top + rect.height / 2);
+
+        flyImg.style.transform = `translate(${diffX}px, ${diffY}px) scale(0.1) rotate(25deg)`;
+        flyImg.style.opacity = '0';
+        setTimeout(() => flyImg.remove(), 750);
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         /* ——— Preloader ——— */
         const preloaderProgress = document.getElementById('preloader-progress');
@@ -363,6 +398,7 @@
                 subtotal: finalPrice
             });
             actualizarInterfazCarrito();
+            triggerFlyToCart('modal-promo-img');
             modalPromoSelection?.classList.remove('active');
             lockBodyScroll(false);
             if (menu) menu.style.overflow = '';
@@ -443,19 +479,51 @@
             }
         }
 
-        function abrirCarritoConFeedback() {
-            if (stickyNav) stickyNav.style.display = 'none';
-            checkoutView?.classList.add('hidden');
-            cartItemsView?.classList.remove('hidden');
+        /**
+         * Sincroniza la visibilidad de los componentes (Carrito, Checkout, Modales)
+         * basándose exclusivamente en el estado actual del historial.
+         */
+        function syncUIWithState() {
+            const state = window.history.state;
+            const activeModal = document.querySelector('.modal.active');
 
-            // Asegurar que el estado 'cart' existe en el historial si no estamos en él
-            if (!window.history.state || window.history.state.ui !== 'cart') {
+            // 1. Gestión de visibilidad del Carrito y Checkout
+            if (state?.ui === 'cart') {
+                if (stickyNav) stickyNav.style.display = 'none';
+                cartSidebar?.classList.remove('cart-closed');
+                cartItemsView?.classList.remove('hidden');
+                checkoutView?.classList.add('hidden');
+                lockBodyScroll(true);
+            } else if (state?.ui === 'checkout') {
+                if (stickyNav) stickyNav.style.display = 'none';
+                cartSidebar?.classList.remove('cart-closed');
+                cartItemsView?.classList.add('hidden');
+                checkoutView?.classList.remove('hidden');
+                lockBodyScroll(true);
+            } else {
+                // Si no hay estado de carrito en el historial, lo cerramos
+                cartSidebar?.classList.add('cart-closed');
+                if (stickyNav) stickyNav.style.display = 'block';
+                if (!activeModal) lockBodyScroll(false);
+            }
+
+            // 2. Gestión de Modales (Hamburguesas, Ayuda, etc.)
+            if (activeModal && state?.ui !== 'modal') {
+                activeModal.classList.remove('active');
+                if (!state?.ui) lockBodyScroll(false);
+                if (stickyNav) stickyNav.style.display = 'block';
+            }
+            
+            if (menu) menu.style.overflow = (state?.ui ? 'hidden' : '');
+        }
+
+        function abrirCarritoConFeedback() {
+            if (window.history.state?.ui !== 'cart' && window.history.state?.ui !== 'checkout') {
                 history.pushState({ ui: 'cart' }, '');
             }
-            lockBodyScroll(true);
+            syncUIWithState();
 
             setTimeout(() => {
-                cartSidebar?.classList.remove('cart-closed');
                 cartBtn?.classList.add('pulse-animation');
                 setTimeout(() => cartBtn?.classList.remove('pulse-animation'), 1000);
             }, 300);
@@ -521,11 +589,8 @@
         }
 
         cartBtn?.addEventListener('click', () => {
-            if (stickyNav) stickyNav.style.display = 'none';
-
-            cartSidebar?.classList.remove('cart-closed');
-            history.pushState({ ui: 'cart' }, '');
-            lockBodyScroll(true);
+            if (window.history.state?.ui !== 'cart') history.pushState({ ui: 'cart' }, '');
+            syncUIWithState();
         });
 
         closeCart?.addEventListener('click', () => {
@@ -780,6 +845,8 @@
         const agregarAlPedido = () => {
             if (currentMainQty < 1 || !modal) return;
 
+            triggerFlyToCart('modal-img');
+
             const extrasSeleccionados = [];
             modal.querySelectorAll('.extra-card').forEach((card) => {
                 if (card.style.display === 'none') return;
@@ -843,9 +910,8 @@
                 showToast('Añade algo al carrito primero', 'error');
                 return;
             }
-            cartItemsView?.classList.add('hidden');
-            checkoutView?.classList.remove('hidden');
             history.pushState({ ui: 'checkout' }, '');
+            syncUIWithState();
         });
 
         document.getElementById('btn-back-to-cart')?.addEventListener('click', () => {
@@ -988,46 +1054,7 @@
                 history.pushState({ orderSent: true }, '');
                 return;
             }
-
-            const state = event.state;
-            const activeModal = document.querySelector('.modal.active');
-
-            // 1. Gestión Centralizada del Carrito (Estado 'cart' o 'checkout')
-            if (state?.ui === 'cart') {
-                cartSidebar?.classList.remove('cart-closed');
-                cartItemsView?.classList.remove('hidden');
-                checkoutView?.classList.add('hidden');
-                lockBodyScroll(true);
-            } else if (state?.ui === 'checkout') {
-                cartSidebar?.classList.remove('cart-closed');
-                cartItemsView?.classList.add('hidden');
-                checkoutView?.classList.remove('hidden');
-                lockBodyScroll(true);
-            } else if (!state || !state.ui || state.mainMenu) {
-                // Volvimos al menú principal: cerrar todo el sidebar
-                cartSidebar?.classList.add('cart-closed');
-                if (stickyNav) stickyNav.style.display = 'block';
-                if (!activeModal) lockBodyScroll(false);
-            }
-
-            // 2. Gestión de Modales
-            if (activeModal && state?.ui !== 'modal') {
-                activeModal.classList.remove('active');
-                if (!state?.ui) lockBodyScroll(false);
-                if (stickyNav) stickyNav.style.display = 'block';
-            }
-
-            // 3. Salida de la App
-            if (!state || state.mainMenu) {
-                if (!backPressCount) {
-                    backPressCount = 1;
-                    showToast('Presiona de nuevo para salir', 'info');
-                    history.pushState({ mainMenu: true }, '');
-                    setTimeout(() => { backPressCount = 0; }, 2000);
-                }
-            }
-
-            if (menu) menu.style.overflow = (state?.ui ? 'hidden' : '');
+            syncUIWithState();
         });
 
         window.addEventListener('beforeunload', (e) => {

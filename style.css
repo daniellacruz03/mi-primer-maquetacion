@@ -1916,3 +1916,13 @@ p, .item-desc {
 #promo-combo-option.selected .promo-switch-indicator {
     transform: translateX(20px);
 }
+
+/* --- ANIMACIÓN DE VUELO AL CARRITO --- */
+.product-fly-particle {
+    position: fixed;
+    z-index: 10001;
+    pointer-events: none;
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.6s ease-out;
+    filter: drop-shadow(0 0 20px rgba(230, 0, 0, 0.4));
+    will-change: transform, opacity;
+}
