@@ -14,8 +14,23 @@
         WEEKEND_OPEN: 780,
         PROMO_BASE_PRICE: 6.5,
         PROMO_COMBO_PRICE: 8.5,
-        PROMO_COMBO_EXTRA: 2.0
+        PROMO_COMBO_EXTRA: 2.0,
+        // REEMPLAZA ESTO CON TUS CREDENCIALES DE FIREBASE CONSOLE
+        FIREBASE_CONFIG: {
+            apiKey: "AIzaSyCOIK3Xc_IzKvDc1hm05aAdLSt0KE8f9P8",
+            authDomain: "burguer-house-17e76.firebaseapp.com",
+            databaseURL: "https://burguer-house-17e76-default-rtdb.firebaseio.com",
+            projectId: "burguer-house-17e76",
+            storageBucket: "burguer-house-17e76.firebasestorage.app",
+            messagingSenderId: "641974770181",
+            appId: "1:641974770181:web:5e348815b735d26cb7da6c"
+        }
     };
+
+    // Inicializar Firebase
+    if (typeof firebase !== 'undefined' && CONFIG.FIREBASE_CONFIG.apiKey !== "TU_API_KEY") {
+        firebase.initializeApp(CONFIG.FIREBASE_CONFIG);
+    }
 
     const getCaracasDate = () =>
         new Date(new Date().toLocaleString('en-US', { timeZone: CONFIG.TIMEZONE }));
@@ -96,6 +111,32 @@
         setTimeout(() => flyImg.remove(), 750);
     };
 
+    /**
+     * Registra la visita en Firebase y premia a los primeros 20.
+     */
+    const registrarVisitaFirebase = () => {
+        if (typeof firebase === 'undefined' || !firebase.apps.length) return;
+
+        const db = firebase.database();
+        const counterRef = db.ref('stats/unique_visitors_count');
+        
+        // Usamos localStorage para no contar a la misma persona varias veces
+        if (!localStorage.getItem('bh_visitor_registered')) {
+            counterRef.transaction((currentValue) => {
+                return (currentValue || 0) + 1;
+            }, (error, committed, snapshot) => {
+                if (committed) {
+                    const count = snapshot.val();
+                    localStorage.setItem('bh_visitor_registered', 'true');
+                    // Si está entre los primeros 20, mostramos el premio
+                    if (count <= 20) {
+                        showToast(`¡ERES DE LOS PRIMEROS! Visitante #${count}. ¡Menciona esto al pedir y recibe una sorpresa!`, 'success');
+                    }
+                }
+            });
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         /* ——— Preloader ——— */
         const preloaderProgress = document.getElementById('preloader-progress');
@@ -109,6 +150,18 @@
             setTimeout(() => {
                 document.getElementById('preloader')?.classList.add('ocultar');
                 document.getElementById('main-menu')?.classList.add('mostrar-menu');
+
+                // Enviar evento a Google Analytics cuando el menú está listo
+                if (typeof gtag === 'function') {
+                    gtag('event', 'menu_ready', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Carga Completa'
+                    });
+                }
+
+                // Lógica de Firebase para el contador de los primeros 20
+                registrarVisitaFirebase();
+
                 stickyNav?.classList.add('mostrar-menu');
                 document.getElementById('cart-floating-btn')?.classList.remove('cart-btn-hidden');
                 setTimeout(verificarYMostrarPromo, 1000);
