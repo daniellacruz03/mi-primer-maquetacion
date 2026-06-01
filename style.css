@@ -1460,7 +1460,7 @@ p, .item-desc {
     flex-direction: row !important; /* Forza alineación horizontal */
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
-    overflow-y: visible !important;
+    overflow-y: hidden !important;
     gap: 12px !important;
     padding: 5px 20px 0 !important;
     margin-top: 0 !important;
@@ -1468,7 +1468,7 @@ p, .item-desc {
     width: 100% !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none !important;
-    touch-action: pan-x !important;
+    touch-action: auto !important;
     animation: slideHint 6s ease-in-out 1.5s infinite;
     position: relative;
 }
