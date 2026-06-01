@@ -128,10 +128,10 @@
                 if (committed) {
                     const count = snapshot.val();
                     localStorage.setItem('bh_visitor_registered', 'true');
-                    // Si está entre los primeros 20, mostramos el premio
-                    if (count <= 20) {
-                        showToast(`¡ERES DE LOS PRIMEROS! Visitante #${count}. ¡Menciona esto al pedir y recibe una sorpresa!`, 'success');
-                    }
+                    // Lógica pausada hasta el lanzamiento oficial
+                    // if (count <= 20) {
+                    //     showToast(`¡ERES DE LOS PRIMEROS! Visitante #${count}. ¡Menciona esto al pedir y recibe una sorpresa!`, 'success');
+                    // }
                 }
             });
         }
@@ -1030,35 +1030,54 @@
 
             const url = `https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
-            // --- REGISTRO DE PEDIDO EN FIREBASE ---
-            if (typeof firebase !== 'undefined' && firebase.apps.length) {
-                const db = firebase.database();
-                const nuevoPedido = {
-                    cliente: {
-                        nombre: nombre,
-                        metodo: currentDeliveryMethod,
-                        notas_referencia: notas,
-                        ubicacion_maps: mapsLink
-                    },
-                    productos: carrito.map(item => ({
-                        nombre: item.nombre,
-                        cantidad: item.cantidad,
-                        precio_unitario: item.precioUnitario,
-                        subtotal: item.subtotal,
-                        detalles_personalizacion: item.extras.map(ex => ({
-                            nombre: ex.nombre,
-                            cantidad: ex.qty,
-                            opcion: ex.val
-                        }))
-                    })),
-                    total_usd: totalPedido,
-                    fecha: new Date().toLocaleString(),
-                    timestamp: firebase.database.ServerValue.TIMESTAMP,
-                    estado: "Pendiente"
-                };
-                // Guardamos el pedido con un ID único generado por push()
-                db.ref('pedidos').push(nuevoPedido);
-            }
+            // --- REGISTRO DE PEDIDO (FIREBASE + SHEETDB) ---
+            const registrarOrden = async () => {
+                const fechaActual = new Date().toLocaleString();
+                const productosResumen = carrito.map(item => `${item.cantidad}x ${item.nombre}`).join(', ');
+
+                // 1. Guardar en Firebase Realtime Database
+                if (typeof firebase !== 'undefined' && firebase.apps.length) {
+                    const db = firebase.database();
+                    db.ref('pedidos').push({
+                        cliente: { nombre, metodo: currentDeliveryMethod, notas_referencia: notas, ubicacion_maps: mapsLink },
+                        productos: carrito.map(item => ({
+                            nombre: item.nombre,
+                            cantidad: item.cantidad,
+                            precio_unitario: item.precioUnitario,
+                            subtotal: item.subtotal,
+                            detalles_personalizacion: item.extras.map(ex => ({ nombre: ex.nombre, cantidad: ex.qty, opcion: ex.val }))
+                        })),
+                        total_usd: totalPedido,
+                        fecha: fechaActual,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP,
+                        estado: "Pendiente"
+                    });
+                }
+
+                // 2. Guardar en Google Sheets vía SheetDB
+                try {
+                    await fetch('https://sheetdb.io/api/v1/qyjuou0mbnjhc', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            data: [{
+                                fecha: fechaActual,
+                                cliente: nombre,
+                                metodo: currentDeliveryMethod,
+                                productos: productosResumen,
+                                total: totalPedido.toFixed(2),
+                                notas: notas || "Sin notas adicionales",
+                                ubicacion: mapsLink || "N/A"
+                            }]
+                        })
+                    });
+                } catch (err) {
+                    console.error('Error al guardar en SheetDB:', err);
+                }
+            };
+
+            // Disparamos los registros de forma asíncrona sin bloquear la apertura de WhatsApp
+            registrarOrden();
 
             try {
                 localStorage.removeItem('bh_cart');
