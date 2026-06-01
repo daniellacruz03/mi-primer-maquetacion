@@ -1030,6 +1030,36 @@
 
             const url = `https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
 
+            // --- REGISTRO DE PEDIDO EN FIREBASE ---
+            if (typeof firebase !== 'undefined' && firebase.apps.length) {
+                const db = firebase.database();
+                const nuevoPedido = {
+                    cliente: {
+                        nombre: nombre,
+                        metodo: currentDeliveryMethod,
+                        notas_referencia: notas,
+                        ubicacion_maps: mapsLink
+                    },
+                    productos: carrito.map(item => ({
+                        nombre: item.nombre,
+                        cantidad: item.cantidad,
+                        precio_unitario: item.precioUnitario,
+                        subtotal: item.subtotal,
+                        detalles_personalizacion: item.extras.map(ex => ({
+                            nombre: ex.nombre,
+                            cantidad: ex.qty,
+                            opcion: ex.val
+                        }))
+                    })),
+                    total_usd: totalPedido,
+                    fecha: new Date().toLocaleString(),
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    estado: "Pendiente"
+                };
+                // Guardamos el pedido con un ID único generado por push()
+                db.ref('pedidos').push(nuevoPedido);
+            }
+
             try {
                 localStorage.removeItem('bh_cart');
             } catch {
