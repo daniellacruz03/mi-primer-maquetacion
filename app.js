@@ -638,7 +638,7 @@
                 const nameLower = name.toLowerCase();
                 const esNuggets = nameLower.includes('nuggets');
                 const esComboHouseLocal = nameLower.includes('combo house');
-                esHamburguesa = !!item.closest('#hamburguesas') || esKids;
+            esHamburguesa = !!item.closest('#hamburguesas') || esKids || nameLower === 'crispy bowl';
 
                 const esBebida = !!item.closest('#bebidas');
                 modal?.querySelector('.modal-content')?.classList.toggle('food-modal', !esBebida);
